@@ -5,7 +5,7 @@ using UnityEngine;
 public class CircuitMeshMatrix : MonoBehaviour
 {
     private float meshCount;
-    private float[][] resistanceMatrix;
+    private float[,] resistanceMatrix;
     private float[] meshVoltageMatrix;
 
     CircuitMeshMatrix(int meshCount)
@@ -15,13 +15,7 @@ public class CircuitMeshMatrix : MonoBehaviour
         //meshVoltageMatrix = new float[meshCount];
     }
 
-    public int GetDet()
-    {
-        // TODO : GetDet
-        return 0;
-    }
-
-    public float[][] GetReverseResistanceMatrix()
+    public float[,] GetReverseResistanceMatrix()
     {
         // WARNING : Det should not be equal to 0
         // TODO : GetReverseDataMatrix
