@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class DebugManager : MonoBehaviour
 {
-    public bool isDebugging { get; private set; } = true;
+    public bool isDebugging = true;
 
     [SerializeField] private GameObject debugPrefab;
 

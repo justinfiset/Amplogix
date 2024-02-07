@@ -2,57 +2,47 @@ using UnityEngine;
 
 public class CameraDrag : MonoBehaviour
 {
-    private Vector3 ResetCamera;
-    private Vector3 Origin;
-    private Vector3 Diference;
-    private bool Drag = false;
-
-    public bool canDrag = true;
+    private Vector3 resetPos;
+    private Vector3 originPos;
+    private Vector3 diffPos;
+    private bool isDragging = false;
 
     public KeyCode dragButton = KeyCode.Mouse1;
 
     void Start()
     {
-        ResetCamera = Camera.main.transform.position;
+        resetPos = Camera.main.transform.position;
     }
+
     void LateUpdate()
     {
-        //canDrag = CursorManager.Instance.canDrag();
-        if (!canDrag) return;
-
-        if (Input.GetMouseButton(0))
+        if (Input.GetKey(dragButton))
         {
-            Diference = (Camera.main.ScreenToWorldPoint(Input.mousePosition)) - Camera.main.transform.position;
-            if (Drag == false)
+            diffPos = (Camera.main.ScreenToWorldPoint(Input.mousePosition)) - Camera.main.transform.position;
+            if (isDragging == false)
             {
-                Drag = true;
-                Origin = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                isDragging = true;
+                originPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             }
         }
         else
         {
-            Drag = false;
+            isDragging = false;
         }
-        if (Drag == true)
+        if (isDragging == true)
         {
-            Camera.main.transform.position = Origin - Diference;
+            Camera.main.transform.position = originPos - diffPos;
         }
-
-        if(Input.GetKeyDown(dragButton))
-        {
-            CursorManager.ChangeCursor(CursorManager.WindowsCursor.Hand);
-        }
-        if(Input.GetKeyUp(dragButton))
-        {
-            CursorManager.ChangeCursor(CursorManager.WindowsCursor.StandardArrow);
-        }
-
-        //CursorManager.Instance.isDragin = Drag;
-
-        //RESET CAMERA TO STARTING POSITION WHEN SPACEBAR DOWN
+        
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            Camera.main.transform.position = ResetCamera;
+            //RESET CAMERA TO STARTING POSITION WHEN SPACEBAR DOWN
+            ResetCamPos();
         }
+    }
+
+    public void ResetCamPos()
+    {
+        Camera.main.transform.position = resetPos;
     }
 }

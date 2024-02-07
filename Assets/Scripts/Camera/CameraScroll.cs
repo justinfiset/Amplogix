@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class CameraScroll : MonoBehaviour
@@ -15,17 +13,17 @@ public class CameraScroll : MonoBehaviour
 
     private void Start()
     {
-        cam = this.GetComponent<Camera>();
+        cam = GetComponent<Camera>();
     }
+
     void Update()
     {
-        if (!canScroll) return;
-
         float axis = Input.GetAxis("Mouse ScrollWheel");
-        if (axis != 0f)
+        if (canScroll && axis != 0f)
         {
             // Adjust zoom
             cam.orthographicSize += sensibility * axis * -1f;
+
             if (cam.orthographicSize < minSize)
             {
                 cam.orthographicSize = minSize;
@@ -36,10 +34,10 @@ public class CameraScroll : MonoBehaviour
                 cam.orthographicSize = maxSize;
                 return;
             }
-
+            
             Vector3 cursorPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            Vector3 deltaPos = (cam.transform.position - cursorPos) * axis * -1f;
-            Vector3 translation = deltaPos * cursorFollowStep;
+            Vector3 deltaPos = axis >= 0 ? (cam.transform.position - cursorPos) : Vector3.zero;
+            Vector3 translation = deltaPos * cursorFollowStep * axis * -1f;
             cam.transform.position = cam.transform.position + translation;
         }
     }

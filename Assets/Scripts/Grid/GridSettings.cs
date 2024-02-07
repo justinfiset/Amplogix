@@ -16,8 +16,6 @@ public class GridSettings : MonoBehaviour
             m_Instance = this;
         else if(m_Instance != this) 
             Destroy(this);
-
-        DebugManager.CreateNewDebugObject(this, 1);
     }
 
     /// <summary>
@@ -46,15 +44,6 @@ public class GridSettings : MonoBehaviour
         snappedPos = gridPos * gridIncrement;
 
         return snappedPos;
-    }
-
-    private void Update()
-    {
-        // todo remove debug loop
-        if(DebugManager.IsDebugging())
-        {
-            DebugManager.SetDebugObjectLocalPos(this, 1, GetCurrentSnapedPosition());
-        }
     }
 }
     
