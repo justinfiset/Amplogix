@@ -381,7 +381,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e5638e92e2bbc64981423e0020f826d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cursorFollowStep: 1
+  cursorFollowStep: 2
   sensibility: 10
   minSize: 1
   maxSize: 30
@@ -398,7 +398,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9992ccb193287145aa2d9c21baba3f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  canDrag: 1
   dragButton: 324
 --- !u!1 &1382395634
 GameObject:
@@ -534,6 +533,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d7b809f0fc4d46d4980aed5384478c7b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isDebugging: 1
   debugPrefab: {fileID: 5923548642171435245, guid: 41bd1bbf18c316543b0f24f16af30e10, type: 3}
 --- !u!1 &1611551103
 GameObject:
