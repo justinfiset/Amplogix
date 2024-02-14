@@ -20,7 +20,7 @@ public class MainMenuButtons : MonoBehaviour
 
     public void OpenFile()
     {    
-        var paths = StandaloneFileBrowser.OpenFilePanel("Ouvrir fichier", "", ".amp", false);
+        var paths = StandaloneFileBrowser.OpenFilePanel("Ouvrir fichier", "", "amp", false);
 
     }
 }
