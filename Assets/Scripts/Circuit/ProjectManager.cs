@@ -3,26 +3,25 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class ProjectManager : MonoBehaviour
 {
-    public TextMeshProUGUI nameText;
-    
-  
-    // Start is called before the first frame update
-    void Start()
-    {
+    bool isProjectSaved = false;
 
-    }
+    public TextMeshProUGUI nameText;
 
     public void SaveProject()
     {
-        var paths = StandaloneFileBrowser.SaveFilePanel("Sauvegarder fichier", "", nameText.text, "amp");
+        string path = StandaloneFileBrowser.SaveFilePanel("Sauvegarder fichier", "", nameText.text, "amp");
     }
 
-    // Update is called once per frame
-    void Update()
+    public void ReturnToMenu()
     {
+        if(!isProjectSaved)
+        {
+            // TODO: Want to save project popup???
+            SceneManager.LoadScene("MainMenu");
+        }
     }
-   
 }

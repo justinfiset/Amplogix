@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class GridSettings : MonoBehaviour
 {
-    static public float gridIncrement = 1; // the step between two grid position (x and y axis)
+    public float gridIncrement = 1; // the step between two grid position (x and y axis)
 
-    private GridSettings m_Instance; // the Singleton instance, only usable by the class itself
+    private static GridSettings m_Instance; // the Singleton instance, only usable by the class itself
     /// <summary>
     /// Singleton creation and making sure only one instance exists
     /// </summary>
@@ -39,9 +39,9 @@ public class GridSettings : MonoBehaviour
     {
         Vector3 snappedPos;
         Vector3 gridPos = MouseInputToWorldPoint();
-        gridPos.x = Mathf.Round(gridPos.x / gridIncrement);
-        gridPos.y = Mathf.Round(gridPos.y / gridIncrement);
-        snappedPos = gridPos * gridIncrement;
+        gridPos.x = Mathf.Round(gridPos.x / m_Instance.gridIncrement);
+        gridPos.y = Mathf.Round(gridPos.y / m_Instance.gridIncrement);
+        snappedPos = gridPos * m_Instance.gridIncrement;
 
         return snappedPos;
     }

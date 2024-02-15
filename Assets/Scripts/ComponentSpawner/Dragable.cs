@@ -1,29 +1,32 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEditor.SearchService;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class Dragable : MonoBehaviour
 {
     private float startPoxX;
     private float startPoxY;
     private bool isBeingHeld;
-   
+    private bool snapToGrid = true;
 
     // Update is called once per frame
     void Update()
     {
-        if (isBeingHeld && SceneManager.GetActiveScene().name == "CircuitCreator")
+        if (isBeingHeld)
         {
-            Vector3 mousePos;
-            mousePos = Input.mousePosition;
-            mousePos = Camera.main.ScreenToWorldPoint(mousePos);
+            if(snapToGrid)
+            {   // We snap the object according to the grid settings
+                gameObject.transform.localPosition = GridSettings.GetCurrentSnapedPosition();
+            }
+            else
+            {
+                // We move the object according to the mouse position
+                Vector3 mousePos;
+                mousePos = Input.mousePosition;
+                mousePos = Camera.main.ScreenToWorldPoint(mousePos);
 
-            this.gameObject.transform.localPosition = new Vector3(mousePos.x - startPoxX, mousePos.y - startPoxY, 0);
+                gameObject.transform.localPosition = new Vector3(mousePos.x - startPoxX, mousePos.y - startPoxY, 0);
+            }
         }
     }
-
 
     private void OnMouseOver()
     {
@@ -44,11 +47,6 @@ public class Dragable : MonoBehaviour
 
                 isBeingHeld = true;
             }
-        }
-
-       
+        }  
     }
-
-  
-
 }
