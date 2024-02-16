@@ -7,13 +7,44 @@ using UnityEngine.SceneManagement;
 
 public class ProjectManager : MonoBehaviour
 {
-    bool isProjectSaved = false;
+    public bool isProjectSaved = false;
 
-    public TextMeshProUGUI nameText;
+    [SerializeField] private TextMeshProUGUI nameText;
+
+    public Project project;
+
+    private void Start()
+    {
+        if(project == null)
+        {
+            project = new Project();
+        }
+    }
+
+    public void OpenNewProject()
+    {
+        // TODO: Open New Project
+    }
 
     public void SaveProject()
     {
-        string path = StandaloneFileBrowser.SaveFilePanel("Sauvegarder fichier", "", nameText.text, "amp");
+        if (project.savePath == null)
+        {
+            SaveProjectAs();
+        }
+        // TODO: Save the project
+
+        isProjectSaved = true;
+    }
+
+    public void SaveProjectAs()
+    {
+        if (project.savePath == null)
+        {
+            string path = StandaloneFileBrowser.SaveFilePanel("Sauvegarder le projet", "", nameText.text, "amp");
+            project.savePath = path;
+        }
+        SaveProject();
     }
 
     public void ReturnToMenu()
