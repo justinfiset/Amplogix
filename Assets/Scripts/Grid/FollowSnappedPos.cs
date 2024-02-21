@@ -8,4 +8,4 @@ public class FollowSnappedPos : MonoBehaviour
     {
         transform.position = GridSettings.GetCurrentSnapedPosition();
     }
-}
+}   

@@ -11,27 +11,22 @@ public class ProjectManager : MonoBehaviour
 
     public TMP_InputField nameText;
 
-    
-
     public Project project;
 
     private void Start()
     {
-        nameText.interactable = true;
-        nameText.text = "Nom du projet";
         ProjectSettings projectSettings = (ProjectSettings)FindObjectOfType(typeof(ProjectSettings));
-
         if (projectSettings != null) 
         {
             project = JsonUtility.FromJson<Project>(projectSettings.data);
         }
-
         else 
         { 
             project = new Project();
-            UpdateProjectName();
         }
-        Debug.Log(project.name);
+        UpdateProjectName();
+
+        Debug.Log("Current project: " + project.name);
     }
 
     public void UpdateProjectName()
@@ -46,6 +41,8 @@ public class ProjectManager : MonoBehaviour
 
     public void SaveProject()
     {
+        project.name = nameText.text;
+
         if (project.savePath == null)
         {
             SaveProjectAs();
@@ -53,7 +50,7 @@ public class ProjectManager : MonoBehaviour
         // TODO: Save the project
 
         string data = JsonUtility.ToJson(project);
-       FileUtility.WriteString(project.savePath, data);
+        FileUtility.WriteString(project.savePath, data);
        
 
         isProjectSaved = true;
