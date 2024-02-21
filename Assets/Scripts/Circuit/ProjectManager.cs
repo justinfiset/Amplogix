@@ -9,17 +9,29 @@ public class ProjectManager : MonoBehaviour
 {
     public bool isProjectSaved = false;
 
-    [SerializeField] private TextMeshProUGUI nameText;
+    public TMP_InputField nameText;
+
+    
 
     public Project project;
 
     private void Start()
     {
-        if(project == null)
+        nameText.interactable = true;
+        nameText.text = "Nom du projet";
+        ProjectSettings projectSettings = (ProjectSettings)FindObjectOfType(typeof(ProjectSettings));
+
+        if (projectSettings != null) 
         {
+            project = JsonUtility.FromJson<Project>(projectSettings.data);
+        }
+
+        else 
+        { 
             project = new Project();
             UpdateProjectName();
         }
+        Debug.Log(project.name);
     }
 
     public void UpdateProjectName()
