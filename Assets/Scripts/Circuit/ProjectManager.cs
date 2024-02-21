@@ -9,17 +9,24 @@ public class ProjectManager : MonoBehaviour
 {
     public bool isProjectSaved = false;
 
-    [SerializeField] private TextMeshProUGUI nameText;
+    public TMP_InputField nameText;
 
     public Project project;
 
     private void Start()
     {
-        if(project == null)
+        ProjectSettings projectSettings = (ProjectSettings)FindObjectOfType(typeof(ProjectSettings));
+        if (projectSettings != null) 
         {
-            project = new Project();
-            UpdateProjectName();
+            project = JsonUtility.FromJson<Project>(projectSettings.data);
         }
+        else 
+        { 
+            project = new Project();
+        }
+        UpdateProjectName();
+
+        Debug.Log("Current project: " + project.name);
     }
 
     public void UpdateProjectName()
@@ -34,6 +41,8 @@ public class ProjectManager : MonoBehaviour
 
     public void SaveProject()
     {
+        project.name = nameText.text;
+
         if (project.savePath == null)
         {
             SaveProjectAs();
@@ -41,7 +50,7 @@ public class ProjectManager : MonoBehaviour
         // TODO: Save the project
 
         string data = JsonUtility.ToJson(project);
-       FileUtility.WriteString(project.savePath, data);
+        FileUtility.WriteString(project.savePath, data);
        
 
         isProjectSaved = true;

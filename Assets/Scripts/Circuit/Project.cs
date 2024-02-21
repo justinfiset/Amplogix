@@ -4,7 +4,7 @@ using UnityEngine;
 using System;
 
 [Serializable]
-public class Project : MonoBehaviour
+public class Project
 {
     public string name = "default";
     public string savePath;
