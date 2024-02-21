@@ -34,6 +34,10 @@ public class ProjectManager : MonoBehaviour
         }
         // TODO: Save the project
 
+        string data = JsonUtility.ToJson(project);
+       FileUtility.WriteString(project.savePath, data);
+       
+
         isProjectSaved = true;
     }
 

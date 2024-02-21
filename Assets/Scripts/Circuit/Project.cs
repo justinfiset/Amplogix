@@ -6,9 +6,9 @@ using System;
 [Serializable]
 public class Project : MonoBehaviour
 {
-    public string name;
+    public string name = "default";
     public string savePath;
     
     // Une map qui contient tout les circuits
-    Dictionary<string, Circuit> circuits = new Dictionary<string, Circuit>();
+    //Dictionary<string, Circuit> circuits = new Dictionary<string, Circuit>();
 }
