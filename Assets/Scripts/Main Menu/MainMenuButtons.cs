@@ -20,7 +20,15 @@ public class MainMenuButtons : MonoBehaviour
 
     public void OpenFile()
     {    
-        var paths = StandaloneFileBrowser.OpenFilePanel("Ouvrir fichier", "", "amp", false);
+        string[] paths = StandaloneFileBrowser.OpenFilePanel("Ouvrir un projet", "", "amp", false);
+        string data = FileUtility.ReadString(paths[0]);
 
+        GameObject gm = Instantiate(new GameObject());
+        ProjectSettings settings = gm.AddComponent<ProjectSettings>();
+        DontDestroyOnLoad(gm);
+        settings.data = data;
+        Debug.Log(settings.data);
+
+        SceneManager.LoadScene("CircuitCreator", LoadSceneMode.Single);
     }
 }
