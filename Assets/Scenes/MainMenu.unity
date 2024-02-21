@@ -153,12 +153,12 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1611551107}
+  m_Father: {fileID: 642457760}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -81.999756, y: 80}
+  m_AnchoredPosition: {x: 1438.0001, y: 80}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &13882776
@@ -231,14 +231,13 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1412659580}
-  - {fileID: 605559697}
   m_Father: {fileID: 1611551107}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 201.40002, y: 70}
-  m_SizeDelta: {x: 357.59558, y: 100}
+  m_AnchorMin: {x: 0.5, y: 0.47774073}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -763.2022, y: -420}
+  m_SizeDelta: {x: 357.5956, y: 76}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &67983480
 MonoBehaviour:
@@ -577,6 +576,7 @@ RectTransform:
   m_Children:
   - {fileID: 371211097}
   - {fileID: 1234261957}
+  - {fileID: 13882775}
   m_Father: {fileID: 1611551107}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1244,15 +1244,15 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 32
-  m_fontSizeBase: 32
+  m_fontSize: 36
+  m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 1
   m_HorizontalAlignment: 1
-  m_VerticalAlignment: 512
+  m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0
@@ -1280,7 +1280,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 14.431488, w: 0}
+  m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -1527,7 +1527,6 @@ RectTransform:
   - {fileID: 764715417}
   - {fileID: 1262333994}
   - {fileID: 1130662583}
-  - {fileID: 13882775}
   - {fileID: 67983479}
   m_Father: {fileID: 0}
   m_RootOrder: 1
