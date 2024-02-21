@@ -7,11 +7,17 @@ public class Dragable : MonoBehaviour
     private bool isBeingHeld;
     private bool snapToGrid = true;
 
+    public static KeyCode rotateKey = KeyCode.R;
+
     // Update is called once per frame
     void Update()
     {
         if (isBeingHeld)
         {
+            if(Input.GetKeyDown(rotateKey)) {
+                transform.Rotate(Vector3.forward * -45f);
+            }
+
             if(snapToGrid)
             {   // We snap the object according to the grid settings
                 gameObject.transform.localPosition = GridSettings.GetCurrentSnapedPosition();
