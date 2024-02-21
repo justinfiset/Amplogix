@@ -18,7 +18,13 @@ public class ProjectManager : MonoBehaviour
         if(project == null)
         {
             project = new Project();
+            UpdateProjectName();
         }
+    }
+
+    public void UpdateProjectName()
+    {
+        nameText.text = project.name;
     }
 
     public void OpenNewProject()
