@@ -8,10 +8,16 @@ public class ComponentSelection : MonoBehaviour, IPointerClickHandler
     private bool buttonPressed = false;
     private Image border;
     public Color selectedColor = new Color(66, 135, 245);
+    public bool isDefaultSelection = false;
 
     private void Start()
     {
         border = transform.GetChild(0).GetComponent<Image>();
+
+        if (isDefaultSelection) 
+        { 
+            SetActivePrefab();
+        }
     }
 
     private void Update()

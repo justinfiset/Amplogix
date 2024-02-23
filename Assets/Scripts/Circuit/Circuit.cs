@@ -4,7 +4,7 @@ using UnityEngine;
 using System;
 
 [Serializable]
-public class Circuit : MonoBehaviour
+public class Circuit
 {
     string name;
 

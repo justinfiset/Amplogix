@@ -22,6 +22,7 @@ public class ElectricComponent : MonoBehaviour
 
     public static KeyCode rotateKey = KeyCode.R;
     public static KeyCode deleteKey = KeyCode.Mouse2;
+    public static KeyCode unSelectKey = KeyCode.Escape;
 
     private ResizeWinglets resizeWinglets;
     private SpriteRenderer sprite;
@@ -43,6 +44,10 @@ public class ElectricComponent : MonoBehaviour
             else if(Input.GetKeyDown(deleteKey))
             {
                 ComponentSpawner.DestroyComponent(gameObject);
+            } 
+            else if(Input.GetKeyDown(unSelectKey))
+            {
+                Unselect();
             }
 
             if(!hasReleasedSinceSelection)
