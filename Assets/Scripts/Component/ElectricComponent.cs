@@ -9,10 +9,16 @@ using UnityEditor.TextCore.Text;
 [RequireComponent(typeof(ResizeWinglets))]
 public class ElectricComponent : MonoBehaviour
 {
-    public Vector3 origin;
-    public Vector2 size; 
+    // STATE
+    public bool isHover = false;
+    public bool isSelected = false;
+    // Move the component
+    private bool hasReleasedSinceSelection = true;
+    private bool isBeingMoved = false;
 
-    private bool isSelected;
+    // Moving the component
+    private Vector3 startPos;
+    private Vector3 startOrigin;
 
     public static KeyCode rotateKey = KeyCode.R;
     public static KeyCode deleteKey = KeyCode.Mouse2;
@@ -39,8 +45,42 @@ public class ElectricComponent : MonoBehaviour
                 ComponentSpawner.DestroyComponent(gameObject);
             }
 
-            // We snap the object according to the grid settings
-            //gameObject.transform.localPosition = GridSettings.GetCurrentSnapedPosition();
+            if(!hasReleasedSinceSelection)
+            {
+                if(!isBeingMoved)
+                {
+                    startPos = GridSettings.GetCurrentSnapedPosition();
+                    startOrigin = transform.localPosition;
+                    isBeingMoved = true;
+                }
+                if(isBeingMoved)
+                {
+                    Vector3 diffPos = GridSettings.GetCurrentSnapedPosition() - startPos;
+                    gameObject.transform.localPosition = startOrigin + diffPos;
+                }
+            }
+        }
+
+        if(Input.GetMouseButtonDown(0))
+        {
+            if (isHover)
+            {
+                if (!isSelected)
+                {
+                    Select();
+                    hasReleasedSinceSelection = false;
+                }
+            }
+        }
+        else if(Input.GetMouseButtonUp(0))
+        {
+            if (isSelected && hasReleasedSinceSelection)
+            {
+                Unselect();
+            } else
+            {
+                hasReleasedSinceSelection = true;
+            }
         }
     }
 
@@ -49,39 +89,34 @@ public class ElectricComponent : MonoBehaviour
         isSelected = true;
         OnSelect();
 
-        origin = transform.position;
-        size = transform.localScale;
-        resizeWinglets.GenerateWinglets(origin, size);
+        resizeWinglets.GenerateWinglets(transform.localPosition, transform.localScale);
     }
 
     private void Unselect()
     {
         isSelected = false;
-        OnUnselect();
+        isBeingMoved = false;
         resizeWinglets.DestroyWinglets();
+        OnUnselect();
     }
 
     private void OnSelect()
     {
-        sprite.color = sprite.color * 0.5f;
+        sprite.color = sprite.color * new Color(1, 1, 1, 0.5f);
     }
 
     private void OnUnselect()
     {
-        sprite.color = sprite.color * new Color(1, 1, 1, 0.5f);
+        sprite.color = Color.white;
     }
 
-    private void OnMouseOver()
+    private void OnMouseEnter()
     {
-        if (Input.GetMouseButtonDown(0))
-        {
-            if (!isSelected)
-            {
-                Select();
-            } else
-            {
-                Unselect();
-            }
-        }
+        isHover = true;
+    }
+
+    private void OnMouseExit()
+    {
+        isHover = false;
     }
 }
