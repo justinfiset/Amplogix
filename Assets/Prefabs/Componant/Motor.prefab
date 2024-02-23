@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 4028369109100792874}
   - component: {fileID: 4028369109100792865}
   - component: {fileID: 4028369109100792870}
-  - component: {fileID: 4028369109100792871}
   - component: {fileID: 4028369109100792868}
   - component: {fileID: 4028369109100792869}
   m_Layer: 0
@@ -114,18 +113,6 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
---- !u!225 &4028369109100792871
-CanvasGroup:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4028369109100792875}
-  m_Enabled: 1
-  m_Alpha: 1
-  m_Interactable: 1
-  m_BlocksRaycasts: 1
-  m_IgnoreParentGroups: 0
 --- !u!114 &4028369109100792868
 MonoBehaviour:
   m_ObjectHideFlags: 0

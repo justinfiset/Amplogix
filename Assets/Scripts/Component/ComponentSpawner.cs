@@ -4,14 +4,19 @@ public class ComponentSpawner : MonoBehaviour
 {
     public static ComponentSpawner m_Instance { get; private set; }
 
-    [HideInInspector] private GameObject currentComponent;
-    public Transform parent;
     public bool canSpawn = true;
 
+    private float spawnAngle;
+    private GameObject currentComponent;
     private ComponentSelection currentSelection;
+
+    private Transform parent;
 
     public GameObject previewPrefab;
     private GameObject componentPreview;
+
+    [Header("Inputs")]
+    public static KeyCode rotateKey = KeyCode.R;
 
     void Start()
     {
@@ -28,6 +33,12 @@ public class ComponentSpawner : MonoBehaviour
         {
             SpawnPrefab();
         }
+
+        if (Input.GetKeyDown(rotateKey))
+        {
+            componentPreview.transform.Rotate(Vector3.forward * -90);
+            spawnAngle = componentPreview.transform.eulerAngles.z;
+        }
     }
 
     public static void SetCurrentSelection(GameObject prefab, ComponentSelection selection)
@@ -40,6 +51,8 @@ public class ComponentSpawner : MonoBehaviour
             m_Instance.canSpawn = true;
 
             m_Instance.componentPreview = Instantiate(m_Instance.previewPrefab, m_Instance.parent);
+            m_Instance.spawnAngle = m_Instance.componentPreview.transform.eulerAngles.z;
+
             SpriteRenderer sprite = m_Instance.componentPreview.GetComponent<SpriteRenderer>();
             sprite.sprite = selection.sprite;
             sprite.color = new Color(0, 0, 0, 0.25f);
@@ -68,7 +81,7 @@ public class ComponentSpawner : MonoBehaviour
 
     public static void CreateComponent(GameObject component, Vector3 pos)
     {
-        Instantiate(m_Instance.currentComponent, pos, Quaternion.identity, m_Instance.parent);
+        Instantiate(m_Instance.currentComponent, pos, Quaternion.Euler(0, 0, m_Instance.spawnAngle), m_Instance.parent);
         // TODO add component to a list somewhere to keep track
     }
 
