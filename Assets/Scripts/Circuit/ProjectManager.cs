@@ -20,8 +20,8 @@ public class ProjectManager : MonoBehaviour
         {
             project = JsonUtility.FromJson<Project>(projectSettings.data);
         }
-        else 
-        { 
+        else if(project == null)
+        {
             project = new Project();
         }
         UpdateProjectName();
@@ -29,14 +29,14 @@ public class ProjectManager : MonoBehaviour
         Debug.Log("Current project: " + project.name);
     }
 
+    public void SetProjectName()
+    {
+        project.name = nameText.text;
+    }
+
     public void UpdateProjectName()
     {
         nameText.text = project.name;
-    }
-
-    public void OpenNewProject()
-    {
-        // TODO: Open New Project
     }
 
     public void SaveProject()

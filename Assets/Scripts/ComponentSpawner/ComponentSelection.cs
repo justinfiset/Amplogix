@@ -1,48 +1,44 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Windows.Forms;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
-public class ComponentSelection : MonoBehaviour
+public class ComponentSelection : MonoBehaviour, IPointerClickHandler
 {
-    public DuplicateComponent duplicator;
     public GameObject prefab;
     private bool buttonPressed = false;
+    private Image border;
+    public Color selectedColor = new Color(66, 135, 245);
 
-    public void SetAtivePrefab()
-    {   
-        
-        duplicator.SetCurrentPrefab(prefab);
-    }
-
-    // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
-        
+        border = transform.GetChild(0).GetComponent<Image>();
     }
-    // Update is called once per frame
-    void Update()
+
+    private void Update()
     {
         if (buttonPressed)
         {
-            SetAtivePrefab();
+            SetActivePrefab();
         }
-        
     }
 
-    public void OnPointerDown(PointerEventData eventData)
+    public void SetActivePrefab()
     {
-        buttonPressed = true;
-  
+        ComponentSpawner.SetCurrentSelection(prefab, this);
     }
 
-    public void OnPointerUp(PointerEventData eventData)
+    public void OnSelect()
     {
-        buttonPressed = false;
+        border.color = selectedColor;
     }
 
+    public void OnUnselect()
+    {
+        border.color = Color.white;
+    }
 
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        SetActivePrefab();
+    }
 }

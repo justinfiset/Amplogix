@@ -3,7 +3,7 @@ guid: d94bb6a12ad852a419fdf935f76aab38
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
-  serializedVersion: 11
+  serializedVersion: 12
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -20,7 +20,6 @@ TextureImporter:
     externalNormalMap: 0
     heightScale: 0.25
     normalMapFilter: 0
-    flipGreenChannel: 0
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
@@ -64,7 +63,7 @@ TextureImporter:
   textureFormatSet: 0
   ignorePngGamma: 0
   applyGammaDecoding: 0
-  swizzle: 50462976
+  cookieLightType: 1
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
@@ -92,6 +91,18 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
     buildTarget: Server
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: WebGL
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
@@ -453,23 +464,24 @@ TextureImporter:
     secondaryTextures: []
     nameFileIdTable:
       tileset_0: 1694739866
-      tileset_12: -845194049
-      tileset_4: -1309458775
       tileset_1: -1303233402
-      tileset_6: 1577667866
-      tileset_11: -177346271
-      tileset_5: -2042651571
-      tileset_15: 230773982
-      tileset_8: -536769480
       tileset_10: 66728084
-      tileset_2: -362824607
+      tileset_11: -177346271
+      tileset_12: -845194049
       tileset_13: 1234834765
-      tileset_9: 27828841
-      tileset_7: -1033826853
-      tileset_3: -1615046788
       tileset_14: 1829795953
+      tileset_15: 230773982
+      tileset_2: -362824607
+      tileset_3: -1615046788
+      tileset_4: -1309458775
+      tileset_5: -2042651571
+      tileset_6: 1577667866
+      tileset_7: -1033826853
+      tileset_8: -536769480
+      tileset_9: 27828841
   spritePackingTag: 
   pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 

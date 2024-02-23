@@ -3,7 +3,7 @@ guid: e0280b3438ec49a4a976eedc0b076a67
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
-  serializedVersion: 11
+  serializedVersion: 12
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -20,7 +20,6 @@ TextureImporter:
     externalNormalMap: 0
     heightScale: 0.25
     normalMapFilter: 0
-    flipGreenChannel: 0
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
@@ -64,7 +63,7 @@ TextureImporter:
   textureFormatSet: 0
   ignorePngGamma: 0
   applyGammaDecoding: 0
-  swizzle: 50462976
+  cookieLightType: 1
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
@@ -92,6 +91,18 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
     buildTarget: Server
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: WebGL
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
@@ -452,24 +463,25 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      '!tileset2_15': -1065796607
-      '!tileset2_7': -126342400
-      '!tileset2_9': -1087029519
+      '!tileset2_0': -1888274931
+      '!tileset2_1': -2145783372
+      '!tileset2_10': 1015818313
+      '!tileset2_11': 743000672
       '!tileset2_12': -1344034616
+      '!tileset2_13': -1001421212
+      '!tileset2_14': -1190374661
+      '!tileset2_15': -1065796607
       '!tileset2_2': -1385582536
       '!tileset2_3': -1221857380
-      '!tileset2_10': 1015818313
-      '!tileset2_8': -1812411725
-      '!tileset2_6': -2141834728
-      '!tileset2_13': -1001421212
-      '!tileset2_1': -2145783372
-      '!tileset2_11': 743000672
-      '!tileset2_14': -1190374661
-      '!tileset2_0': -1888274931
-      '!tileset2_5': -63231791
       '!tileset2_4': 1525300612
+      '!tileset2_5': -63231791
+      '!tileset2_6': -2141834728
+      '!tileset2_7': -126342400
+      '!tileset2_8': -1812411725
+      '!tileset2_9': -1087029519
   spritePackingTag: 
   pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 
