@@ -64,6 +64,7 @@ public class ComponentSpawner : MonoBehaviour
 
     public static void DestroyComponent(GameObject component)
     {
+        Destroy(component);
         // TODO remove from a certain list
     }
 }
