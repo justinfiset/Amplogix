@@ -6,7 +6,7 @@ public class GridSettings : MonoBehaviour
 {
     public float gridIncrement = 1; // the step between two grid position (x and y axis)
 
-    private static GridSettings m_Instance; // the Singleton instance, only usable by the class itself
+    public static GridSettings m_Instance { get; private set; } // the Singleton instance, only usable by the class itself
     /// <summary>
     /// Singleton creation and making sure only one instance exists
     /// </summary>

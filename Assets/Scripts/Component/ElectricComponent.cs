@@ -6,19 +6,23 @@ using UnityEditor.TextCore.Text;
 
 [Serializable]
 [RequireComponent(typeof(SpriteRenderer))]
+[RequireComponent(typeof(ResizeWinglets))]
 public class ElectricComponent : MonoBehaviour
 {
-    public bool isSelected;
-    public bool isBeingHeld;
-    public bool canHold;
+    public Vector3 origin;
+    public Vector2 size; 
+
+    private bool isSelected;
 
     public static KeyCode rotateKey = KeyCode.R;
     public static KeyCode deleteKey = KeyCode.Mouse2;
 
+    private ResizeWinglets resizeWinglets;
     private SpriteRenderer sprite;
 
     void Start()
     {
+        resizeWinglets = GetComponent<ResizeWinglets>();
         sprite = GetComponent<SpriteRenderer>();
     }
 
@@ -35,32 +39,8 @@ public class ElectricComponent : MonoBehaviour
                 ComponentSpawner.DestroyComponent(gameObject);
             }
 
-            if(canHold)
-            {
-                if(Input.GetMouseButtonDown(0))
-                {
-                    isBeingHeld = true;
-                }
-                else if(Input.GetMouseButtonUp(0))
-                {
-                    isBeingHeld = false;
-                    Unselect();
-                    canHold = false;
-                }
-            } 
-            else
-            {
-                if (Input.GetMouseButtonUp(0))
-                {
-                    canHold = true;
-                }
-            }
-
             // We snap the object according to the grid settings
-            if (isBeingHeld)
-            {
-                gameObject.transform.localPosition = GridSettings.GetCurrentSnapedPosition();
-            }
+            //gameObject.transform.localPosition = GridSettings.GetCurrentSnapedPosition();
         }
     }
 
@@ -68,12 +48,17 @@ public class ElectricComponent : MonoBehaviour
     {
         isSelected = true;
         OnSelect();
+
+        origin = transform.position;
+        size = transform.localScale;
+        resizeWinglets.GenerateWinglets(origin, size);
     }
 
     private void Unselect()
     {
         isSelected = false;
         OnUnselect();
+        resizeWinglets.DestroyWinglets();
     }
 
     private void OnSelect()
@@ -93,6 +78,9 @@ public class ElectricComponent : MonoBehaviour
             if (!isSelected)
             {
                 Select();
+            } else
+            {
+                Unselect();
             }
         }
     }
