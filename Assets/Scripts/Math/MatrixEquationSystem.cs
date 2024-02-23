@@ -1,10 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using MathNet.Numerics.LinearAlgebra;
-using System.Dynamic;
-using UnityEditor.SceneTemplate;
-using System;
 
 public class MatrixEquationSystem
 {

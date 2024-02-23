@@ -26,6 +26,14 @@ public class ComponentSelection : MonoBehaviour, IPointerClickHandler
 
     private void Update()
     {
+        if(isDefaultSelection)
+        {
+            if(Input.GetKeyDown(KeyCode.Escape))
+            {
+                SetActivePrefab();
+            }
+        }
+
         if (buttonPressed)
         {
             SetActivePrefab();

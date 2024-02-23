@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 
 public class ProjectManager : MonoBehaviour
 {
-    public bool isProjectSaved = false;
+    public bool isProjectSaved = true; // Par défault un projet n'a pas de modification
 
     public TMP_InputField nameText;
 
@@ -43,24 +43,24 @@ public class ProjectManager : MonoBehaviour
     {
         project.name = nameText.text;
 
-        if (project.savePath == null)
+        if (project.savePath == "" || project.savePath == null)
         {
             SaveProjectAs();
-        }
+        } else
+        {
+            print("Saving project...");
+            string data = JsonUtility.ToJson(project);
+            FileUtility.WriteString(project.savePath, data);
 
-        string data = JsonUtility.ToJson(project);
-        FileUtility.WriteString(project.savePath, data);
-       
-        isProjectSaved = true;
+            isProjectSaved = true;
+        }
     }
 
     public void SaveProjectAs()
     {
-        if (project.savePath == null)
-        {
-            string path = StandaloneFileBrowser.SaveFilePanel("Sauvegarder le projet", "", nameText.text, "amp");
-            project.savePath = path;
-        }
+        print("Opening file option window...");
+        string path = StandaloneFileBrowser.SaveFilePanel("Sauvegarder le projet", "", nameText.text, "amp");
+        project.savePath = path;
         SaveProject();
     }
 

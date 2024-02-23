@@ -7,7 +7,7 @@ using System;
 public class Project
 {
     public string name = "default";
-    public string savePath;
+    [NonSerialized] public string savePath;
     
     // Une map qui contient tout les circuits
     //Dictionary<string, Circuit> circuits = new Dictionary<string, Circuit>();
