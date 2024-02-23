@@ -7,25 +7,27 @@ using UnityEditor.TextCore.Text;
 [Serializable]
 [RequireComponent(typeof(SpriteRenderer))]
 [RequireComponent(typeof(ResizeWinglets))]
+[RequireComponent(typeof(BoxCollider2D))]
 public class ElectricComponent : MonoBehaviour
 {
-    // STATE
+    [Header("State")]
     public bool isHover = false;
     public bool isSelected = false;
-    // Move the component
+
+    [Header("Move / Drag")]
     private bool hasReleasedSinceSelection = true;
     private bool isBeingMoved = false;
-
-    // Moving the component
     private Vector3 startPos;
     private Vector3 startOrigin;
 
+    [Header("UI")]
+    private ResizeWinglets resizeWinglets;
+    private SpriteRenderer sprite;
+
+    [Header("Inputs")]
     public static KeyCode rotateKey = KeyCode.R;
     public static KeyCode deleteKey = KeyCode.Mouse2;
     public static KeyCode unSelectKey = KeyCode.Escape;
-
-    private ResizeWinglets resizeWinglets;
-    private SpriteRenderer sprite;
 
     void Start()
     {

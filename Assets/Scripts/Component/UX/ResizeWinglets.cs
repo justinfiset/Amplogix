@@ -16,6 +16,7 @@ public class ResizeWinglets : MonoBehaviour
         if(parent != null)
         {
             parent.transform.position = transform.position;
+            parent.transform.rotation = transform.rotation;
         }
     }
 

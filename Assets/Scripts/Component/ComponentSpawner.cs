@@ -10,6 +10,9 @@ public class ComponentSpawner : MonoBehaviour
 
     private ComponentSelection currentSelection;
 
+    public GameObject previewPrefab;
+    private GameObject componentPreview;
+
     void Start()
     {
         if (m_Instance == null)
@@ -29,10 +32,17 @@ public class ComponentSpawner : MonoBehaviour
 
     public static void SetCurrentSelection(GameObject prefab, ComponentSelection selection)
     {
+        Destroy(m_Instance.componentPreview);
+
         if (prefab != null)
         {
             m_Instance.currentComponent = prefab;
             m_Instance.canSpawn = true;
+
+            m_Instance.componentPreview = Instantiate(m_Instance.previewPrefab, m_Instance.parent);
+            SpriteRenderer sprite = m_Instance.componentPreview.GetComponent<SpriteRenderer>();
+            sprite.sprite = selection.sprite;
+            sprite.color = new Color(0, 0, 0, 0.25f);
         }
         else
         {
