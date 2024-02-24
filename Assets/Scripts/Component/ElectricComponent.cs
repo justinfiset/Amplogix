@@ -28,6 +28,16 @@ public class ElectricComponent : MonoBehaviour
     public static KeyCode deleteKey = KeyCode.Mouse2;
     public static KeyCode unSelectKey = KeyCode.Escape;
 
+    public virtual void RotateComponent()
+    {
+        transform.Rotate(Vector3.forward * -90);
+    }
+
+    public virtual void DestroyComponent()
+    {
+        ComponentSpawner.DestroyComponent(gameObject);
+    }
+
     void Start()
     {
         resizeWinglets = GetComponent<ResizeWinglets>();
@@ -40,11 +50,11 @@ public class ElectricComponent : MonoBehaviour
         {
             if (Input.GetKeyDown(rotateKey))
             {
-                transform.Rotate(Vector3.forward * -90);
+                RotateComponent();
             } 
             else if(Input.GetKeyDown(deleteKey))
             {
-                ComponentSpawner.DestroyComponent(gameObject);
+                DestroyComponent();
             } 
             else if(Input.GetKeyDown(unSelectKey))
             {
@@ -93,9 +103,9 @@ public class ElectricComponent : MonoBehaviour
     private void Select()
     {
         isSelected = true;
-        OnSelect();
 
         resizeWinglets.GenerateWinglets(transform.localPosition, transform.localScale);
+        sprite.color = sprite.color * new Color(1, 1, 1, 0.5f);
     }
 
     private void Unselect()
@@ -103,19 +113,10 @@ public class ElectricComponent : MonoBehaviour
         isSelected = false;
         isBeingMoved = false;
         resizeWinglets.DestroyWinglets();
-        OnUnselect();
-    }
-
-    private void OnSelect()
-    {
-        sprite.color = sprite.color * new Color(1, 1, 1, 0.5f);
-    }
-
-    private void OnUnselect()
-    {
         sprite.color = Color.white;
     }
 
+    #region Mouse Callback
     private void OnMouseEnter()
     {
         isHover = true;
@@ -125,4 +126,5 @@ public class ElectricComponent : MonoBehaviour
     {
         isHover = false;
     }
+    #endregion
 }

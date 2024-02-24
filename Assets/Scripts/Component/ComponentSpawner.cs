@@ -3,6 +3,7 @@ using UnityEngine;
 public class ComponentSpawner : MonoBehaviour
 {
     public static ComponentSpawner m_Instance { get; private set; }
+    public ProjectManager projectManager;
 
     public bool canSpawn = true;
 
@@ -82,12 +83,14 @@ public class ComponentSpawner : MonoBehaviour
     public static void CreateComponent(GameObject component, Vector3 pos)
     {
         Instantiate(m_Instance.currentComponent, pos, Quaternion.Euler(0, 0, m_Instance.spawnAngle), m_Instance.parent);
+        m_Instance.projectManager.isProjectSaved = false;
         // TODO add component to a list somewhere to keep track
     }
 
     public static void DestroyComponent(GameObject component)
     {
         Destroy(component);
+        m_Instance.projectManager.isProjectSaved = false;
         // TODO remove from a certain list
     }
 }

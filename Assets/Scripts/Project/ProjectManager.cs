@@ -9,9 +9,11 @@ public class ProjectManager : MonoBehaviour
 {
     public bool isProjectSaved = true; // Par défault un projet n'a pas de modification
 
-    public TMP_InputField nameText;
-
     public Project project;
+
+    [Header("UI")]
+    public TMP_InputField nameText;
+    public QuitWithoutSavingPopup quitWithoutSavingPopup;
 
     private void Start()
     {
@@ -64,11 +66,14 @@ public class ProjectManager : MonoBehaviour
         SaveProject();
     }
 
-    public void ReturnToMenu()
+    public void ReturnToMenu(bool bypassSaveProtection = false)
     {
-        if(!isProjectSaved)
+        print("working");
+        if(!bypassSaveProtection && !isProjectSaved)
         {
-            // TODO: Want to save project popup???
+            quitWithoutSavingPopup.Show();
+        } else
+        {
             SceneManager.LoadScene("MainMenu");
         }
     }
