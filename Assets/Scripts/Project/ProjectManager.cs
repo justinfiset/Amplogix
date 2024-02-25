@@ -36,7 +36,11 @@ public class ProjectManager : MonoBehaviour
 
     public void SetProjectName()
     {
-        project.name = nameText.text;
+        if(project.name != nameText.text)
+        {
+            project.name = nameText.text;
+            isProjectSaved = false;
+        }
     }
 
     public void UpdateProjectName()
