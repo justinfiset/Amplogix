@@ -29,7 +29,10 @@ public class CameraBehaviour : MonoBehaviour
     {
         foreach (var controller in instance.controllers)
         {
-            controller.enabled = true;
+            if(controller != null)
+            {
+                controller.enabled = true;
+            }
         }
     }
 }

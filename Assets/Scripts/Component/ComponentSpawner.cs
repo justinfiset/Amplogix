@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class ComponentSpawner : MonoBehaviour
@@ -82,15 +83,15 @@ public class ComponentSpawner : MonoBehaviour
 
     public static void CreateComponent(GameObject component, Vector3 pos)
     {
-        Instantiate(m_Instance.currentComponent, pos, Quaternion.Euler(0, 0, m_Instance.spawnAngle), m_Instance.parent);
+        GameObject instance = Instantiate(m_Instance.currentComponent, pos, Quaternion.Euler(0, 0, m_Instance.spawnAngle), m_Instance.parent);
         m_Instance.projectManager.isProjectSaved = false;
-        // TODO add component to a list somewhere to keep track
+        m_Instance.projectManager.AddComponent(instance.GetComponent<ElectricComponent>());
     }
 
     public static void DestroyComponent(GameObject component)
     {
+        m_Instance.projectManager.AddComponent(component.GetComponent<ElectricComponent>());
         Destroy(component);
         m_Instance.projectManager.isProjectSaved = false;
-        // TODO remove from a certain list
     }
 }

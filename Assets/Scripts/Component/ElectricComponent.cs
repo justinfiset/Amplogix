@@ -3,15 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-[Serializable]
 [RequireComponent(typeof(SpriteRenderer))]
 [RequireComponent(typeof(ResizeWinglets))]
 [RequireComponent(typeof(BoxCollider2D))]
 public class ElectricComponent : MonoBehaviour
 {
+    [SerializeField] protected ElectricComponentType type;
+    private ElectricComponentData data;
+
     [Header("State")]
-    public bool isHover = false;
-    public bool isSelected = false;
+    private bool isHover = false;
+    private bool isSelected = false;
 
     [Header("Move / Drag")]
     private bool hasReleasedSinceSelection = true;
@@ -24,9 +26,9 @@ public class ElectricComponent : MonoBehaviour
     private SpriteRenderer sprite;
 
     [Header("Inputs")]
-    public static KeyCode rotateKey = KeyCode.R;
-    public static KeyCode deleteKey = KeyCode.Mouse2;
-    public static KeyCode unSelectKey = KeyCode.Escape;
+    private static KeyCode rotateKey = KeyCode.R;
+    private static KeyCode deleteKey = KeyCode.Mouse2;
+    private static KeyCode unSelectKey = KeyCode.Escape;
 
     public virtual void RotateComponent()
     {
@@ -116,6 +118,24 @@ public class ElectricComponent : MonoBehaviour
         sprite.color = Color.white;
     }
 
+    public void UpdateData()
+    {
+        if(data == null) data = new ElectricComponentData();
+
+        data.type = type;
+        data.x = transform.position.x;
+        data.y = transform.position.y;
+        data.rot = transform.localEulerAngles.z;
+        data.scaleX = transform.localScale.x;
+        data.scaleY = transform.localScale.y;
+    }
+
+    public ElectricComponentData GetData()
+    {
+        UpdateData();
+        return data;
+    }
+
     #region Mouse Callback
     private void OnMouseEnter()
     {
@@ -127,4 +147,30 @@ public class ElectricComponent : MonoBehaviour
         isHover = false;
     }
     #endregion
+}
+
+[Serializable]
+public enum ElectricComponentType
+{
+    Resistor,
+    PowerSource,
+    Switch,
+    LightBulb,
+    Motor,
+    Condensator,
+    Ammeter,
+    Voltmeter,
+    Diode,
+    Coil
+}
+
+[Serializable]
+public class ElectricComponentData
+{
+    public ElectricComponentType type;
+    public float x;
+    public float y;
+    public float rot;
+    public float scaleX;
+    public float scaleY;
 }
