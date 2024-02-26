@@ -11,7 +11,6 @@ public class MainMenuButtons : MonoBehaviour
     {
         SceneManager.LoadScene("CircuitCreator", LoadSceneMode.Single);
     }
-   
 
     public void LoadModel(/*Model model*/)
     {
@@ -27,7 +26,6 @@ public class MainMenuButtons : MonoBehaviour
         ProjectSettings settings = gm.AddComponent<ProjectSettings>();
         DontDestroyOnLoad(gm);
         settings.data = data;
-        Debug.Log(settings.data);
 
         SceneManager.LoadScene("CircuitCreator", LoadSceneMode.Single);
     }

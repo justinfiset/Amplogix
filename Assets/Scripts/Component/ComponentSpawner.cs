@@ -1,5 +1,15 @@
 using Unity.VisualScripting;
 using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
+using System;
+
+[Serializable]
+public class ElectricComponentPrefabLinker
+{
+    public ElectricComponentType type;
+    public GameObject prefab;
+}
 
 public class ComponentSpawner : MonoBehaviour
 {
@@ -9,10 +19,11 @@ public class ComponentSpawner : MonoBehaviour
     public bool canSpawn = true;
 
     private float spawnAngle;
-    private GameObject currentComponent;
+    private ElectricComponentType currentComponentType;
+    public List<ElectricComponentPrefabLinker> prefabList;
     private ComponentSelection currentSelection;
 
-    private Transform parent;
+    [SerializeField] private Transform parent;
 
     public GameObject previewPrefab;
     private GameObject componentPreview;
@@ -27,6 +38,8 @@ public class ComponentSpawner : MonoBehaviour
             m_Instance = this;
         }
         else Destroy(this);
+
+        projectManager.Init();
     }
 
     void Update()
@@ -43,13 +56,37 @@ public class ComponentSpawner : MonoBehaviour
         }
     }
 
-    public static void SetCurrentSelection(GameObject prefab, ComponentSelection selection)
+    private GameObject GetCurrentPrefab()
+    {
+        foreach(ElectricComponentPrefabLinker linker in prefabList)
+        {
+            if(linker.type == currentComponentType)
+            {
+                return linker.prefab;
+            }
+        }
+        return null;
+    }
+
+    private GameObject GetPrefab(ElectricComponentType type)
+    {
+        foreach (ElectricComponentPrefabLinker linker in prefabList)
+        {
+            if (linker.type == type)
+            {
+                return linker.prefab;
+            }
+        }
+        return null;
+    }
+
+    public static void SetCurrentSelection(ElectricComponentType type, ComponentSelection selection)
     {
         Destroy(m_Instance.componentPreview);
 
-        if (prefab != null)
+        if (type != ElectricComponentType.None)
         {
-            m_Instance.currentComponent = prefab;
+            m_Instance.currentComponentType = type;
             m_Instance.canSpawn = true;
 
             m_Instance.componentPreview = Instantiate(m_Instance.previewPrefab, m_Instance.parent);
@@ -74,18 +111,35 @@ public class ComponentSpawner : MonoBehaviour
 
     private static void SpawnPrefab()
     {
-        if(m_Instance.currentComponent != null)
+        GameObject currentComponent = m_Instance.GetCurrentPrefab();
+        if (currentComponent != null)
         {
             Vector3 pos = GridSettings.GetCurrentSnapedPosition();
-            CreateComponent(m_Instance.currentComponent, pos);
+            CreateComponent(currentComponent, pos);
         }
     }
 
     public static void CreateComponent(GameObject component, Vector3 pos)
     {
-        GameObject instance = Instantiate(m_Instance.currentComponent, pos, Quaternion.Euler(0, 0, m_Instance.spawnAngle), m_Instance.parent);
+        CreateComponent(component, pos, Quaternion.Euler(0, 0, m_Instance.spawnAngle), Vector3.one);
+    }
+
+    public static void CreateComponent(ElectricComponentData data)
+    {
+        ElectricComponentType type = (ElectricComponentType)data.type;
+        GameObject component = m_Instance.GetPrefab(type);
+        Vector3 pos = new Vector3(data.x, data.y, 0);
+        Quaternion angles = Quaternion.Euler(0, 0, data.rot);
+        Vector3 scale = new Vector3(data.scaleX, data.scaleY, 1);
+        CreateComponent(component, pos, angles, scale); 
+    }
+
+    public static void CreateComponent(GameObject component, Vector3 pos, Quaternion spawnAngle, Vector3 scale)
+    {
+        GameObject instance = Instantiate(component, pos, spawnAngle, m_Instance.parent);
         m_Instance.projectManager.isProjectSaved = false;
         m_Instance.projectManager.AddComponent(instance.GetComponent<ElectricComponent>());
+        instance.transform.localScale = scale;
     }
 
     public static void DestroyComponent(GameObject component)

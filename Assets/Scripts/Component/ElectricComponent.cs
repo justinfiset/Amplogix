@@ -122,7 +122,7 @@ public class ElectricComponent : MonoBehaviour
     {
         if(data == null) data = new ElectricComponentData();
 
-        data.type = type;
+        data.type = (int) type + 1; //TODO fix le + 1
         data.x = transform.position.x;
         data.y = transform.position.y;
         data.rot = transform.localEulerAngles.z;
@@ -152,6 +152,7 @@ public class ElectricComponent : MonoBehaviour
 [Serializable]
 public enum ElectricComponentType
 {
+    None,
     Resistor,
     PowerSource,
     Switch,
@@ -167,7 +168,7 @@ public enum ElectricComponentType
 [Serializable]
 public class ElectricComponentData
 {
-    public ElectricComponentType type;
+    public int type;
     public float x;
     public float y;
     public float rot;

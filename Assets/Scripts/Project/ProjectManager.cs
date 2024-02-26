@@ -18,20 +18,33 @@ public class ProjectManager : MonoBehaviour
 
     public List<ElectricComponent> componentList;
 
-    private void Start()
+    public void Init()
     {
         ProjectSettings projectSettings = (ProjectSettings)FindObjectOfType(typeof(ProjectSettings));
         if (projectSettings != null) 
         {
-            project = JsonUtility.FromJson<Project>(projectSettings.data);
+            LoadProject(projectSettings);
         }
-        else if(project == null)
+
+        if(project == null)
         {
             project = new Project();
         }
         UpdateProjectName();
 
         Debug.Log("Current project: " + project.name);
+    }
+
+    public void LoadProject(ProjectSettings settings)
+    {
+        project = settings.GetProject();
+        foreach(ElectricComponentData data in project.componentDataList)
+        {
+            if(data != null)
+            {
+                ComponentSpawner.CreateComponent(data);
+            }
+        }
     }
 
     public void SetProjectName()

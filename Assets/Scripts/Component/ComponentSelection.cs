@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 public class ComponentSelection : MonoBehaviour, IPointerClickHandler
 {
-    public GameObject prefab;
+    public ElectricComponentType type;
     public Sprite sprite;
 
     private bool buttonPressed = false;
@@ -42,7 +42,7 @@ public class ComponentSelection : MonoBehaviour, IPointerClickHandler
 
     public void SetActivePrefab()
     {
-        ComponentSpawner.SetCurrentSelection(prefab, this);
+        ComponentSpawner.SetCurrentSelection(type, this);
     }
 
     public void OnSelect()
