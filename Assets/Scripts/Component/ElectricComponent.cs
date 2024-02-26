@@ -23,6 +23,7 @@ public class ElectricComponent : MonoBehaviour
 
     [Header("UI")]
     private ResizeWinglets resizeWinglets;
+    [SerializeField] private SpriteRenderer outline;
     private SpriteRenderer sprite;
 
     [Header("Inputs")]
@@ -105,9 +106,9 @@ public class ElectricComponent : MonoBehaviour
     private void Select()
     {
         isSelected = true;
-
         resizeWinglets.GenerateWinglets(transform.localPosition, transform.localScale);
         sprite.color = sprite.color * new Color(1, 1, 1, 0.5f);
+        outline.color = Color.white;
     }
 
     private void Unselect()
@@ -116,6 +117,7 @@ public class ElectricComponent : MonoBehaviour
         isBeingMoved = false;
         resizeWinglets.DestroyWinglets();
         sprite.color = Color.white;
+        outline.color = Color.clear;
     }
 
     public void UpdateData()
