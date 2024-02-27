@@ -127,11 +127,16 @@ public class ComponentSpawner : MonoBehaviour
     public static void CreateComponent(ElectricComponentData data)
     {
         ElectricComponentType type = (ElectricComponentType)data.type;
-        GameObject component = m_Instance.GetPrefab(type);
         Vector3 pos = new Vector3(data.x, data.y, 0);
         Quaternion angles = Quaternion.Euler(0, 0, data.rot);
         Vector3 scale = new Vector3(data.scaleX, data.scaleY, 1);
-        CreateComponent(component, pos, angles, scale); 
+        CreateComponent(type, pos, angles, scale); 
+    }
+
+    public static void CreateComponent(ElectricComponentType type, Vector3 pos, Quaternion angles, Vector3 scale)
+    {
+        GameObject component = m_Instance.GetPrefab(type);
+        CreateComponent(component, pos, angles, scale);
     }
 
     public static void CreateComponent(GameObject component, Vector3 pos, Quaternion spawnAngle, Vector3 scale)

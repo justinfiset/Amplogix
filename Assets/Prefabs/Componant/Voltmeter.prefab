@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 8775329183439322426}
   - component: {fileID: 8775329183439322424}
   - component: {fileID: 8775329183439322407}
+  - component: {fileID: 271733607069528854}
   m_Layer: 0
   m_Name: Voltmeter
   m_TagString: Untagged
@@ -126,7 +127,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fc53c17d0aff6a54f8d5664dc952d0f9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 7
+  type: 8
   outline: {fileID: 7581558312388452172}
 --- !u!114 &8775329183439322407
 MonoBehaviour:
@@ -143,6 +144,21 @@ MonoBehaviour:
   resizeVertical: 0
   resizeHorizontal: 0
   prefab: {fileID: 300055153881864830, guid: 89912d52d0f4f714a818a04c2ba2ad6c, type: 3}
+--- !u!114 &271733607069528854
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8775329183439322405}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f78dc4d4e46b52c4180ce447ccfdcd9e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isActive: 0
+  respectOrientation: 1
+  wireTilePrefab: {fileID: 729730110476256346, guid: b7b1b57ceb44fc9489faac4c0c4be09f, type: 3}
 --- !u!1001 &9204522690265819115
 PrefabInstance:
   m_ObjectHideFlags: 0

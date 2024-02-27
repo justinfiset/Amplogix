@@ -5,6 +5,7 @@ using System;
 
 [RequireComponent(typeof(SpriteRenderer))]
 [RequireComponent(typeof(ResizeWinglets))]
+[RequireComponent(typeof(WireTilesManager))]
 [RequireComponent(typeof(BoxCollider2D))]
 public class ElectricComponent : MonoBehaviour
 {
@@ -23,6 +24,7 @@ public class ElectricComponent : MonoBehaviour
 
     [Header("UI")]
     private ResizeWinglets resizeWinglets;
+    private WireTilesManager wireTilesManager;
     [SerializeField] private SpriteRenderer outline;
     private SpriteRenderer sprite;
 
@@ -44,6 +46,7 @@ public class ElectricComponent : MonoBehaviour
     void Start()
     {
         resizeWinglets = GetComponent<ResizeWinglets>();
+        wireTilesManager = GetComponent<WireTilesManager>();
         sprite = GetComponent<SpriteRenderer>();
     }
 
@@ -101,12 +104,15 @@ public class ElectricComponent : MonoBehaviour
                 hasReleasedSinceSelection = true;
             }
         }
+
+
     }
 
     private void Select()
     {
         isSelected = true;
         resizeWinglets.GenerateWinglets(transform.localPosition, transform.localScale);
+        wireTilesManager.ShowTiles();
         sprite.color = sprite.color * new Color(1, 1, 1, 0.5f);
         outline.color = Color.white;
     }
@@ -116,6 +122,7 @@ public class ElectricComponent : MonoBehaviour
         isSelected = false;
         isBeingMoved = false;
         resizeWinglets.DestroyWinglets();
+        wireTilesManager.HideTiles();
         sprite.color = Color.white;
         outline.color = Color.clear;
     }
@@ -124,7 +131,7 @@ public class ElectricComponent : MonoBehaviour
     {
         if(data == null) data = new ElectricComponentData();
 
-        data.type = (int) type + 1; //TODO fix le + 1
+        data.type = (int) type;
         data.x = transform.position.x;
         data.y = transform.position.y;
         data.rot = transform.localEulerAngles.z;
@@ -164,7 +171,9 @@ public enum ElectricComponentType
     Ammeter,
     Voltmeter,
     Diode,
-    Coil
+    Coil,
+    Wire,
+    WireCorner
 }
 
 [Serializable]

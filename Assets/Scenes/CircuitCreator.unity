@@ -2985,6 +2985,10 @@ MonoBehaviour:
     prefab: {fileID: 566914790449441715, guid: 2f619ab1d06de904a9662b9e5c929178, type: 3}
   - type: 10
     prefab: {fileID: 1076454670309057305, guid: 2490a740030a0da43a4412184feb6471, type: 3}
+  - type: 11
+    prefab: {fileID: 5643372875791426778, guid: 6fbe15626e6a7454c9392e4782c47890, type: 3}
+  - type: 12
+    prefab: {fileID: 5643372875791426778, guid: 97ddab93113ee974689764dbaa0c38c6, type: 3}
   parent: {fileID: 21885590}
   previewPrefab: {fileID: 475578015003214662, guid: 78f07e3abc25108409917cab84d733ae, type: 3}
 --- !u!224 &1030773709
@@ -3419,6 +3423,7 @@ GameObject:
   - component: {fileID: 1112125351}
   - component: {fileID: 1112125350}
   - component: {fileID: 1112125349}
+  - component: {fileID: 1112125354}
   m_Layer: 0
   m_Name: 1x1
   m_TagString: Untagged
@@ -3469,6 +3474,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 0
+  outline: {fileID: 0}
 --- !u!225 &1112125351
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -3559,6 +3565,21 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &1112125354
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1112125347}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f78dc4d4e46b52c4180ce447ccfdcd9e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isActive: 0
+  respectOrientation: 0
+  wireTilePrefab: {fileID: 0}
 --- !u!1 &1126380001
 GameObject:
   m_ObjectHideFlags: 0
