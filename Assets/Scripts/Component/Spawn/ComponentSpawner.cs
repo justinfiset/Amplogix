@@ -121,7 +121,13 @@ public class ComponentSpawner : MonoBehaviour
         if (currentComponent != null)
         {
             Vector3 pos = GridSettings.GetCurrentSnapedPosition();
-            CreateComponent(currentComponent, pos);
+            if (!m_Instance.projectManager.ContainsComponent(pos))
+            {
+                CreateComponent(currentComponent, pos);
+            } else
+            {
+                // TODO ERREUR COMPONENT DEJA EXISTANT
+            }
         }
     }
 

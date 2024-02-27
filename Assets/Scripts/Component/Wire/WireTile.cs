@@ -2,11 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum WireTilePosition
+{
+    Top = 270,
+    Bottom = 90,
+    Left = 180,
+    Right = 0
+}
+
 public class WireTile : MonoBehaviour
 {
     private bool isHover = false;
-    private float spawnRot = 0;
-    private ElectricComponent currentComponent; 
+    private WireTilesManager manager;
+    public WireTilePosition position;
 
     public void Update()
     {
@@ -14,30 +22,15 @@ public class WireTile : MonoBehaviour
         {
             if(Input.GetMouseButtonDown(0))
             {
-                ElectricComponentType type = ElectricComponentType.Wire;
-                Quaternion angles = Quaternion.Euler(0, 0, spawnRot);
-                // TODO GERER COIN <---
-                GameObject component = ComponentSpawner.CreateComponent(type, transform.position, angles, Vector3.one);
-                StartCoroutine(WaitBeforeSelection(component));
+                manager.CreateNewWire(this);
             }
         }
     }
 
-    public void Setup(ElectricComponent component, float spawnRot)
+    public void Setup(WireTilesManager manager, WireTilePosition position)
     {
-        this.currentComponent = component;
-        this.spawnRot = spawnRot;
-    }
-
-    private IEnumerator WaitBeforeSelection(GameObject component)
-    {
-        yield return new WaitForEndOfFrame();
-        currentComponent.Unselect();
-        ElectricComponent wire = component.GetComponent<ElectricComponent>();
-        if (wire != null) {
-            wire.Select();
-            wire.hasReleasedSinceSelection = false;
-        }
+        this.manager = manager;
+        this.position = position;
     }
 
     #region Mouse callbacks

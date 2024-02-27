@@ -8,10 +8,13 @@ public class WireTilesManager : MonoBehaviour
 
     public bool respectOrientation;
     private float spacing;
+    private List<Vector2> surroundingComponents;
     private ElectricComponent currentComponent;
 
     public GameObject wireTilePrefab;
     private GameObject parent;
+
+    float rot; // the current component roatation
 
     private void Start()
     {
@@ -22,8 +25,8 @@ public class WireTilesManager : MonoBehaviour
     {
         parent = new GameObject("Wire Tiles");
         spacing = GridSettings.m_Instance.gridIncrement;
-        // TODO checkup case non dispo
-        float rot = Mathf.Abs(transform.localEulerAngles.z);
+        rot = Mathf.Abs(transform.localEulerAngles.z);
+        surroundingComponents = ProjectManager.m_Instance.GetSurroundingComponentsPos(transform.position);
 
         if(respectOrientation )
         {
@@ -47,10 +50,16 @@ public class WireTilesManager : MonoBehaviour
         Vector3 topPos = transform.position + (Vector3.up * spacing);
         Vector3 bottomPos = transform.position + (Vector3.down * spacing);
 
-        Instantiate(wireTilePrefab, topPos, Quaternion.identity, parent.transform)
-            .GetComponent<WireTile>().Setup(currentComponent, 270f);
-        Instantiate(wireTilePrefab, bottomPos, Quaternion.identity, parent.transform)
-            .GetComponent<WireTile>().Setup(currentComponent, 90f);
+        if(!surroundingComponents.Contains(topPos))
+        {
+            Instantiate(wireTilePrefab, topPos, Quaternion.identity, parent.transform)
+                .GetComponent<WireTile>().Setup(this, WireTilePosition.Top);
+        }
+        if (!surroundingComponents.Contains(bottomPos))
+        {
+            Instantiate(wireTilePrefab, bottomPos, Quaternion.identity, parent.transform)
+                .GetComponent<WireTile>().Setup(this, WireTilePosition.Bottom);
+        }
     }
 
     public void SpawnHorizontalTiles()
@@ -58,10 +67,53 @@ public class WireTilesManager : MonoBehaviour
         Vector3 leftPos = transform.position + (Vector3.left * spacing);
         Vector3 rightPos = transform.position + (Vector3.right * spacing);
 
-        Instantiate(wireTilePrefab, leftPos, Quaternion.identity, parent.transform)
-            .GetComponent<WireTile>().Setup(currentComponent, 180f);
-        Instantiate(wireTilePrefab, rightPos, Quaternion.identity, parent.transform)
-            .GetComponent<WireTile>().Setup(currentComponent, 0f);
+        if (!surroundingComponents.Contains(leftPos))
+        {
+            Instantiate(wireTilePrefab, leftPos, Quaternion.identity, parent.transform)
+                .GetComponent<WireTile>().Setup(this, WireTilePosition.Left);
+        }
+        if (!surroundingComponents.Contains(rightPos))
+        {
+            Instantiate(wireTilePrefab, rightPos, Quaternion.identity, parent.transform)
+                .GetComponent<WireTile>().Setup(this, WireTilePosition.Right);
+        }
+    }
+
+    public void CreateNewWire(WireTile tile)
+    {
+        ElectricComponentType type = ElectricComponentType.Wire;
+        Vector3 pos = tile.transform.position;
+        Quaternion angles = Quaternion.Euler(0, 0, (float) tile.position);
+        GameObject component = ComponentSpawner.CreateComponent(type, pos, angles, Vector3.one);
+        
+        ManageNewSelection(component);
+        HandleWireVariation(component);
+    }
+
+    public void HandleWireVariation(GameObject newWire)
+    {
+        float diffY = newWire.transform.position.y - transform.position.y; // + = en haut, - = en bas, 0 = meme hauteur
+        float diffx = newWire.transform.position.x - transform.position.x; // + = en haut, - = en bas, 0 = meme hauteur
+         
+        // TODO SCAN COMPONENTS AUTOUR POUR LIER AU BESOIN
+
+    }
+
+    public void ManageNewSelection(GameObject newWire)
+    {
+        StartCoroutine(WaitBeforeSelection(newWire));
+    }
+
+    private IEnumerator WaitBeforeSelection(GameObject newWire)
+    {
+        yield return new WaitForEndOfFrame();
+        currentComponent.Unselect();
+        ElectricComponent wire = newWire.GetComponent<ElectricComponent>();
+        if (wire != null)
+        {
+            wire.Select();
+            wire.hasReleasedSinceSelection = false;
+        }
     }
 
     public void HideTiles()
