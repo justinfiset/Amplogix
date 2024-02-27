@@ -5,6 +5,7 @@ using UnityEngine;
 public class WireTile : MonoBehaviour
 {
     private bool isHover = false;
+    [HideInInspector] public ElectricComponent currentComponent; 
 
     public void Update()
     {
@@ -15,8 +16,21 @@ public class WireTile : MonoBehaviour
                 ElectricComponentType type = ElectricComponentType.Wire;
                 Quaternion angles = Quaternion.identity;
                 // TODO GERER ORIENTATION
-                ComponentSpawner.CreateComponent(type, transform.position, angles, Vector3.one);
+
+                GameObject component = ComponentSpawner.CreateComponent(type, transform.position, angles, Vector3.one);
+                StartCoroutine(WaitBeforeSelection(component));
             }
+        }
+    }
+
+    private IEnumerator WaitBeforeSelection(GameObject component)
+    {
+        yield return new WaitForEndOfFrame();
+        currentComponent.Unselect();
+        ElectricComponent wire = component.GetComponent<ElectricComponent>();
+        if (wire != null) {
+            wire.Select();
+            wire.hasReleasedSinceSelection = false;
         }
     }
 

@@ -45,6 +45,7 @@ public class ResizeWinglets : MonoBehaviour
 
     public void DestroyWinglets()
     {
-        Destroy(parent.gameObject);
+        if(parent != null)
+            Destroy(parent.gameObject);
     }
 }

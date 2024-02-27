@@ -44,15 +44,21 @@ public class ComponentSpawner : MonoBehaviour
 
     void Update()
     {
-        if (canSpawn && Input.GetMouseButtonDown(0))
+        if(canSpawn)
         {
-            SpawnPrefab();
-        }
+            if (Input.GetMouseButtonDown(0))
+            {
+                SpawnPrefab();
+            }
 
-        if (Input.GetKeyDown(rotateKey))
-        {
-            componentPreview.transform.Rotate(Vector3.forward * -90);
-            spawnAngle = componentPreview.transform.eulerAngles.z;
+            if (Input.GetKeyDown(rotateKey))
+            {
+                if (componentPreview != null)
+                {
+                    componentPreview.transform.Rotate(Vector3.forward * -90);
+                    spawnAngle = componentPreview.transform.eulerAngles.z;
+                }
+            }
         }
     }
 
@@ -119,32 +125,33 @@ public class ComponentSpawner : MonoBehaviour
         }
     }
 
-    public static void CreateComponent(GameObject component, Vector3 pos)
+    public static GameObject CreateComponent(GameObject component, Vector3 pos)
     {
-        CreateComponent(component, pos, Quaternion.Euler(0, 0, m_Instance.spawnAngle), Vector3.one);
+        return CreateComponent(component, pos, Quaternion.Euler(0, 0, m_Instance.spawnAngle), Vector3.one);
     }
 
-    public static void CreateComponent(ElectricComponentData data)
+    public static GameObject CreateComponent(ElectricComponentData data)
     {
         ElectricComponentType type = (ElectricComponentType)data.type;
         Vector3 pos = new Vector3(data.x, data.y, 0);
         Quaternion angles = Quaternion.Euler(0, 0, data.rot);
         Vector3 scale = new Vector3(data.scaleX, data.scaleY, 1);
-        CreateComponent(type, pos, angles, scale); 
+        return CreateComponent(type, pos, angles, scale); 
     }
 
-    public static void CreateComponent(ElectricComponentType type, Vector3 pos, Quaternion angles, Vector3 scale)
+    public static GameObject CreateComponent(ElectricComponentType type, Vector3 pos, Quaternion angles, Vector3 scale)
     {
         GameObject component = m_Instance.GetPrefab(type);
-        CreateComponent(component, pos, angles, scale);
+        return CreateComponent(component, pos, angles, scale);
     }
 
-    public static void CreateComponent(GameObject component, Vector3 pos, Quaternion spawnAngle, Vector3 scale)
+    public static GameObject CreateComponent(GameObject component, Vector3 pos, Quaternion spawnAngle, Vector3 scale)
     {
         GameObject instance = Instantiate(component, pos, spawnAngle, m_Instance.parent);
         m_Instance.projectManager.isProjectSaved = false;
         m_Instance.projectManager.AddComponent(instance.GetComponent<ElectricComponent>());
         instance.transform.localScale = scale;
+        return instance;
     }
 
     public static void DestroyComponent(GameObject component)

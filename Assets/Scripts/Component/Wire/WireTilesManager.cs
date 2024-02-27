@@ -8,16 +8,14 @@ public class WireTilesManager : MonoBehaviour
 
     public bool respectOrientation;
     private float spacing;
+    private ElectricComponent currentComponent;
 
     public GameObject wireTilePrefab;
     private GameObject parent;
 
-    private void Update()
+    private void Start()
     {
-       if(isActive)
-        {
-
-        }
+        currentComponent = GetComponent<ElectricComponent>();
     }
 
     public void ShowTiles()
@@ -48,16 +46,22 @@ public class WireTilesManager : MonoBehaviour
     {
         Vector3 topPos = transform.position + (Vector3.up * spacing);
         Vector3 bottomPos = transform.position + (Vector3.down * spacing);
-        Instantiate(wireTilePrefab, topPos, Quaternion.identity, parent.transform);
-        Instantiate(wireTilePrefab, bottomPos, Quaternion.identity, parent.transform);
+
+        Instantiate(wireTilePrefab, topPos, Quaternion.identity, parent.transform)
+            .GetComponent<WireTile>().currentComponent = currentComponent;
+        Instantiate(wireTilePrefab, bottomPos, Quaternion.identity, parent.transform)
+            .GetComponent<WireTile>().currentComponent = currentComponent;
     }
 
     public void SpawnHorizontalTiles()
     {
         Vector3 leftPos = transform.position + (Vector3.left * spacing);
         Vector3 rightPos = transform.position + (Vector3.right * spacing);
-        Instantiate(wireTilePrefab, leftPos, Quaternion.identity, parent.transform);
-        Instantiate(wireTilePrefab, rightPos, Quaternion.identity, parent.transform);
+
+        Instantiate(wireTilePrefab, leftPos, Quaternion.identity, parent.transform)
+            .GetComponent<WireTile>().currentComponent = currentComponent;
+        Instantiate(wireTilePrefab, rightPos, Quaternion.identity, parent.transform)
+            .GetComponent<WireTile>().currentComponent = currentComponent;
     }
 
     public void HideTiles()

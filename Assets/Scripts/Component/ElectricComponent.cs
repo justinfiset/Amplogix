@@ -13,13 +13,14 @@ public class ElectricComponent : MonoBehaviour
     private ElectricComponentData data;
 
     [Header("Logic")]
+    public bool canBeRotated = true;
     public bool canBeMoved = true; // Le composant peut-il être manipulé par l'utilisateur?
     [Header("State")]
     private bool isHover = false;
     private bool isSelected = false;
 
     [Header("Move / Drag")]
-    private bool hasReleasedSinceSelection = true;
+    [HideInInspector] public bool hasReleasedSinceSelection = true;
     private bool isBeingMoved = false;
     private Vector3 startPos;
     private Vector3 startOrigin;
@@ -34,6 +35,13 @@ public class ElectricComponent : MonoBehaviour
     private static KeyCode rotateKey = KeyCode.R;
     private static KeyCode deleteKey = KeyCode.Mouse2;
     private static KeyCode unSelectKey = KeyCode.Escape;
+
+    public virtual void _RotateComponent()
+    {
+        Unselect();
+        RotateComponent();
+        Select();
+    }
 
     public virtual void RotateComponent()
     {
@@ -57,9 +65,9 @@ public class ElectricComponent : MonoBehaviour
     {
         if (isSelected)
         {
-            if (Input.GetKeyDown(rotateKey))
+            if (canBeRotated && Input.GetKeyDown(rotateKey))
             {
-                RotateComponent();
+                _RotateComponent();
             } 
             else if(Input.GetKeyDown(deleteKey))
             {
@@ -111,7 +119,7 @@ public class ElectricComponent : MonoBehaviour
 
     }
 
-    private void Select()
+    public void Select()
     {
         isSelected = true;
         resizeWinglets.GenerateWinglets(transform.localPosition, transform.localScale);
@@ -120,7 +128,7 @@ public class ElectricComponent : MonoBehaviour
         outline.color = Color.white;
     }
 
-    private void Unselect()
+    public void Unselect()
     {
         isSelected = false;
         isBeingMoved = false;
