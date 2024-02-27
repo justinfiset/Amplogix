@@ -12,6 +12,8 @@ public class ElectricComponent : MonoBehaviour
     [SerializeField] protected ElectricComponentType type;
     private ElectricComponentData data;
 
+    [Header("Logic")]
+    public bool canBeMoved = true; // Le composant peut-il être manipulé par l'utilisateur?
     [Header("State")]
     private bool isHover = false;
     private bool isSelected = false;
@@ -23,9 +25,9 @@ public class ElectricComponent : MonoBehaviour
     private Vector3 startOrigin;
 
     [Header("UI")]
+    [SerializeField] private SpriteRenderer outline;
     private ResizeWinglets resizeWinglets;
     private WireTilesManager wireTilesManager;
-    [SerializeField] private SpriteRenderer outline;
     private SpriteRenderer sprite;
 
     [Header("Inputs")]
@@ -40,6 +42,7 @@ public class ElectricComponent : MonoBehaviour
 
     public virtual void DestroyComponent()
     {
+        Unselect();
         ComponentSpawner.DestroyComponent(gameObject);
     }
 
@@ -75,7 +78,7 @@ public class ElectricComponent : MonoBehaviour
                     startOrigin = transform.localPosition;
                     isBeingMoved = true;
                 }
-                if(isBeingMoved)
+                if(isBeingMoved && canBeMoved)
                 {
                     Vector3 diffPos = GridSettings.GetCurrentSnapedPosition() - startPos;
                     gameObject.transform.localPosition = startOrigin + diffPos;
