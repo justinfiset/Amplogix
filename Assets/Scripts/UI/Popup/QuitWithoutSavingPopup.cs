@@ -2,24 +2,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(CanvasGroup))]
 public class QuitWithoutSavingPopup : MonoBehaviour
 {
-    private CanvasGroup canvasGroup;
+    private GameObject container;
 
     private void Start()
     {
-        canvasGroup = GetComponent<CanvasGroup>();
+        container = transform.GetChild(0).gameObject;
     }
 
     public void Show()
     {
-       canvasGroup.alpha = 1;
+        container.SetActive(true);
     }
 
     public void Hide()
     {
-        canvasGroup.alpha = 0;
+        container.SetActive(false);
     }
 
     public void SaveAndExit()

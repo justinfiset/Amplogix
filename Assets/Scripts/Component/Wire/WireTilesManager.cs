@@ -48,9 +48,9 @@ public class WireTilesManager : MonoBehaviour
         Vector3 bottomPos = transform.position + (Vector3.down * spacing);
 
         Instantiate(wireTilePrefab, topPos, Quaternion.identity, parent.transform)
-            .GetComponent<WireTile>().currentComponent = currentComponent;
+            .GetComponent<WireTile>().Setup(currentComponent, 270f);
         Instantiate(wireTilePrefab, bottomPos, Quaternion.identity, parent.transform)
-            .GetComponent<WireTile>().currentComponent = currentComponent;
+            .GetComponent<WireTile>().Setup(currentComponent, 90f);
     }
 
     public void SpawnHorizontalTiles()
@@ -59,9 +59,9 @@ public class WireTilesManager : MonoBehaviour
         Vector3 rightPos = transform.position + (Vector3.right * spacing);
 
         Instantiate(wireTilePrefab, leftPos, Quaternion.identity, parent.transform)
-            .GetComponent<WireTile>().currentComponent = currentComponent;
+            .GetComponent<WireTile>().Setup(currentComponent, 180f);
         Instantiate(wireTilePrefab, rightPos, Quaternion.identity, parent.transform)
-            .GetComponent<WireTile>().currentComponent = currentComponent;
+            .GetComponent<WireTile>().Setup(currentComponent, 0f);
     }
 
     public void HideTiles()
