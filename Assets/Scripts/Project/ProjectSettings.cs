@@ -5,6 +5,7 @@ using UnityEngine;
 public class ProjectSettings : MonoBehaviour
 {
     public string data;
+    public string path;
 
     public Project GetProject()
     {

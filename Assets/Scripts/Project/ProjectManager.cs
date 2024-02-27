@@ -38,6 +38,9 @@ public class ProjectManager : MonoBehaviour
     public void LoadProject(ProjectSettings settings)
     {
         project = settings.GetProject();
+        project.savePath = settings.path;
+
+        // Creation des composants
         foreach(ElectricComponentData data in project.componentDataList)
         {
             if(data != null)
@@ -45,6 +48,8 @@ public class ProjectManager : MonoBehaviour
                 ComponentSpawner.CreateComponent(data);
             }
         }
+
+        isProjectSaved = true;
     }
 
     public void SetProjectName()

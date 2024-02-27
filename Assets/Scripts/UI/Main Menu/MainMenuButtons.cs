@@ -26,6 +26,7 @@ public class MainMenuButtons : MonoBehaviour
         ProjectSettings settings = gm.AddComponent<ProjectSettings>();
         DontDestroyOnLoad(gm);
         settings.data = data;
+        settings.path = paths[0];
 
         SceneManager.LoadScene("CircuitCreator", LoadSceneMode.Single);
     }
