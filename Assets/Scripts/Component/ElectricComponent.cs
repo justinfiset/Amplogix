@@ -41,6 +41,7 @@ public class ElectricComponent : MonoBehaviour
         Unselect();
         RotateComponent();
         Select();
+        ProjectManager.m_Instance.isProjectSaved = false;
     }
 
     public virtual void RotateComponent()
@@ -89,7 +90,14 @@ public class ElectricComponent : MonoBehaviour
                 if(isBeingMoved && canBeMoved)
                 {
                     Vector3 diffPos = GridSettings.GetCurrentSnapedPosition() - startPos;
-                    gameObject.transform.localPosition = startOrigin + diffPos;
+
+                    if (diffPos != Vector3.zero)
+                    {
+                        Unselect();
+                        gameObject.transform.localPosition = startOrigin + diffPos;
+                        Select();
+                        ProjectManager.m_Instance.isProjectSaved = false;
+                    }
                 }
             }
         }

@@ -8,6 +8,8 @@ using UnityEngine.SceneManagement;
 
 public class ProjectManager : MonoBehaviour
 {
+    public static ProjectManager m_Instance { get; private set; }
+
     public bool isProjectSaved = true; // Par défault un projet n'a pas de modification
 
     public Project project;
@@ -17,6 +19,12 @@ public class ProjectManager : MonoBehaviour
     public QuitWithoutSavingPopup quitWithoutSavingPopup;
 
     public List<ElectricComponent> componentList;
+
+    void Start()
+    {
+        if(m_Instance == null) m_Instance = this;
+        else Destroy(this);
+    }
 
     public void Init()
     {
