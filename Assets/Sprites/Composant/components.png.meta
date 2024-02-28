@@ -1,9 +1,9 @@
 fileFormatVersion: 2
-guid: e0280b3438ec49a4a976eedc0b076a67
+guid: c6b6966af1811ea4bbd2fbab940b39d5
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
-  serializedVersion: 12
+  serializedVersion: 11
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -20,6 +20,7 @@ TextureImporter:
     externalNormalMap: 0
     heightScale: 0.25
     normalMapFilter: 0
+    flipGreenChannel: 0
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
@@ -63,7 +64,7 @@ TextureImporter:
   textureFormatSet: 0
   ignorePngGamma: 0
   applyGammaDecoding: 0
-  cookieLightType: 1
+  swizzle: 50462976
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
@@ -101,23 +102,11 @@ TextureImporter:
     overridden: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 3
-    buildTarget: WebGL
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: '!tileset2_0'
+      name: components_0
       rect:
         serializedVersion: 2
         x: 0
@@ -131,14 +120,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: bb6e9b0722c12594e9a6df2d6714c472
-      internalID: -1888274931
+      spriteID: 978f61828e7981447bebfb3f8aae537a
+      internalID: 953828334
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: '!tileset2_1'
+      name: components_1
       rect:
         serializedVersion: 2
         x: 1000
@@ -152,14 +141,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: a47f36b6c1177534694551bf42393c53
-      internalID: -2145783372
+      spriteID: 26d5d087bafd2cf4e9d6d4f4e43d42ff
+      internalID: -1940939031
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: '!tileset2_2'
+      name: components_2
       rect:
         serializedVersion: 2
         x: 2000
@@ -173,14 +162,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 8c0afa459690bbe4f83c806226afba49
-      internalID: -1385582536
+      spriteID: 120a4e10e058d0f468f69ddc88a5bfaa
+      internalID: 834973893
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: '!tileset2_3'
+      name: components_3
       rect:
         serializedVersion: 2
         x: 3000
@@ -194,14 +183,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 23fa6e02c4059444f8b8d40219fe4e59
-      internalID: -1221857380
+      spriteID: 099951027fa59ee4c82668f5145cb512
+      internalID: 436207562
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: '!tileset2_4'
+      name: components_4
       rect:
         serializedVersion: 2
         x: 0
@@ -215,14 +204,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: db7180b7434fca54ab23bdd93dc500ce
-      internalID: 1525300612
+      spriteID: 91467069999e0cf4693454c1de7cfa96
+      internalID: 306176031
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: '!tileset2_5'
+      name: components_5
       rect:
         serializedVersion: 2
         x: 1000
@@ -236,14 +225,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 08cf5a4ef3b828c4296253d9c70ec7b9
-      internalID: -63231791
+      spriteID: e39e5d282fe42c0488ecd3ce9e3bb420
+      internalID: -1351411403
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: '!tileset2_6'
+      name: components_6
       rect:
         serializedVersion: 2
         x: 2000
@@ -257,14 +246,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 9b1564c00ef7fb940a2ce6f5579c6b97
-      internalID: -2141834728
+      spriteID: afe452d2086bdac4a89fa28925d802b4
+      internalID: -1799907246
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: '!tileset2_7'
+      name: components_7
       rect:
         serializedVersion: 2
         x: 3000
@@ -278,14 +267,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 41195735048d5ea4bb6debf330b9f905
-      internalID: -126342400
+      spriteID: 2fbe4cc20bf4b4f479c9367f8f8666a5
+      internalID: -609352295
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: '!tileset2_8'
+      name: components_8
       rect:
         serializedVersion: 2
         x: 0
@@ -299,14 +288,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: c82dc018d77269348909032124760984
-      internalID: -1812411725
+      spriteID: 2c26c565402001644a3b95c363d7aae6
+      internalID: 704941132
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: '!tileset2_9'
+      name: components_9
       rect:
         serializedVersion: 2
         x: 1000
@@ -320,14 +309,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 481cba2e368310942890fc524aefd941
-      internalID: -1087029519
+      spriteID: 7d118613ae10d9347badd2fbd0909729
+      internalID: 1801052287
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: '!tileset2_10'
+      name: components_10
       rect:
         serializedVersion: 2
         x: 2000
@@ -341,14 +330,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: ea30e3d7730640f4bb2a17307173af2e
-      internalID: 1015818313
+      spriteID: acc5b66538c61cc42977c3128d1fdc61
+      internalID: -1757465333
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: '!tileset2_11'
+      name: components_11
       rect:
         serializedVersion: 2
         x: 3000
@@ -362,14 +351,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: d964862cbd905cc4ab4bbd530ebf6b8c
-      internalID: 743000672
+      spriteID: 6fc32e5285015a647bf8dcb270fe7c59
+      internalID: -79407870
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: '!tileset2_12'
+      name: components_12
       rect:
         serializedVersion: 2
         x: 0
@@ -383,14 +372,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: ecb276109e9c79c478467156cc8120a1
-      internalID: -1344034616
+      spriteID: 260aaab519743e74a8804e408540beaf
+      internalID: 878399993
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: '!tileset2_13'
+      name: components_13
       rect:
         serializedVersion: 2
         x: 1000
@@ -404,14 +393,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 829992fc515ed8f4a8661cf333832b98
-      internalID: -1001421212
+      spriteID: 355942c8b0d4bed47a98b95422ccfabd
+      internalID: -1088185203
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: '!tileset2_14'
+      name: components_14
       rect:
         serializedVersion: 2
         x: 2000
@@ -425,29 +414,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 48ba246c70110f546b37cd576d5be7e7
-      internalID: -1190374661
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: '!tileset2_15'
-      rect:
-        serializedVersion: 2
-        x: 3000
-        y: 0
-        width: 1000
-        height: 1000
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 5aeba6b4c209678429e15809eb25ce30
-      internalID: -1065796607
+      spriteID: 5989aa40111c7d44eb2f7d0d00792683
+      internalID: 394026406
       vertices: []
       indices: 
       edges: []
@@ -463,25 +431,23 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      '!tileset2_0': -1888274931
-      '!tileset2_1': -2145783372
-      '!tileset2_10': 1015818313
-      '!tileset2_11': 743000672
-      '!tileset2_12': -1344034616
-      '!tileset2_13': -1001421212
-      '!tileset2_14': -1190374661
-      '!tileset2_15': -1065796607
-      '!tileset2_2': -1385582536
-      '!tileset2_3': -1221857380
-      '!tileset2_4': 1525300612
-      '!tileset2_5': -63231791
-      '!tileset2_6': -2141834728
-      '!tileset2_7': -126342400
-      '!tileset2_8': -1812411725
-      '!tileset2_9': -1087029519
+      components_6: -1799907246
+      components_3: 436207562
+      components_14: 394026406
+      components_8: 704941132
+      components_5: -1351411403
+      components_4: 306176031
+      components_12: 878399993
+      components_9: 1801052287
+      components_13: -1088185203
+      components_11: -79407870
+      components_2: 834973893
+      components_0: 953828334
+      components_1: -1940939031
+      components_10: -1757465333
+      components_7: -609352295
   spritePackingTag: 
   pSDRemoveMatte: 0
-  pSDShowRemoveMatteOption: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 
