@@ -92,11 +92,13 @@ public class WireTilesManager : MonoBehaviour
 
     public void HandleWireVariation(GameObject newWire)
     {
-        float diffY = newWire.transform.position.y - transform.position.y; // + = en haut, - = en bas, 0 = meme hauteur
-        float diffx = newWire.transform.position.x - transform.position.x; // + = en haut, - = en bas, 0 = meme hauteur
-         
-        // TODO SCAN COMPONENTS AUTOUR POUR LIER AU BESOIN
+        // On modifie la variation uniquement si on est dans un fil
+        if(ElectricComponentTypeMethods.IsWire(currentComponent))
+        {
+            surroundingComponents = ProjectManager.m_Instance.GetSurroundingComponentsPos(transform.position);
 
+            // TODO SCAN COMPONENTS AUTOUR POUR LIER AU BESOIN
+        }
     }
 
     public void ManageNewSelection(GameObject newWire)

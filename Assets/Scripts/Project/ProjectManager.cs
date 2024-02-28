@@ -18,14 +18,14 @@ public class ProjectManager : MonoBehaviour
     public TMP_InputField nameText;
     public QuitWithoutSavingPopup quitWithoutSavingPopup;
 
-    public Dictionary<UnityEngine.Vector2, ElectricComponent> componentList;
+    public Dictionary<ElectricComponent, Vector2> componentList;
 
     void Start()
     {
         if(m_Instance == null) m_Instance = this;
         else Destroy(this);
 
-        componentList = new Dictionary<UnityEngine.Vector2, ElectricComponent>();
+        componentList = new Dictionary<ElectricComponent, Vector2>();
     }
 
     public void Init()
@@ -97,7 +97,7 @@ public class ProjectManager : MonoBehaviour
     public void SerializeComponents()
     {
         List<ElectricComponentData> data = new List<ElectricComponentData>();
-        foreach (ElectricComponent component in componentList.Values)
+        foreach (ElectricComponent component in componentList.Keys)
         {
             data.Add(component.GetData());
         }
@@ -126,35 +126,34 @@ public class ProjectManager : MonoBehaviour
 
     public void AddComponent(ElectricComponent component)
     {
-        componentList.Add(component.transform.position, component);
+        componentList.Add(component, component.transform.position);
     }
 
     public void RemoveComponent(ElectricComponent component)
     {
-        componentList.Remove(component.transform.position);
+        componentList.Remove(component);
     }
 
-    public bool ContainsComponent(UnityEngine.Vector2 position)
+    public bool ContainsComponent(Vector2 pos)
     {
-        bool containsKey = false;
+        return componentList.ContainsValue(pos);
+    }
 
-        if (componentList.Count() > 1)
-        {
-            containsKey = componentList.ContainsKey(position);
-        }
-        return containsKey;
+    public bool ContainsComponent(ElectricComponent component)
+    {
+        return componentList.ContainsKey(component);
     }
 
     public ElectricComponent GetComponent(Vector2 position)
     {
-        ElectricComponent component = null;
-
-        if(ContainsComponent(position))
+        foreach(KeyValuePair<ElectricComponent, Vector2> pair in componentList)
         {
-            component = componentList[position];
+            if(pair.Value.Equals(position))
+            {
+                return pair.Key;
+            }
         }
-
-        return component;
+        return null;
     }
 
     public List<KeyValuePair<Vector2, ElectricComponent>> GetSurroundingComponents(Vector2 pos)
@@ -213,4 +212,11 @@ public class ProjectManager : MonoBehaviour
         return list;
     }
 
+    public void ChangeComponentPos(ElectricComponent component, Vector2 newPos)
+    {
+        if(componentList.ContainsKey(component))
+        {
+            componentList[component] = newPos;
+        }
+    }
 }

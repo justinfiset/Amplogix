@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using System.Linq;
 
 [RequireComponent(typeof(SpriteRenderer))]
 [RequireComponent(typeof(ResizeWinglets))]
@@ -9,15 +10,14 @@ using System;
 [RequireComponent(typeof(BoxCollider2D))]
 public class ElectricComponent : MonoBehaviour
 {
-    [SerializeField] protected ElectricComponentType type;
-    private ElectricComponentData data;
-
     [Header("Logic")]
-    public bool canBeRotated = true;
+    public ElectricComponentType type;
+    public bool canBeRotated = true; // Le composant peut-il être rotationé par l'utilisateur?
     public bool canBeMoved = true; // Le composant peut-il être manipulé par l'utilisateur?
     [Header("State")]
     private bool isHover = false;
     private bool isSelected = false;
+    private ElectricComponentData data;
 
     [Header("Move / Drag")]
     [HideInInspector] public bool hasReleasedSinceSelection = true;
@@ -84,7 +84,7 @@ public class ElectricComponent : MonoBehaviour
                 if(!isBeingMoved)
                 {
                     startPos = GridSettings.GetCurrentSnapedPosition();
-                    startOrigin = transform.localPosition;
+                    startOrigin = transform.position;
                     isBeingMoved = true;
                 }
                 if(isBeingMoved && canBeMoved)
@@ -94,8 +94,9 @@ public class ElectricComponent : MonoBehaviour
                     if (diffPos != Vector3.zero)
                     {
                         Unselect();
-                        gameObject.transform.localPosition = startOrigin + diffPos;
+                        transform.position = startOrigin + diffPos;
                         Select();
+                        ProjectManager.m_Instance.ChangeComponentPos(this, transform.position);
                         ProjectManager.m_Instance.isProjectSaved = false;
                     }
                 }
@@ -123,14 +124,12 @@ public class ElectricComponent : MonoBehaviour
                 hasReleasedSinceSelection = true;
             }
         }
-
-
     }
 
     public void Select()
     {
         isSelected = true;
-        resizeWinglets.GenerateWinglets(transform.localPosition, transform.localScale);
+        resizeWinglets.GenerateWinglets(transform.position, transform.localScale);
         wireTilesManager.ShowTiles();
         sprite.color = sprite.color * new Color(1, 1, 1, 0.5f);
         outline.color = Color.white;
@@ -192,7 +191,25 @@ public enum ElectricComponentType
     Diode,
     Coil,
     Wire,
-    WireCorner
+    WireCorner,
+    WireThreeWay,
+    WireFourWay
+}
+
+public static class ElectricComponentTypeMethods
+{
+    public static bool IsWire(ElectricComponent component)
+    {
+        ElectricComponentType[] wireTypes =
+        {
+            ElectricComponentType.Wire,
+            ElectricComponentType.WireCorner,
+            ElectricComponentType.WireThreeWay,
+            ElectricComponentType.WireFourWay
+        };
+
+        return wireTypes.Contains(component.type);
+    }
 }
 
 [Serializable]
