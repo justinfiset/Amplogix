@@ -162,7 +162,7 @@ public class ComponentSpawner : MonoBehaviour
 
     public static void DestroyComponent(GameObject component)
     {
-        m_Instance.projectManager.AddComponent(component.GetComponent<ElectricComponent>());
+        m_Instance.projectManager.RemoveComponent(component.GetComponent<ElectricComponent>());
         Destroy(component);
         m_Instance.projectManager.isProjectSaved = false;
     }

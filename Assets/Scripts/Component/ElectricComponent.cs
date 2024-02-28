@@ -33,7 +33,9 @@ public class ElectricComponent : MonoBehaviour
 
     [Header("Inputs")]
     private static KeyCode rotateKey = KeyCode.R;
-    private static KeyCode deleteKey = KeyCode.Mouse2;
+    private static KeyCode mouseDeleteKey = KeyCode.Mouse2;
+    private static KeyCode keyboardDeleteKey = KeyCode.Backspace;
+    private static KeyCode systemDeleteKey = KeyCode.Delete;
     private static KeyCode unSelectKey = KeyCode.Escape;
 
     public virtual void _RotateComponent()
@@ -70,7 +72,9 @@ public class ElectricComponent : MonoBehaviour
             {
                 _RotateComponent();
             } 
-            else if(Input.GetKeyDown(deleteKey))
+            else if(Input.GetKeyDown(mouseDeleteKey) 
+                || Input.GetKeyDown(keyboardDeleteKey)
+                || Input.GetKeyDown(systemDeleteKey))
             {
                 DestroyComponent();
             } 
@@ -93,11 +97,7 @@ public class ElectricComponent : MonoBehaviour
 
                     if (diffPos != Vector3.zero)
                     {
-                        Unselect();
-                        transform.position = startOrigin + diffPos;
-                        Select();
-                        ProjectManager.m_Instance.ChangeComponentPos(this, transform.position);
-                        ProjectManager.m_Instance.isProjectSaved = false;
+                        MoveComponent(startOrigin + diffPos);
                     }
                 }
             }
@@ -122,8 +122,26 @@ public class ElectricComponent : MonoBehaviour
             } else
             {
                 hasReleasedSinceSelection = true;
+                print(startPos - transform.position);
+                if(isBeingMoved && transform.position != startPos)
+                {
+                    print(!ProjectManager.m_Instance.ContainsMultipleComponentAtPos(transform.position));
+                    if (!ProjectManager.m_Instance.ContainsMultipleComponentAtPos(transform.position))
+                    {
+                        MoveComponent(startPos);
+                    }
+                }
             }
         }
+    }
+
+    public void MoveComponent(Vector3 newPos)
+    {
+        Unselect();
+        transform.position = newPos;
+        ProjectManager.m_Instance.ChangeComponentPos(this, transform.position);
+        ProjectManager.m_Instance.isProjectSaved = false;
+        Select();
     }
 
     public void Select()
