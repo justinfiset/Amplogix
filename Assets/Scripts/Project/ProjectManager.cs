@@ -156,7 +156,7 @@ public class ProjectManager : MonoBehaviour
         return null;
     }
 
-    public bool ContainsMultipleComponentAtPos(Vector2 pos)
+    public int GetComponentCount(Vector2 pos)
     {
         int count = 0;
         foreach(Vector2 compPos in componentList.Values)
@@ -166,7 +166,7 @@ public class ProjectManager : MonoBehaviour
                 count++;
             }
         }
-        return count > 1;
+        return count;
     }
 
     public List<KeyValuePair<Vector2, ElectricComponent>> GetSurroundingComponents(Vector2 pos)

@@ -20,10 +20,9 @@ public class ElectricComponent : MonoBehaviour
     private ElectricComponentData data;
 
     [Header("Move / Drag")]
-    [HideInInspector] public bool hasReleasedSinceSelection = true;
-    private bool isBeingMoved = false;
-    private Vector3 startPos;
-    private Vector3 startOrigin;
+    public bool hasReleasedSinceSelection = true;
+    public bool isBeingMoved = false;
+    public Vector3 lastClickPos;
 
     [Header("UI")]
     [SerializeField] private SpriteRenderer outline;
@@ -66,47 +65,12 @@ public class ElectricComponent : MonoBehaviour
 
     void Update()
     {
-        if (isSelected)
-        {
-            if (canBeRotated && Input.GetKeyDown(rotateKey))
-            {
-                _RotateComponent();
-            } 
-            else if(Input.GetKeyDown(mouseDeleteKey) 
-                || Input.GetKeyDown(keyboardDeleteKey)
-                || Input.GetKeyDown(systemDeleteKey))
-            {
-                DestroyComponent();
-            } 
-            else if(Input.GetKeyDown(unSelectKey))
-            {
-                Unselect();
-            }
-
-            if(!hasReleasedSinceSelection)
-            {
-                if(!isBeingMoved)
-                {
-                    startPos = GridSettings.GetCurrentSnapedPosition();
-                    startOrigin = transform.position;
-                    isBeingMoved = true;
-                }
-                if(isBeingMoved && canBeMoved)
-                {
-                    Vector3 diffPos = GridSettings.GetCurrentSnapedPosition() - startPos;
-
-                    if (diffPos != Vector3.zero)
-                    {
-                        MoveComponent(startOrigin + diffPos);
-                    }
-                }
-            }
-        }
-
         if(Input.GetMouseButtonDown(0))
         {
             if (isHover)
             {
+                lastClickPos = GridSettings.GetCurrentSnapedPosition();
+
                 if (!isSelected)
                 {
                     Select();
@@ -122,13 +86,46 @@ public class ElectricComponent : MonoBehaviour
             } else
             {
                 hasReleasedSinceSelection = true;
-                print(startPos - transform.position);
-                if(isBeingMoved && transform.position != startPos)
+            }
+        }
+
+        if (isSelected)
+        {
+            if (canBeRotated && Input.GetKeyDown(rotateKey))
+            {
+                _RotateComponent();
+            }
+            else if (Input.GetKeyDown(mouseDeleteKey)
+                || Input.GetKeyDown(keyboardDeleteKey)
+                || Input.GetKeyDown(systemDeleteKey))
+            {
+                DestroyComponent();
+            }
+            else if (Input.GetKeyDown(unSelectKey))
+            {
+                Unselect();
+            }
+
+            if (!hasReleasedSinceSelection)
+            {
+                if (!isBeingMoved)
                 {
-                    print(!ProjectManager.m_Instance.ContainsMultipleComponentAtPos(transform.position));
-                    if (!ProjectManager.m_Instance.ContainsMultipleComponentAtPos(transform.position))
+                    isBeingMoved = true;
+                }
+
+                if (isBeingMoved && canBeMoved)
+                {
+                    MoveComponent(GridSettings.GetCurrentSnapedPosition());
+                }
+            }
+            else // Si on relache le boutton
+            {
+                if (isBeingMoved)
+                {
+                    print(ProjectManager.m_Instance.GetComponentCount(transform.position));
+                    if (ProjectManager.m_Instance.GetComponentCount(transform.position) != 1)
                     {
-                        MoveComponent(startPos);
+                        MoveComponent(lastClickPos);
                     }
                 }
             }
@@ -156,7 +153,6 @@ public class ElectricComponent : MonoBehaviour
     public void Unselect()
     {
         isSelected = false;
-        isBeingMoved = false;
         resizeWinglets.DestroyWinglets();
         wireTilesManager.HideTiles();
         sprite.color = Color.white;
