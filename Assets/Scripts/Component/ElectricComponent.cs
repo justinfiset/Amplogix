@@ -122,7 +122,6 @@ public class ElectricComponent : MonoBehaviour
             {
                 if (isBeingMoved)
                 {
-                    print(ProjectManager.m_Instance.GetComponentCount(transform.position));
                     if (ProjectManager.m_Instance.GetComponentCount(transform.position) != 1)
                     {
                         MoveComponent(lastClickPos);

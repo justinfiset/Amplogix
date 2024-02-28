@@ -6,6 +6,7 @@ public class CameraScroll : MonoBehaviour
 
     public float cursorFollowStep = 1f;
 
+    private float defaultSize;
     public float sensibility = 10f;
     public float minSize;
     public float maxSize;
@@ -14,6 +15,7 @@ public class CameraScroll : MonoBehaviour
     private void Start()
     {
         cam = GetComponent<Camera>();
+        defaultSize = cam.orthographicSize;
     }
 
     void Update()
@@ -39,6 +41,11 @@ public class CameraScroll : MonoBehaviour
             Vector3 deltaPos = axis >= 0 ? (cam.transform.position - cursorPos) : Vector3.zero;
             Vector3 translation = deltaPos * cursorFollowStep * axis * -1f;
             cam.transform.position = cam.transform.position + translation;
+        }
+
+        if(Input.GetKeyDown(KeyCode.Space))
+        {
+            cam.orthographicSize = defaultSize;
         }
     }
 }
