@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5643372875791426779}
   - component: {fileID: 5643372875791426724}
   - component: {fileID: 5643372875791426727}
-  - component: {fileID: 5643372875791426777}
+  - component: {fileID: -1749322275458754582}
   - component: {fileID: 5643372875791426776}
   - component: {fileID: 8771387389109448797}
   m_Layer: 0
@@ -115,7 +115,7 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
---- !u!114 &5643372875791426777
+--- !u!114 &-1749322275458754582
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -124,14 +124,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 5643372875791426778}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fc53c17d0aff6a54f8d5664dc952d0f9, type: 3}
+  m_Script: {fileID: 11500000, guid: 2ce77a3c66d337944b3be886007a6f61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   type: 3
   canBeRotated: 1
   canBeMoved: 1
   hasReleasedSinceSelection: 1
-  outline: {fileID: 4462570508578049598}
+  outline: {fileID: 1624132070148405415, guid: b5baa3d1b1169d148b97771d5d633605, type: 3}
+  closedSprite: {fileID: -1757465333, guid: c6b6966af1811ea4bbd2fbab940b39d5, type: 3}
+  openSprite: {fileID: -79407870, guid: c6b6966af1811ea4bbd2fbab940b39d5, type: 3}
+  isOpen: 1
 --- !u!114 &5643372875791426776
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -224,10 +227,5 @@ PrefabInstance:
 --- !u!4 &1758802311599814102 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3678502852632036175, guid: b5baa3d1b1169d148b97771d5d633605, type: 3}
-  m_PrefabInstance: {fileID: 3126676511196591769}
-  m_PrefabAsset: {fileID: 0}
---- !u!212 &4462570508578049598 stripped
-SpriteRenderer:
-  m_CorrespondingSourceObject: {fileID: 1624132070148405415, guid: b5baa3d1b1169d148b97771d5d633605, type: 3}
   m_PrefabInstance: {fileID: 3126676511196591769}
   m_PrefabAsset: {fileID: 0}

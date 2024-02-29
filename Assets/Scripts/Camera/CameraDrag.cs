@@ -36,7 +36,6 @@ public class CameraDrag : MonoBehaviour
         
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            //RESET CAMERA TO STARTING POSITION WHEN SPACEBAR DOWN
             ResetCamPos();
         }
     }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using System.Linq;
+using UnityEditor;
 
 [RequireComponent(typeof(SpriteRenderer))]
 [RequireComponent(typeof(ResizeWinglets))]
@@ -20,9 +21,9 @@ public class ElectricComponent : MonoBehaviour
     private ElectricComponentData data;
 
     [Header("Move / Drag")]
-    public bool hasReleasedSinceSelection = true;
-    public bool isBeingMoved = false;
-    public Vector3 lastClickPos;
+    [HideInInspector] public bool hasReleasedSinceSelection = true;
+    private bool isBeingMoved = false;
+    private Vector3 lastClickPos;
 
     [Header("UI")]
     [SerializeField] private SpriteRenderer outline;
@@ -35,15 +36,20 @@ public class ElectricComponent : MonoBehaviour
     private static KeyCode mouseDeleteKey = KeyCode.Mouse2;
     private static KeyCode keyboardDeleteKey = KeyCode.Backspace;
     private static KeyCode systemDeleteKey = KeyCode.Delete;
-    private static KeyCode unSelectKey = KeyCode.Escape;
+    private static KeyCode unselectKey = KeyCode.Escape;
+    private static KeyCode interactKey = KeyCode.Mouse1;
 
-    public virtual void _RotateComponent()
+    private void _RotateComponent()
     {
         Unselect();
         RotateComponent();
         Select();
         ProjectManager.m_Instance.isProjectSaved = false;
     }
+
+    #region Inheritance
+    public virtual void Interact() { }
+    public virtual void Setup() { }
 
     public virtual void RotateComponent()
     {
@@ -55,12 +61,15 @@ public class ElectricComponent : MonoBehaviour
         Unselect();
         ComponentSpawner.DestroyComponent(gameObject);
     }
+    #endregion
 
-    void Start()
+    private void Start()
     {
         resizeWinglets = GetComponent<ResizeWinglets>();
         wireTilesManager = GetComponent<WireTilesManager>();
         sprite = GetComponent<SpriteRenderer>();
+
+        Setup();
     }
 
     void Update()
@@ -89,6 +98,11 @@ public class ElectricComponent : MonoBehaviour
             }
         }
 
+        if (Input.GetKeyDown(interactKey))
+        {
+            Interact();
+        }
+
         if (isSelected)
         {
             if (canBeRotated && Input.GetKeyDown(rotateKey))
@@ -101,7 +115,7 @@ public class ElectricComponent : MonoBehaviour
             {
                 DestroyComponent();
             }
-            else if (Input.GetKeyDown(unSelectKey))
+            else if (Input.GetKeyDown(unselectKey))
             {
                 Unselect();
             }
@@ -122,7 +136,7 @@ public class ElectricComponent : MonoBehaviour
             {
                 if (isBeingMoved)
                 {
-                    if (ProjectManager.m_Instance.GetComponentCount(transform.position) != 1)
+                    if (ProjectManager.m_Instance.GetComponentCount(transform.position) > 1)
                     {
                         MoveComponent(lastClickPos);
                     }
@@ -189,6 +203,7 @@ public class ElectricComponent : MonoBehaviour
     #endregion
 }
 
+#region Component Type
 [Serializable]
 public enum ElectricComponentType
 {
@@ -224,7 +239,9 @@ public static class ElectricComponentTypeMethods
         return wireTypes.Contains(component.type);
     }
 }
+#endregion
 
+#region Component Data
 [Serializable]
 public class ElectricComponentData
 {
@@ -235,3 +252,4 @@ public class ElectricComponentData
     public float scaleX;
     public float scaleY;
 }
+#endregion

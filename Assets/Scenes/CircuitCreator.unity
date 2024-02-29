@@ -2851,6 +2851,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9992ccb193287145aa2d9c21baba3f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  posTreshold: 0.5
   dragButton: 324
 --- !u!114 &1030773707
 MonoBehaviour:
