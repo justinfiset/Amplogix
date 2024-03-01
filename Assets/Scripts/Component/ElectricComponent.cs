@@ -20,15 +20,15 @@ public class ElectricComponent : MonoBehaviour
     public bool snapToGrid = true;
 
     [Header("State")]
-    private bool isHover = false;
-    private bool isSelected = false;
+    protected bool isHover = false;
+    protected bool isSelected = false;
     [HideInInspector] public string initialComponentData = "";
 
     [Header("Move / Drag")]
     [HideInInspector] public bool hasReleasedSinceSelection = true;
-    private bool isBeingMoved = false;
-    private Vector3 lastClickMousePos;
-    private Vector3 lastClickPos;
+    protected bool isBeingMoved = false;
+    protected Vector3 lastClickMousePos;
+    protected Vector3 lastClickPos;
 
     [Header("UI")]
     [SerializeField] protected SpriteRenderer outline;
