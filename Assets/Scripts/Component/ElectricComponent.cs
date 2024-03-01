@@ -22,6 +22,7 @@ public class ElectricComponent : MonoBehaviour
     [Header("State")]
     protected bool isHover = false;
     protected bool isSelected = false;
+    protected bool listenToInputs = true;
     [HideInInspector] public string initialComponentData = "";
 
     [Header("Move / Drag")]
@@ -100,19 +101,22 @@ public class ElectricComponent : MonoBehaviour
 
         if (isSelected)
         {
-            if (canBeRotated && Input.GetKeyDown(rotateKey))
+            if(listenToInputs)
             {
-                _RotateComponent();
-            }
-            else if (Input.GetKeyDown(mouseDeleteKey)
-                || Input.GetKeyDown(keyboardDeleteKey)
-                || Input.GetKeyDown(systemDeleteKey))
-            {
-                _DestroyComponent();
-            }
-            else if (Input.GetKeyDown(unselectKey))
-            {
-                _Unselect();
+                if (canBeRotated && Input.GetKeyDown(rotateKey))
+                {
+                    _RotateComponent();
+                }
+                else if (Input.GetKeyDown(mouseDeleteKey)
+                    || Input.GetKeyDown(keyboardDeleteKey)
+                    || Input.GetKeyDown(systemDeleteKey))
+                {
+                    _DestroyComponent();
+                }
+                else if (Input.GetKeyDown(unselectKey))
+                {
+                    _Unselect();
+                }
             }
 
             if (!hasReleasedSinceSelection)
@@ -148,6 +152,8 @@ public class ElectricComponent : MonoBehaviour
                 }
             }
         }
+
+        OnUpdate();
     }
 
     #region Internal
@@ -194,6 +200,8 @@ public class ElectricComponent : MonoBehaviour
     public virtual void Interact() { }
 
     public virtual void Setup() { }
+
+    public virtual void OnUpdate() { }
 
     public virtual void DestroyComponent() { }
 
