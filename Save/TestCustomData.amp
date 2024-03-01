@@ -1,0 +1,41 @@
+{
+    "name": "Nouveau Projet",
+    "componentDataList": [
+        {
+            "type": 99,
+            "x": -8.0111083984375,
+            "y": 4.9259185791015629,
+            "rot": 0.0,
+            "scaleX": 1.0,
+            "scaleY": 1.0,
+            "customComponentData": "{\"text\":\"1\"}"
+        },
+        {
+            "type": 99,
+            "x": -4.977783203125,
+            "y": 4.977783203125,
+            "rot": 0.0,
+            "scaleX": 1.0,
+            "scaleY": 1.0,
+            "customComponentData": "{\"text\":\"2\"}"
+        },
+        {
+            "type": 1,
+            "x": -8.0,
+            "y": 4.0,
+            "rot": 0.0,
+            "scaleX": 1.0,
+            "scaleY": 1.0,
+            "customComponentData": ""
+        },
+        {
+            "type": 1,
+            "x": -5.0,
+            "y": 4.0,
+            "rot": 0.0,
+            "scaleX": 1.0,
+            "scaleY": 1.0,
+            "customComponentData": ""
+        }
+    ]
+}

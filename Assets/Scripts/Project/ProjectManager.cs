@@ -2,6 +2,7 @@ using SFB;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Forms;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -55,7 +56,8 @@ public class ProjectManager : MonoBehaviour
         {
             if(data != null)
             {
-                ComponentSpawner.CreateComponent(data);
+                ElectricComponent component = ComponentSpawner.CreateComponent(data);
+                component.initialComponentData = data.customComponentData;
             }
         }
 
@@ -91,6 +93,7 @@ public class ProjectManager : MonoBehaviour
             FileUtility.WriteString(project.savePath, data);
 
             isProjectSaved = true;
+            MainMenuButtons.AddRecentProject(project.savePath);
         }
     }
 

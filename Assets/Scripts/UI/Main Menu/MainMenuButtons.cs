@@ -66,7 +66,7 @@ public class MainMenuButtons : MonoBehaviour
             {
             string name = Path.GetFileName(path);
             GameObject go = Instantiate(recentProjectPrefab);
-            go.transform.parent = list.transform;
+            go.transform.SetParent(list.transform);
             go.GetComponent<RecentProject>().Setup(name, path);
             }                      
         }

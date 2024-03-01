@@ -17,6 +17,7 @@ public class ComponentSpawner : MonoBehaviour
     public ProjectManager projectManager;
 
     public bool canSpawn = true;
+    public bool snapToGrid = false;
 
     private float spawnAngle;
     private ElectricComponentType currentComponentType;
@@ -88,14 +89,28 @@ public class ComponentSpawner : MonoBehaviour
 
     public static void SetCurrentSelection(ElectricComponentType type, ComponentSelection selection)
     {
-        Destroy(m_Instance.componentPreview);
+        if (m_Instance == null) return;
+
+        if(m_Instance.componentPreview != null)
+        {
+            Destroy(m_Instance.componentPreview);
+        }
 
         if (type != ElectricComponentType.None)
         {
+            // on peut placer les textes partout
+            if (type == ElectricComponentType.TextLabel)
+            {
+                m_Instance.snapToGrid = false;
+            }
+            else m_Instance.snapToGrid = true;
+
             m_Instance.currentComponentType = type;
             m_Instance.canSpawn = true;
 
             m_Instance.componentPreview = Instantiate(m_Instance.previewPrefab, m_Instance.parent);
+            FollowSnappedPos previewBehaviour = m_Instance.componentPreview.GetComponent<FollowSnappedPos>();
+            previewBehaviour.snapToGrid = m_Instance.snapToGrid;
             m_Instance.spawnAngle = m_Instance.componentPreview.transform.eulerAngles.z;
 
             SpriteRenderer sprite = m_Instance.componentPreview.GetComponent<SpriteRenderer>();
@@ -115,12 +130,18 @@ public class ComponentSpawner : MonoBehaviour
         m_Instance.currentSelection.OnSelect();
     }
 
+    private static Vector3 GetMousePos()
+    {
+        return m_Instance.snapToGrid ? GridSettings.GetCurrentSnapedPosition()
+            : GridSettings.MouseInputToWorldPoint();
+    }
+
     private static void SpawnPrefab()
     {
         GameObject currentComponent = m_Instance.GetCurrentPrefab();
         if (currentComponent != null)
         {
-            Vector3 pos = GridSettings.GetCurrentSnapedPosition();
+            Vector3 pos = GetMousePos();
             if (!m_Instance.projectManager.ContainsComponent(pos))
             {
                 CreateComponent(currentComponent, pos);
@@ -131,12 +152,12 @@ public class ComponentSpawner : MonoBehaviour
         }
     }
 
-    public static GameObject CreateComponent(GameObject component, Vector3 pos)
+    public static ElectricComponent CreateComponent(GameObject component, Vector3 pos)
     {
         return CreateComponent(component, pos, Quaternion.Euler(0, 0, m_Instance.spawnAngle), Vector3.one);
     }
 
-    public static GameObject CreateComponent(ElectricComponentData data)
+    public static ElectricComponent CreateComponent(ElectricComponentData data)
     {
         ElectricComponentType type = (ElectricComponentType)data.type;
         Vector3 pos = new Vector3(data.x, data.y, 0);
@@ -145,19 +166,20 @@ public class ComponentSpawner : MonoBehaviour
         return CreateComponent(type, pos, angles, scale); 
     }
 
-    public static GameObject CreateComponent(ElectricComponentType type, Vector3 pos, Quaternion angles, Vector3 scale)
+    public static ElectricComponent CreateComponent(ElectricComponentType type, Vector3 pos, Quaternion angles, Vector3 scale)
     {
         GameObject component = m_Instance.GetPrefab(type);
         return CreateComponent(component, pos, angles, scale);
     }
 
-    public static GameObject CreateComponent(GameObject component, Vector3 pos, Quaternion spawnAngle, Vector3 scale)
+    public static ElectricComponent CreateComponent(GameObject component, Vector3 pos, Quaternion spawnAngle, Vector3 scale)
     {
         GameObject instance = Instantiate(component, pos, spawnAngle, m_Instance.parent);
         m_Instance.projectManager.isProjectSaved = false;
-        m_Instance.projectManager.AddComponent(instance.GetComponent<ElectricComponent>());
+        ElectricComponent electricComponent = instance.GetComponent<ElectricComponent>();
+        m_Instance.projectManager.AddComponent(electricComponent);
         instance.transform.localScale = scale;
-        return instance;
+        return electricComponent;
     }
 
     public static void DestroyComponent(GameObject component)

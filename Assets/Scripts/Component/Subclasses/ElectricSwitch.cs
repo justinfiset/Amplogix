@@ -1,3 +1,5 @@
+using JetBrains.Annotations;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -14,11 +16,40 @@ public class ElectricSwitch : ElectricComponent
     override public void Setup()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
+        UpdateSprite();
+    }
+
+    private void UpdateSprite()
+    {
+        spriteRenderer.sprite = isOpen ? openSprite : closedSprite;
     }
 
     override public void Interact()
     {
         isOpen = !isOpen;
-        spriteRenderer.sprite = isOpen ? openSprite : closedSprite;
+        UpdateSprite();
+    }
+
+    public override void UnpackCustomComponentData(string customDataString)
+    {
+        ElectricSwitchData customData = UnserializeCustomComponentData<ElectricSwitchData>(customDataString);
+        this.isOpen = customData.isOpen;
+        UpdateSprite();
+    }
+
+    public override string GetCustomComponentData()
+    {
+        ElectricSwitchData customData = new ElectricSwitchData(this);
+        return SerializeCustomComponentData(customData);
+    }
+}
+
+[Serializable]
+public class ElectricSwitchData
+{
+    public bool isOpen;
+
+    public ElectricSwitchData(ElectricSwitch component) { 
+        isOpen = component.isOpen;
     }
 }

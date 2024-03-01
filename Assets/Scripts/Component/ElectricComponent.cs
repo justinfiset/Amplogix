@@ -4,10 +4,11 @@ using UnityEngine;
 using System;
 using System.Linq;
 using UnityEditor;
+using System.ComponentModel;
 
-[RequireComponent(typeof(SpriteRenderer))]
-[RequireComponent(typeof(ResizeWinglets))]
-[RequireComponent(typeof(WireTilesManager))]
+//[RequireComponent(typeof(SpriteRenderer))]
+//[RequireComponent(typeof(ResizeWinglets))]
+//[RequireComponent(typeof(WireTilesManager))]
 [RequireComponent(typeof(BoxCollider2D))]
 public class ElectricComponent : MonoBehaviour
 {
@@ -15,18 +16,22 @@ public class ElectricComponent : MonoBehaviour
     public ElectricComponentType type;
     public bool canBeRotated = true; // Le composant peut-il être rotationé par l'utilisateur?
     public bool canBeMoved = true; // Le composant peut-il être manipulé par l'utilisateur?
+    public bool canStack = false;
+    public bool snapToGrid = true;
+
     [Header("State")]
     private bool isHover = false;
     private bool isSelected = false;
-    private ElectricComponentData data;
+    [HideInInspector] public string initialComponentData = "";
 
     [Header("Move / Drag")]
     [HideInInspector] public bool hasReleasedSinceSelection = true;
     private bool isBeingMoved = false;
+    private Vector3 lastClickMousePos;
     private Vector3 lastClickPos;
 
     [Header("UI")]
-    [SerializeField] private SpriteRenderer outline;
+    [SerializeField] protected SpriteRenderer outline;
     private ResizeWinglets resizeWinglets;
     private WireTilesManager wireTilesManager;
     private SpriteRenderer sprite;
@@ -39,30 +44,6 @@ public class ElectricComponent : MonoBehaviour
     private static KeyCode unselectKey = KeyCode.Escape;
     private static KeyCode interactKey = KeyCode.Mouse1;
 
-    private void _RotateComponent()
-    {
-        Unselect();
-        RotateComponent();
-        Select();
-        ProjectManager.m_Instance.isProjectSaved = false;
-    }
-
-    #region Inheritance
-    public virtual void Interact() { }
-    public virtual void Setup() { }
-
-    public virtual void RotateComponent()
-    {
-        transform.Rotate(Vector3.forward * -90);
-    }
-
-    public virtual void DestroyComponent()
-    {
-        Unselect();
-        ComponentSpawner.DestroyComponent(gameObject);
-    }
-    #endregion
-
     private void Start()
     {
         resizeWinglets = GetComponent<ResizeWinglets>();
@@ -70,6 +51,10 @@ public class ElectricComponent : MonoBehaviour
         sprite = GetComponent<SpriteRenderer>();
 
         Setup();
+        if(initialComponentData != "")
+        {
+            UnpackCustomComponentData(initialComponentData);
+        }
     }
 
     void Update()
@@ -78,11 +63,18 @@ public class ElectricComponent : MonoBehaviour
         {
             if (isHover)
             {
-                lastClickPos = GridSettings.GetCurrentSnapedPosition();
+                if(snapToGrid)
+                {
+                    lastClickMousePos = GridSettings.GetCurrentSnapedPosition();
+                } else
+                {
+                    lastClickPos = transform.position;
+                    lastClickMousePos = GridSettings.MouseInputToWorldPoint();
+                }
 
                 if (!isSelected)
                 {
-                    Select();
+                    _Select();
                     hasReleasedSinceSelection = false;
                 }
             }
@@ -91,16 +83,19 @@ public class ElectricComponent : MonoBehaviour
         {
             if (isSelected && hasReleasedSinceSelection)
             {
-                Unselect();
+                _Unselect();
             } else
             {
                 hasReleasedSinceSelection = true;
             }
         }
 
-        if (Input.GetKeyDown(interactKey))
+        if(isHover)
         {
-            Interact();
+            if (Input.GetKeyDown(interactKey))
+            {
+                Interact();
+            }
         }
 
         if (isSelected)
@@ -113,11 +108,11 @@ public class ElectricComponent : MonoBehaviour
                 || Input.GetKeyDown(keyboardDeleteKey)
                 || Input.GetKeyDown(systemDeleteKey))
             {
-                DestroyComponent();
+                _DestroyComponent();
             }
             else if (Input.GetKeyDown(unselectKey))
             {
-                Unselect();
+                _Unselect();
             }
 
             if (!hasReleasedSinceSelection)
@@ -129,12 +124,22 @@ public class ElectricComponent : MonoBehaviour
 
                 if (isBeingMoved && canBeMoved)
                 {
-                    MoveComponent(GridSettings.GetCurrentSnapedPosition());
+                    Vector3 newPos;
+                    if (snapToGrid)
+                    {
+                        newPos = GridSettings.GetCurrentSnapedPosition();
+                    } 
+                    else
+                    {
+                        Vector3 diffPos = lastClickMousePos - GridSettings.MouseInputToWorldPoint();
+                        newPos = lastClickPos - diffPos;
+                    }
+                    MoveComponent(newPos);
                 }
             }
             else // Si on relache le boutton
             {
-                if (isBeingMoved)
+                if (!canStack && isBeingMoved)
                 {
                     if (ProjectManager.m_Instance.GetComponentCount(transform.position) > 1)
                     {
@@ -145,50 +150,92 @@ public class ElectricComponent : MonoBehaviour
         }
     }
 
+    #region Internal
     public void MoveComponent(Vector3 newPos)
     {
-        Unselect();
+        _Unselect();
         transform.position = newPos;
         ProjectManager.m_Instance.ChangeComponentPos(this, transform.position);
         ProjectManager.m_Instance.isProjectSaved = false;
-        Select();
+        _Select();
     }
 
-    public void Select()
+    public void _Select()
     {
         isSelected = true;
-        resizeWinglets.GenerateWinglets(transform.position, transform.localScale);
-        wireTilesManager.ShowTiles();
-        sprite.color = sprite.color * new Color(1, 1, 1, 0.5f);
+        Select();
         outline.color = Color.white;
     }
 
-    public void Unselect()
+    public void _Unselect()
     {
         isSelected = false;
-        resizeWinglets.DestroyWinglets();
-        wireTilesManager.HideTiles();
-        sprite.color = Color.white;
+        Unselect();
         outline.color = Color.clear;
     }
 
-    public void UpdateData()
+    private void _RotateComponent()
     {
-        if(data == null) data = new ElectricComponentData();
-
-        data.type = (int) type;
-        data.x = transform.position.x;
-        data.y = transform.position.y;
-        data.rot = transform.localEulerAngles.z;
-        data.scaleX = transform.localScale.x;
-        data.scaleY = transform.localScale.y;
+        _Unselect();
+        RotateComponent();
+        _Select();
+        ProjectManager.m_Instance.isProjectSaved = false;
     }
 
+    public void _DestroyComponent()
+    {
+        _Unselect();
+        DestroyComponent();
+        ComponentSpawner.DestroyComponent(gameObject);
+    }
+    #endregion
+
+    #region Inheritance
+    public virtual void Interact() { }
+
+    public virtual void Setup() { }
+
+    public virtual void DestroyComponent() { }
+
+    public virtual void RotateComponent() { 
+        transform.Rotate(Vector3.forward * -90); 
+    }
+
+    public virtual void UnpackCustomComponentData(string customDataString) { return; }
+
+    public virtual string GetCustomComponentData() { return ""; }
+
+    public virtual void Select()
+    {
+        resizeWinglets.GenerateWinglets(transform.position, transform.localScale);
+        wireTilesManager.ShowTiles();
+        sprite.color = sprite.color * new Color(1, 1, 1, 0.5f);
+    }
+
+    public virtual void Unselect()
+    {
+        resizeWinglets.DestroyWinglets();
+        wireTilesManager.HideTiles();
+        sprite.color = Color.white;
+    }
+    #endregion
+
+    #region Data / Serialization / Unpack
     public ElectricComponentData GetData()
     {
-        UpdateData();
-        return data;
+        return new ElectricComponentData(this);
     }
+
+    public T UnserializeCustomComponentData<T>(string customDataString)
+    {
+        return JsonUtility.FromJson<T>(customDataString);
+    }
+
+    public string SerializeCustomComponentData<T>(T customDataClass)
+    {
+        return JsonUtility.ToJson(customDataClass);
+    }
+    #endregion
 
     #region Mouse Callback
     private void OnMouseEnter()
@@ -221,7 +268,8 @@ public enum ElectricComponentType
     Wire,
     WireCorner,
     WireThreeWay,
-    WireFourWay
+    WireFourWay,
+    TextLabel = 99
 }
 
 public static class ElectricComponentTypeMethods
@@ -251,5 +299,17 @@ public class ElectricComponentData
     public float rot;
     public float scaleX;
     public float scaleY;
+    public string customComponentData;
+
+    public ElectricComponentData(ElectricComponent component)
+    {
+        type = (int)component.type;
+        x = component.transform.position.x;
+        y = component.transform.position.y;
+        rot = component.transform.localEulerAngles.z;
+        scaleX = component.transform.localScale.x;
+        scaleY = component.transform.localScale.y;
+        customComponentData = component.GetCustomComponentData();
+    }
 }
 #endregion
