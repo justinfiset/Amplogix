@@ -1,3 +1,4 @@
+using System;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -12,6 +13,8 @@ public class BoxSelectorCreater : MonoBehaviour
     private Quaternion rotation;
     private Vector2 mousePos;
     private Vector2 scaleChange;
+    float witdh;
+    float height;
 
     void Start()
     {
@@ -22,17 +25,29 @@ public class BoxSelectorCreater : MonoBehaviour
     {
         if (Input.GetMouseButton(0))
         {
+            
            if (firstTime) {
                 initialMousePos = Input.mousePosition;
                 
                 firstTime = false;
                 rectangle = Instantiate(prefabs, initialMousePos, rotation, parent).GetComponent<RectTransform>();
+                rectangle.gameObject.SetActive(true);
             }
+           rectangle.sizeDelta = Vector2.zero;
+            //scaleChange = Input.mousePosition - (Vector3) initialMousePos;
+  
+            witdh = Input.mousePosition.x - initialMousePos.x;
+            height = Input.mousePosition.y - initialMousePos.y;
 
-            scaleChange = Input.mousePosition - (Vector3) initialMousePos * 2;
+            print(rectangle.anchoredPosition + "avant" + rectangle.position);
 
-            rectangle.sizeDelta = new Vector2 (Mathf.Abs(scaleChange.x), Mathf.Abs(scaleChange.y));
-            rectangle.anchoredPosition = initialMousePos + scaleChange;
+            rectangle.anchoredPosition = (initialMousePos) + new Vector2 (witdh/2,height/2);
+
+            print(rectangle.anchoredPosition + "apres" + rectangle.position);
+
+            rectangle.sizeDelta = new Vector2(Math.Abs(witdh), Math.Abs(height));
+
+          
         }
         if (Input.GetMouseButtonUp(0)) {
             Destroy(rectangle.gameObject);
