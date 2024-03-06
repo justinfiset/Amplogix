@@ -6,7 +6,6 @@ public class WireTilesManager : MonoBehaviour
 {
     [HideInInspector] public bool isActive;
 
-    public bool respectOrientation;
     private float spacing;
     private List<Vector2> surroundingComponents;
     private ElectricComponent currentComponent;
@@ -28,7 +27,7 @@ public class WireTilesManager : MonoBehaviour
         rot = Mathf.Abs(transform.localEulerAngles.z);
         surroundingComponents = ProjectManager.m_Instance.GetSurroundingComponentsPos(transform.position);
 
-        if(respectOrientation )
+        if(gameObject.GetComponent<ElectricComponent>().respectOrientation)
         {
             if (rot % 180 == 0) // Si horizontal,
             {

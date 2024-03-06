@@ -35,6 +35,18 @@ public abstract class Connection : MonoBehaviour
         }
     }
 
+    public void ConnectTo(int connectionPosition)
+    {
+        switch (connectionPosition)
+        {
+            case 0: connections.left = true; break;
+            case 1: connections.right = true; break;
+            case 2: connections.top = true; break;
+            case 3: connections.bottom = true; break;
+            default: throw new System.Exception("Position index must be between 0 and 3 = " + connectionPosition);
+        }
+    }
+
     /*
      * Retourne un array de toutes les connection (Gauche, Droite, Haut, Bas)
      * Sauf celle reçue en argument

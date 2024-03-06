@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 1076454670309057300}
   - component: {fileID: 1076454670309057303}
   - component: {fileID: 8704000109013533686}
+  - component: {fileID: -7225093504770409322}
   m_Layer: 6
   m_Name: Coil
   m_TagString: Untagged
@@ -132,6 +133,7 @@ MonoBehaviour:
   canBeMoved: 1
   canStack: 0
   snapToGrid: 1
+  respectOrientation: 1
   initialComponentData: 
   hasReleasedSinceSelection: 1
   outline: {fileID: 1076454670309057299}
@@ -165,6 +167,19 @@ MonoBehaviour:
   isActive: 0
   respectOrientation: 1
   wireTilePrefab: {fileID: 729730110476256346, guid: b7b1b57ceb44fc9489faac4c0c4be09f, type: 3}
+--- !u!114 &-7225093504770409322
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1076454670309057305}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4084e44bb10830c4eb9d18b8bda2ce45, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  connectionTilePrefab: {fileID: 729730110476256346, guid: b27489a6dc4be2e468f6e233bd1e49f5, type: 3}
 --- !u!1001 &3032213113677669294
 PrefabInstance:
   m_ObjectHideFlags: 0
