@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 3204017523397130288}
   - component: {fileID: 2048714205074904257}
   - component: {fileID: -1819162603108179100}
+  - component: {fileID: 1080553818296123673}
   m_Layer: 6
   m_Name: Source
   m_TagString: Untagged
@@ -165,7 +166,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isActive: 0
-  respectOrientation: 1
   wireTilePrefab: {fileID: 729730110476256346, guid: b7b1b57ceb44fc9489faac4c0c4be09f, type: 3}
 --- !u!114 &-1819162603108179100
 MonoBehaviour:
@@ -180,6 +180,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   connectionTilePrefab: {fileID: 729730110476256346, guid: b27489a6dc4be2e468f6e233bd1e49f5, type: 3}
+--- !u!114 &1080553818296123673
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3204017523397130290}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e2325cd889c2ba14387064f30e27afed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1489758621188395086
 PrefabInstance:
   m_ObjectHideFlags: 0

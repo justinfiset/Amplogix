@@ -26,7 +26,7 @@ public class ConnectionTile : MonoBehaviour
             {
                 ElectricComponent second;
                 second = ProjectManager.m_Instance.GetComponent(gameObject.transform.localPosition);
-                manager.ConnectComponents(source, second, false); //todo: changer pour connecter
+                ProjectManager.m_Instance.ConnectComponents(source, second); //todo: changer pour connecter
             }
         }
     }

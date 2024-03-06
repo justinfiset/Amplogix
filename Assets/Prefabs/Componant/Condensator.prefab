@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 6104417128329846736}
   - component: {fileID: 7436546834223436713}
   - component: {fileID: -8391025896660047120}
+  - component: {fileID: -1000150357005583478}
   m_Layer: 6
   m_Name: Condensator
   m_TagString: Untagged
@@ -165,7 +166,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isActive: 0
-  respectOrientation: 1
   wireTilePrefab: {fileID: 729730110476256346, guid: b7b1b57ceb44fc9489faac4c0c4be09f, type: 3}
 --- !u!114 &-8391025896660047120
 MonoBehaviour:
@@ -180,6 +180,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   connectionTilePrefab: {fileID: 729730110476256346, guid: b27489a6dc4be2e468f6e233bd1e49f5, type: 3}
+--- !u!114 &-1000150357005583478
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6104417128329846738}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e2325cd889c2ba14387064f30e27afed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &2029552053436906725
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -24,11 +24,6 @@ public class ConnectionTilesManager : MonoBehaviour
         
     }
 
-    public void ConnectComponents(ElectricComponent first, ElectricComponent second, bool horizontal)
-    {
-        //todo
-    }
-
     #region Spawning and hiding tiles
     public void ShowTiles(ElectricComponent source)
     {
@@ -41,17 +36,17 @@ public class ConnectionTilesManager : MonoBehaviour
         {
             if (rot % 180 == 0) // Si horizontal,
             {
-                SpawnHorizontalTiles(source);
+                SpawnHorizontalTiles(gameObject.GetComponent<ElectricComponent>());
             }
             else // Si vertical,
             {
-                SpawnVerticalTiles(source);
+                SpawnVerticalTiles(gameObject.GetComponent<ElectricComponent>());
             }
         }
         else
         {
-            SpawnHorizontalTiles(source);
-            SpawnVerticalTiles(source);
+            SpawnHorizontalTiles(gameObject.GetComponent<ElectricComponent>());
+            SpawnVerticalTiles(gameObject.GetComponent<ElectricComponent>());
         }
     }
 

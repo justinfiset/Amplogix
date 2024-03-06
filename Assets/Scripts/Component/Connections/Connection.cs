@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class Connection : MonoBehaviour
+public class Connection : MonoBehaviour
 {
     public enum ConnectionPosition { Left, Right, Top, Bottom }
     protected Connections connections;

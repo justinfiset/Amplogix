@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4171138821868291455}
   - component: {fileID: 2616239815534115399}
   - component: {fileID: -3450381647581106917}
-  - component: {fileID: 1740017445438873630}
+  - component: {fileID: 8855977608799801477}
   m_Layer: 0
   m_Name: Connection Tile
   m_TagString: Untagged
@@ -114,7 +114,7 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
---- !u!114 &1740017445438873630
+--- !u!114 &8855977608799801477
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -123,10 +123,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 729730110476256346}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 86b9711a4f509104f930ac079a2d45dd, type: 3}
+  m_Script: {fileID: 11500000, guid: 4888d4410a2cae74bb766200998bd845, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   position: 0
+  source: {fileID: 0}
+  isHorizontal: 0
 --- !u!1 &1985075847813984004
 GameObject:
   m_ObjectHideFlags: 0

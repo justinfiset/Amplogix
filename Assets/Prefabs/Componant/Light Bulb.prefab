@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 3364640599128778674}
   - component: {fileID: 6821050966868095543}
   - component: {fileID: -7270292611150060715}
+  - component: {fileID: -912319818469094512}
   m_Layer: 6
   m_Name: Light Bulb
   m_TagString: Untagged
@@ -133,6 +134,7 @@ MonoBehaviour:
   canBeMoved: 1
   canStack: 0
   snapToGrid: 1
+  respectOrientation: 0
   initialComponentData: 
   hasReleasedSinceSelection: 1
   outline: {fileID: 368607867078495382}
@@ -164,7 +166,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isActive: 0
-  respectOrientation: 0
   wireTilePrefab: {fileID: 729730110476256346, guid: b7b1b57ceb44fc9489faac4c0c4be09f, type: 3}
 --- !u!114 &-7270292611150060715
 MonoBehaviour:
@@ -178,8 +179,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4084e44bb10830c4eb9d18b8bda2ce45, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  respectOrientation: 0
   connectionTilePrefab: {fileID: 729730110476256346, guid: b27489a6dc4be2e468f6e233bd1e49f5, type: 3}
+--- !u!114 &-912319818469094512
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3364640599128778684}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e2325cd889c2ba14387064f30e27afed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1411770068393735217
 PrefabInstance:
   m_ObjectHideFlags: 0
