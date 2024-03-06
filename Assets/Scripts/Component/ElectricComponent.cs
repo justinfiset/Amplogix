@@ -162,7 +162,7 @@ public class ElectricComponent : MonoBehaviour
         _Unselect();
         transform.position = newPos;
         ProjectManager.m_Instance.ChangeComponentPos(this, transform.position);
-        ProjectManager.m_Instance.isProjectSaved = false;
+        ProjectManager.OnModifyProject();
         _Select();
     }
 
@@ -185,7 +185,7 @@ public class ElectricComponent : MonoBehaviour
         _Unselect();
         RotateComponent();
         _Select();
-        ProjectManager.m_Instance.isProjectSaved = false;
+        ProjectManager.OnModifyProject();
     }
 
     public void _DestroyComponent()

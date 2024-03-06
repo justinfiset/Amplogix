@@ -11,13 +11,15 @@ public class ProjectManager : MonoBehaviour
 {
     public static ProjectManager m_Instance { get; private set; }
 
-    public bool isProjectSaved = true; // Par défault un projet n'a pas de modification
+    public bool isProjectSaved { get; private set; } = true; // Par défault un projet n'a pas de modification
 
     public Project project;
 
     [Header("UI")]
     public TMP_InputField nameText;
     public QuitWithoutSavingPopup quitWithoutSavingPopup;
+    public GameObject savedIndicator;
+    public GameObject isNotSavedIndicator;
 
     public Dictionary<ElectricComponent, Vector2> componentList;
 
@@ -44,6 +46,7 @@ public class ProjectManager : MonoBehaviour
         UpdateProjectName();
 
         Debug.Log("Current project: " + project.name);
+        OnSaveProject();
     }
 
     public void LoadProject(ProjectSettings settings)
@@ -61,7 +64,7 @@ public class ProjectManager : MonoBehaviour
             }
         }
 
-        isProjectSaved = true;
+        OnSaveProject();
     }
 
     public void SetProjectName()
@@ -69,7 +72,7 @@ public class ProjectManager : MonoBehaviour
         if(project.name != nameText.text)
         {
             project.name = nameText.text;
-            isProjectSaved = false;
+            OnModifyProject();
         }
     }
 
@@ -92,7 +95,7 @@ public class ProjectManager : MonoBehaviour
             string data = JsonUtility.ToJson(project, true);
             FileUtility.WriteString(project.savePath, data);
 
-            isProjectSaved = true;
+            OnSaveProject();
             MainMenuButtons.AddRecentProject(project.savePath);
         }
     }
@@ -126,15 +129,30 @@ public class ProjectManager : MonoBehaviour
         }
     }
 
+    public static void OnSaveProject()
+    {
+        m_Instance.isProjectSaved = true;
+        m_Instance.savedIndicator.SetActive(true);
+        m_Instance.isNotSavedIndicator.SetActive(false);
+    }
+
+    public static void OnModifyProject()
+    {
+        m_Instance.isProjectSaved = false;
+        m_Instance.savedIndicator.SetActive(false);
+        m_Instance.isNotSavedIndicator.SetActive(true);
+    }
 
     public void AddComponent(ElectricComponent component)
     {
         componentList.Add(component, component.transform.position);
+        OnModifyProject();
     }
 
     public void RemoveComponent(ElectricComponent component)
     {
         componentList.Remove(component);
+        OnModifyProject();
     }
 
     public bool ContainsComponent(Vector2 pos)

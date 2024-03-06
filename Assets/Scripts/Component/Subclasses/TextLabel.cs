@@ -10,13 +10,13 @@ public class TextLabel : ElectricComponent
     private Vector2 m_Offset = new Vector2(0.3f, 0);
     [HideInInspector] public TextMeshPro text;
     [HideInInspector] public RectTransform rect;
-    [HideInInspector] public BoxCollider2D collider;
+    [HideInInspector] public BoxCollider2D col;
 
     override public void Setup()
     {
         text = GetComponent<TextMeshPro>();
         rect = GetComponent<RectTransform>();
-        collider = GetComponent<BoxCollider2D>();
+        col = GetComponent<BoxCollider2D>();
     }
 
     override public void OnUpdate()
@@ -57,7 +57,7 @@ public class TextLabel : ElectricComponent
     private void UpdateSize()
     {
         outline.transform.localScale = rect.sizeDelta + m_Offset;
-        collider.size = rect.sizeDelta + m_Offset;
+        col.size = rect.sizeDelta + m_Offset;
     }
 
     public override void Select() {
