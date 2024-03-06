@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 8775329183439322424}
   - component: {fileID: 8775329183439322407}
   - component: {fileID: 271733607069528854}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Voltmeter
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -130,6 +130,9 @@ MonoBehaviour:
   type: 8
   canBeRotated: 1
   canBeMoved: 1
+  canStack: 0
+  snapToGrid: 1
+  initialComponentData: 
   hasReleasedSinceSelection: 1
   outline: {fileID: 7581558312388452172}
 --- !u!114 &8775329183439322407

@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 3364640599128778675}
   - component: {fileID: 3364640599128778674}
   - component: {fileID: 6821050966868095543}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Light Bulb
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -130,6 +130,9 @@ MonoBehaviour:
   type: 4
   canBeRotated: 1
   canBeMoved: 1
+  canStack: 0
+  snapToGrid: 1
+  initialComponentData: 
   hasReleasedSinceSelection: 1
   outline: {fileID: 368607867078495382}
 --- !u!114 &3364640599128778674

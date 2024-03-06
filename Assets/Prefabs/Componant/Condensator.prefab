@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 6104417128329846737}
   - component: {fileID: 6104417128329846736}
   - component: {fileID: 7436546834223436713}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Condensator
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -130,6 +130,9 @@ MonoBehaviour:
   type: 6
   canBeRotated: 1
   canBeMoved: 1
+  canStack: 0
+  snapToGrid: 1
+  initialComponentData: 
   hasReleasedSinceSelection: 1
   outline: {fileID: 765745345514079298}
 --- !u!114 &6104417128329846736

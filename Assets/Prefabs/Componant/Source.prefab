@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 3204017523397130289}
   - component: {fileID: 3204017523397130288}
   - component: {fileID: 2048714205074904257}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Source
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -130,6 +130,9 @@ MonoBehaviour:
   type: 2
   canBeRotated: 1
   canBeMoved: 1
+  canStack: 0
+  snapToGrid: 1
+  initialComponentData: 
   hasReleasedSinceSelection: 1
   outline: {fileID: 155018022359230697}
 --- !u!114 &3204017523397130288

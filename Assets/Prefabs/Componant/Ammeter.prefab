@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 5529895704449371463}
   - component: {fileID: 5529895704449371462}
   - component: {fileID: 2871014443956020451}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Ammeter
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -130,6 +130,9 @@ MonoBehaviour:
   type: 7
   canBeRotated: 1
   canBeMoved: 1
+  canStack: 0
+  snapToGrid: 1
+  initialComponentData: 
   hasReleasedSinceSelection: 1
   outline: {fileID: 6615008245507285433}
 --- !u!114 &5529895704449371462

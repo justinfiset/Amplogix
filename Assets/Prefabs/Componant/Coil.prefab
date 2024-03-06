@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 1076454670309057300}
   - component: {fileID: 1076454670309057303}
   - component: {fileID: 8704000109013533686}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Coil
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -130,6 +130,9 @@ MonoBehaviour:
   type: 10
   canBeRotated: 1
   canBeMoved: 1
+  canStack: 0
+  snapToGrid: 1
+  initialComponentData: 
   hasReleasedSinceSelection: 1
   outline: {fileID: 1076454670309057299}
 --- !u!114 &1076454670309057303

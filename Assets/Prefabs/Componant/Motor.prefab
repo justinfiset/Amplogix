@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 4028369109100792868}
   - component: {fileID: 4028369109100792869}
   - component: {fileID: 5284010741385332986}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Motor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -130,6 +130,9 @@ MonoBehaviour:
   type: 5
   canBeRotated: 1
   canBeMoved: 1
+  canStack: 0
+  snapToGrid: 1
+  initialComponentData: 
   hasReleasedSinceSelection: 1
   outline: {fileID: 7688535382490472171}
 --- !u!114 &4028369109100792869

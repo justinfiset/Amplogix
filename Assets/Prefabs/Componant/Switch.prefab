@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: -1749322275458754582}
   - component: {fileID: 5643372875791426776}
   - component: {fileID: 8771387389109448797}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Switch
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -130,6 +130,9 @@ MonoBehaviour:
   type: 3
   canBeRotated: 1
   canBeMoved: 1
+  canStack: 0
+  snapToGrid: 1
+  initialComponentData: 
   hasReleasedSinceSelection: 1
   outline: {fileID: 1624132070148405415, guid: b5baa3d1b1169d148b97771d5d633605, type: 3}
   closedSprite: {fileID: -1757465333, guid: c6b6966af1811ea4bbd2fbab940b39d5, type: 3}

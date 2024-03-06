@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 5643372875791426777}
   - component: {fileID: 5643372875791426776}
   - component: {fileID: 8771387389109448797}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: WireCorner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -130,6 +130,9 @@ MonoBehaviour:
   type: 12
   canBeRotated: 0
   canBeMoved: 0
+  canStack: 0
+  snapToGrid: 1
+  initialComponentData: 
   hasReleasedSinceSelection: 1
   outline: {fileID: 4462570508578049598}
 --- !u!114 &5643372875791426776
