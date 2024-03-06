@@ -1,4 +1,6 @@
+using MathNet.Numerics.RootFinding;
 using SFB;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -246,6 +248,107 @@ public class ProjectManager : MonoBehaviour
         return list;
     }
 
+    public void ConnectComponents(ElectricComponent first, ElectricComponent second)
+    {
+        if (ComponentsPointToEachOther(first, second))
+        {
+            int positionIndex;
+            if (AreComponentsAlignedOnPlane(first, second, true)) //si les composants sont al. horizontalement
+            {
+                float diff = first.transform.position.x - second.transform.position.x;
+                positionIndex = (int) (0.5 + Mathf.Sign(diff) / 2);
+                first.GetComponent<Connection>().ConnectTo(positionIndex);
+                second.GetComponent<Connection>().ConnectTo(GetOtherValue(positionIndex, 0, 1));
+            } else
+            {
+                float diff = first.transform.position.y - second.transform.position.y;
+                positionIndex = (int)(2.5 - Mathf.Sign(diff) / 2);
+                first.GetComponent<Connection>().ConnectTo(positionIndex);
+                second.GetComponent<Connection>().ConnectTo(GetOtherValue(positionIndex, 0, 1));
+            }
+        }
+    }
+
+    private int GetOtherValue(int entry, int first, int second)
+    {
+        if (entry == first)
+        {
+            return second;
+        }
+        if (entry == second)
+        {
+            return first;
+        }
+        throw new Exception(entry + " is not value " + first + " or " + second);
+    }
+
+    public bool ComponentsPointToEachOther(ElectricComponent first, ElectricComponent second)
+    {
+        bool firstRespectsOrientation = first.GetComponent<ElectricComponent>().respectOrientation;
+        bool secondRespectsOrientation = second.GetComponent<ElectricComponent>().respectOrientation;
+
+        bool isFirstHorizontal = IsComponentHorizontal(first);
+        bool isSecondHorizontal = IsComponentHorizontal(second);
+
+        if (firstRespectsOrientation && secondRespectsOrientation)
+        {
+
+            if ((isFirstHorizontal == isSecondHorizontal) && AreComponentsAlignedOnPlane(first, second, isFirstHorizontal))
+            {
+                return true;
+            } 
+            else
+            {
+                return false;
+            }
+        }
+
+        if (firstRespectsOrientation)
+        {
+            return AreComponentsAlignedOnPlane(first, second, isFirstHorizontal);
+        }
+
+        if (secondRespectsOrientation)
+        {
+            return AreComponentsAlignedOnPlane(first, second, isSecondHorizontal);
+        }
+
+        return true;
+    }
+    #region Alignment checks
+    public bool AreComponentsAlignedOnPlane(ElectricComponent first, ElectricComponent second, bool horizontal)
+    {
+        if (horizontal)
+        {
+            return AreComponentsHorizontallyAligned(first, second);
+        }
+        else
+        {
+            return AreComponentsVerticallyAligned(first, second);
+        }
+    }
+
+    public bool AreComponentsVerticallyAligned(ElectricComponent first, ElectricComponent second)
+    {
+        return first.transform.localPosition.x ==  second.transform.localPosition.x;
+    }
+
+    public bool AreComponentsHorizontallyAligned(ElectricComponent first, ElectricComponent second)
+    {
+        return first.transform.localPosition.y == second.transform.localPosition.y;
+    }
+    #endregion
+    #region Orientation checks
+    public bool IsComponentHorizontal(ElectricComponent component)
+    {
+        return Mathf.Abs(component.transform.localEulerAngles.z) % 180 == 0;
+    }
+
+    public bool IsComponentVertical(ElectricComponent component)
+    {
+        return !IsComponentHorizontal(component);
+    }
+    #endregion
     public void ChangeComponentPos(ElectricComponent component, Vector2 newPos)
     {
         if(componentList.ContainsKey(component))

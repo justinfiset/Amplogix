@@ -18,6 +18,7 @@ public class ElectricComponent : MonoBehaviour
     public bool canBeMoved = true; // Le composant peut-il être manipulé par l'utilisateur?
     public bool canStack = false;
     public bool snapToGrid = true;
+    public bool respectOrientation = false;
 
     [Header("State")]
     protected bool isHover = false;
@@ -35,6 +36,7 @@ public class ElectricComponent : MonoBehaviour
     [SerializeField] protected SpriteRenderer outline;
     private ResizeWinglets resizeWinglets;
     private WireTilesManager wireTilesManager;
+    private ConnectionTilesManager connectionTilesManager;
     private SpriteRenderer sprite;
 
     [Header("Inputs")]
@@ -49,6 +51,7 @@ public class ElectricComponent : MonoBehaviour
     {
         resizeWinglets = GetComponent<ResizeWinglets>();
         wireTilesManager = GetComponent<WireTilesManager>();
+        connectionTilesManager = GetComponent<ConnectionTilesManager>();
         sprite = GetComponent<SpriteRenderer>();
 
         Setup();
@@ -217,6 +220,7 @@ public class ElectricComponent : MonoBehaviour
     {
         resizeWinglets.GenerateWinglets(transform.position, transform.localScale);
         wireTilesManager.ShowTiles();
+        connectionTilesManager.ShowTiles(this);
         sprite.color = sprite.color * new Color(1, 1, 1, 0.5f);
     }
 
@@ -224,6 +228,7 @@ public class ElectricComponent : MonoBehaviour
     {
         resizeWinglets.DestroyWinglets();
         wireTilesManager.HideTiles();
+        connectionTilesManager.HideTiles();
         sprite.color = Color.white;
     }
     #endregion
