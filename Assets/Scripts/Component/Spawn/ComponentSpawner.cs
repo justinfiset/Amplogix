@@ -32,6 +32,8 @@ public class ComponentSpawner : MonoBehaviour
     [Header("Inputs")]
     public static KeyCode rotateKey = KeyCode.R;
 
+    public BoxSelectorCreater boxSelection;
+
     void Start()
     {
         if (m_Instance == null)
@@ -116,9 +118,12 @@ public class ComponentSpawner : MonoBehaviour
             SpriteRenderer sprite = m_Instance.componentPreview.GetComponent<SpriteRenderer>();
             sprite.sprite = selection.sprite;
             sprite.color = new Color(0, 0, 0, 0.25f);
+
+            m_Instance.boxSelection.enabled = false;
         }
         else
         {
+            m_Instance.boxSelection.enabled = true;
             m_Instance.canSpawn = false;
         }
 

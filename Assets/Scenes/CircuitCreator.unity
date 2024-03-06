@@ -3985,6 +3985,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefabs: {fileID: 8679180107115639344, guid: 0ef51ea6ece3a3847be7872d3f0cde21, type: 3}
+  rightComponent: {fileID: 1361839714}
+  selectedComponent: {fileID: 475578015003214662, guid: 78f07e3abc25108409917cab84d733ae, type: 3}
   parent: {fileID: 1611551107}
 --- !u!1 &1054064567
 GameObject:

@@ -7,8 +7,6 @@ public class ComponentSelection : MonoBehaviour, IPointerClickHandler
     public ElectricComponentType type;
     public Sprite sprite;
 
-    private bool buttonPressed = false;
-
     private Image border;
     public Color selectedColor = new Color(66, 135, 245);
 
@@ -32,11 +30,6 @@ public class ComponentSelection : MonoBehaviour, IPointerClickHandler
             {
                 SetActivePrefab();
             }
-        }
-
-        if (buttonPressed)
-        {
-            SetActivePrefab();
         }
     }
 
