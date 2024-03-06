@@ -1,15 +1,11 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.UIElements;
-using static FourWayConnection;
 
 public abstract class Connection : MonoBehaviour
 {
     public enum ConnectionPosition { Left, Right, Top, Bottom }
     protected Connections connections;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -68,7 +64,7 @@ public abstract class Connection : MonoBehaviour
         {
             if (connections.GetValue(i))
             {
-                ElectricComponent connectedComponent = (keyValuePairs[i].Value;
+                ElectricComponent connectedComponent = keyValuePairs[i].Value;
                 if (!discardEntry || connectedComponent != entryPoint)
                 {
                     result.Add(connectedComponent);
