@@ -7,7 +7,15 @@ using UnityEngine;
 
 public class TextLabel : ElectricComponent
 {
-    private Vector2 m_Offset = new Vector2(0.3f, 0);
+    private float m_Offset = 0.3f;
+
+    private float textSizeIncrement = 1;
+    private float minTextSize = 1;
+    private float maxTextSize = 14;
+
+    private GameObject showOnSelection;
+    [SerializeField] private TextMeshPro fontSizeText;
+
     [HideInInspector] public TextMeshPro text;
     [HideInInspector] public RectTransform rect;
     [HideInInspector] public BoxCollider2D col;
@@ -17,6 +25,9 @@ public class TextLabel : ElectricComponent
         text = GetComponent<TextMeshPro>();
         rect = GetComponent<RectTransform>();
         col = GetComponent<BoxCollider2D>();
+        showOnSelection = fontSizeText.transform.parent.gameObject;
+        showOnSelection.SetActive(false);
+        UpdateFontSizeText();
     }
 
     override public void OnUpdate()
@@ -46,6 +57,29 @@ public class TextLabel : ElectricComponent
         }
     }
 
+    public void IncreaseTextSize()
+    {
+        if(text.fontSize < maxTextSize)
+        {
+            text.fontSize += textSizeIncrement;
+            UpdateFontSizeText();
+        }
+    }
+
+    public void DecreaesTextSize()
+    {
+        if (text.fontSize > minTextSize)
+        {
+            text.fontSize -= textSizeIncrement;
+            UpdateFontSizeText();
+        }
+    }
+
+    public void UpdateFontSizeText()    
+    {
+        fontSizeText.text = text.fontSize.ToString();
+    }
+
     public void UpdateText(string newText)
     {
         text.text = newText;
@@ -56,25 +90,29 @@ public class TextLabel : ElectricComponent
 
     private void UpdateSize()
     {
-        outline.transform.localScale = rect.sizeDelta + m_Offset;
-        col.size = rect.sizeDelta + m_Offset;
+        col.size = new Vector2(rect.sizeDelta.x + m_Offset, col.size.y);
+        outline.transform.localScale = new Vector2(rect.sizeDelta.x + m_Offset, col.size.y);
     }
 
     public override void Select() {
         UpdateSize();
         text.color = text.color * new Color(1, 1, 1, 0.5f);
         listenToInputs = false;
+        showOnSelection.SetActive(true);
     }
 
     public override void Unselect() {
         text.color = Color.black;
         listenToInputs = true;
+        showOnSelection.SetActive(false);
     }
 
     public override void UnpackCustomComponentData(string customDataString)
     {
         TextLabelData customData = UnserializeCustomComponentData<TextLabelData>(customDataString);
         UpdateText(customData.text);
+        text.fontSize = customData.fontSize;
+        UpdateFontSizeText();
     }
 
     public override string GetCustomComponentData()
@@ -86,9 +124,11 @@ public class TextLabel : ElectricComponent
 [Serializable]
 public class TextLabelData
 {
-    public string text;
+    public string text = "";
+    public float fontSize = 8;
 
     public TextLabelData(TextLabel component) {
         text = component.text.text;
+        fontSize = component.text.fontSize;
     }
 }

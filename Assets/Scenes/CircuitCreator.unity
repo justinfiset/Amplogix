@@ -948,7 +948,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 578341598}
         m_TargetAssemblyTypeName: ScreenshotManager, Assembly-CSharp
-        m_MethodName: FindCamera
+        m_MethodName: SaveAttachedCamera
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

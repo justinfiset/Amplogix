@@ -4,10 +4,14 @@ using UnityEngine;
 
 public class ScreenshotManager : MonoBehaviour
 {
-    public SaveScreenShotPopup saveScreenShotPopup;
+    private Camera camera;
 
-  
-    public void FindCamera()
+    public void Start()
+    {
+        camera = GetComponent<Camera>();
+    }
+
+    public void SaveAttachedCamera()
     {
         saveScreenShotPopup.Show();
     }
