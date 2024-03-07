@@ -23,7 +23,8 @@ public class ProjectManager : MonoBehaviour
     public GameObject savedIndicator;
     public GameObject isNotSavedIndicator;
 
-    public Dictionary<ElectricComponent, Vector2> componentList;
+    public Dictionary<ElectricComponent, Vector2> componentList { get; private set; }
+    public HashSet<ElectricComponent> componentSelection { get; private set; }
 
     void Start()
     {
@@ -31,6 +32,7 @@ public class ProjectManager : MonoBehaviour
         else Destroy(this);
 
         componentList = new Dictionary<ElectricComponent, Vector2>();
+        componentSelection = new HashSet<ElectricComponent>();
     }
 
     public void Init()
@@ -148,6 +150,21 @@ public class ProjectManager : MonoBehaviour
         m_Instance.isProjectSaved = false;
         m_Instance.savedIndicator.SetActive(false);
         m_Instance.isNotSavedIndicator.SetActive(true);
+    }
+
+    public static bool IsSelectionEmpty()
+    {
+        return m_Instance.componentSelection.Count == 0;
+    }
+
+    public static void AddComponentToSelection(ElectricComponent component)
+    {
+        m_Instance.componentSelection.Add(component);
+    }
+
+    public static void RemoveComponentFromSelection(ElectricComponent component)
+    {
+        m_Instance.componentSelection.Remove(component);
     }
 
     public void AddComponent(ElectricComponent component)

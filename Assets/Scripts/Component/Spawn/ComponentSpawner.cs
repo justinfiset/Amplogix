@@ -47,7 +47,7 @@ public class ComponentSpawner : MonoBehaviour
 
     void Update()
     {
-        if(canSpawn)
+        if(canSpawn && ProjectManager.IsSelectionEmpty())
         {
             if (Input.GetMouseButtonDown(0))
             {

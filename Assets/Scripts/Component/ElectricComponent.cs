@@ -156,7 +156,7 @@ public class ElectricComponent : MonoBehaviour
             }
         }
 
-        OnUpdate();
+        OnUpdate(); // pour les sous composants
     }
 
     #region Internal
@@ -177,6 +177,7 @@ public class ElectricComponent : MonoBehaviour
         isSelected = true;
         Select();
         outline.color = Color.white;
+        ProjectManager.AddComponentToSelection(this);
     }
 
     public void _Unselect()
@@ -184,6 +185,7 @@ public class ElectricComponent : MonoBehaviour
         isSelected = false;
         Unselect();
         outline.color = Color.clear;
+        ProjectManager.RemoveComponentFromSelection(this);
     }
 
     private void _RotateComponent()
