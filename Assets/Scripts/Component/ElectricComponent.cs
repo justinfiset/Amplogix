@@ -162,11 +162,14 @@ public class ElectricComponent : MonoBehaviour
     #region Internal
     public void MoveComponent(Vector3 newPos)
     {
-        _Unselect();
-        transform.position = newPos;
-        ProjectManager.m_Instance.ChangeComponentPos(this, transform.position);
-        ProjectManager.OnModifyProject();
-        _Select();
+        if(newPos != transform.position)
+        {
+            _Unselect();
+            transform.position = newPos;
+            ProjectManager.m_Instance.ChangeComponentPos(this, transform.position);
+            ProjectManager.OnModifyProject();
+            _Select();
+        }
     }
 
     public void _Select()

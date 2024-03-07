@@ -2,6 +2,8 @@ using System.IO;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using System;
+using System.Collections;
 
 public class SaveScreenShotPopup : MonoBehaviour
 {
@@ -39,8 +41,7 @@ public class SaveScreenShotPopup : MonoBehaviour
 
     public void Save()
     {
-        FindObjectOfType<ScreenshotManager>().SaveCurrentView(path);
+        manager.SaveCurrentView(path);
+        Hide();
     }
-
-   
 }

@@ -127,6 +127,11 @@ public class ProjectManager : MonoBehaviour
             quitWithoutSavingPopup.Show();
         } else
         {
+            UnityEngine.Object settings = FindObjectOfType(typeof(ProjectSettings));
+            if(settings != null)
+            {
+                Destroy(settings);
+            }
             SceneManager.LoadScene("MainMenu");
         }
     }
