@@ -5,27 +5,26 @@ using System.IO;
 using TMPro;
 using UnityEngine;
 
-public class ScreenShotDirectory : MonoBehaviour
+public class ScreenshotManager : MonoBehaviour
 {
-    private Camera camera;
+    private Camera cam;
 
     private void Start()
     {
-        camera = GetComponent<Camera>();
+        cam = GetComponent<Camera>();
     }
 
     public string SelectDirectory()
     {
-        string path = StandaloneFileBrowser.SaveFilePanel("Sauvegarder le projet", "", "Circuit", "png");
-        return path;
+        return StandaloneFileBrowser.SaveFilePanel("Enregistrer le schéma", "", "Circuit", "png");
     }
 
-    public void Save(string path)
+    public void SaveCurrentView(string path)
     {
-        SaveCameraView(camera, path);
+        SavecamView(cam, path);
     }
 
-    public static void SaveCameraView(Camera cam, string path)
+    public static void SavecamView(Camera cam, string path)
     {
         RenderTexture screenTexture = new RenderTexture(Screen.width, Screen.height, 16);
         cam.targetTexture = screenTexture;
@@ -37,6 +36,6 @@ public class ScreenShotDirectory : MonoBehaviour
         RenderTexture.active = null;
 
         byte[] byteArray = renderedTexture.EncodeToPNG();
-        System.IO.File.WriteAllBytes(path, byteArray);
+        File.WriteAllBytes(path, byteArray);
     }
 }
