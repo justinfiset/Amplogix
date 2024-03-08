@@ -13,9 +13,6 @@ public class TextLabel : ElectricComponent
     private float minTextSize = 1;
     private float maxTextSize = 14;
 
-    private GameObject showOnSelection;
-    [SerializeField] private TextMeshPro fontSizeText;
-
     [HideInInspector] public TextMeshPro text;
     [HideInInspector] public RectTransform rect;
     [HideInInspector] public BoxCollider2D col;
@@ -25,9 +22,6 @@ public class TextLabel : ElectricComponent
         text = GetComponent<TextMeshPro>();
         rect = GetComponent<RectTransform>();
         col = GetComponent<BoxCollider2D>();
-        showOnSelection = fontSizeText.transform.parent.gameObject;
-        showOnSelection.SetActive(false);
-        UpdateFontSizeText();
     }
 
     override public void OnUpdate()
@@ -62,7 +56,6 @@ public class TextLabel : ElectricComponent
         if(text.fontSize < maxTextSize)
         {
             text.fontSize += textSizeIncrement;
-            UpdateFontSizeText();
         }
     }
 
@@ -71,13 +64,7 @@ public class TextLabel : ElectricComponent
         if (text.fontSize > minTextSize)
         {
             text.fontSize -= textSizeIncrement;
-            UpdateFontSizeText();
         }
-    }
-
-    public void UpdateFontSizeText()    
-    {
-        fontSizeText.text = text.fontSize.ToString();
     }
 
     public void UpdateText(string newText)
@@ -98,13 +85,11 @@ public class TextLabel : ElectricComponent
         UpdateSize();
         text.color = text.color * new Color(1, 1, 1, 0.5f);
         listenToInputs = false;
-        showOnSelection.SetActive(true);
     }
 
     public override void Unselect() {
         text.color = Color.black;
         listenToInputs = true;
-        showOnSelection.SetActive(false);
     }
 
     public override void UnpackCustomComponentData(string customDataString)
@@ -112,7 +97,6 @@ public class TextLabel : ElectricComponent
         TextLabelData customData = UnserializeCustomComponentData<TextLabelData>(customDataString);
         UpdateText(customData.text);
         text.fontSize = customData.fontSize;
-        UpdateFontSizeText();
     }
 
     public override string GetCustomComponentData()
@@ -123,23 +107,32 @@ public class TextLabel : ElectricComponent
     // test gui TODO FINISH GUI IMPLEMETANTAION
     private void OnGUI()
     {
-        GUIStyle currentStyle = ComponentGUI.InitGUI();
-        GUIStyle buttonStyle = ComponentGUI.buttonStyle;
-        ComponentGUILayout layout = ComponentGUI.currentLayout;
-
-        ComponentGUI.CreateBackground();
-
-        // NOTE : LE RECT FONCTIONNE COMME UNE GRILLE DANS L'ESPACE DEDIÉ
-        // Make the first button. If it is pressed, Application.Loadlevel (1) will be executed
-        if (GUI.Button(ComponentGUI.CreateRect(0, 0, 4), "Level 1", buttonStyle))
+        if(isSelected)
         {
-            //Application.LoadLevel(1);
-        }
+            ComponentGUI.InitGUI();
+            GUIStyle buttonStyle = ComponentGUI.buttonStyle;
+            GUIStyle labelStyle = ComponentGUI.labelStyle;
+            ComponentGUILayout layout = ComponentGUI.currentLayout;
 
-        // Make the second button.
-        if (GUI.Button(ComponentGUI.CreateRect(1, 0, 4), "Level 2"))
-        {
-            //Application.LoadLevel(2);
+            Rect box = ComponentGUI.CreateBackground("Texte");
+            isMouseOverGUI = box.Contains(Event.current.mousePosition); // PERMET DE NE PAS FERMER LA FENETRE SI ON CLIQUE
+
+            // NOTE : LE RECT FONCTIONNE COMME UNE GRILLE DANS L'ESPACE DEDIÉ
+            // Make the first button. If it is pressed, Application.Loadlevel (1) will be executed
+            if (GUI.Button(ComponentGUI.CreateRect(0, 1, 3, 8), "-", buttonStyle))
+            {
+                DecreaesTextSize();
+            }
+
+            GUI.Label(ComponentGUI.CreateRect(1, 1, 3, 8), text.fontSize.ToString(), labelStyle);
+
+            // Make the second button.
+            if (GUI.Button(ComponentGUI.CreateRect(2, 1, 3, 8), "+", buttonStyle))
+            {
+                IncreaseTextSize();
+            }
+
+            ComponentGUI.CreateDeleteButton(this);
         }
     }
 }

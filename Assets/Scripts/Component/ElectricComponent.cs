@@ -4,7 +4,7 @@ using UnityEngine;
 using System;
 using System.Linq;
 using UnityEditor;
-using System.ComponentModel;
+using UnityEngine.EventSystems;
 
 //[RequireComponent(typeof(SpriteRenderer))]
 //[RequireComponent(typeof(ResizeWinglets))]
@@ -24,6 +24,7 @@ public class ElectricComponent : MonoBehaviour
     protected bool isHover = false;
     protected bool isSelected = false;
     protected bool listenToInputs = true;
+    protected bool isMouseOverGUI = false;
     [HideInInspector] public string initialComponentData = "";
 
     [Header("Move / Drag")]
@@ -85,9 +86,13 @@ public class ElectricComponent : MonoBehaviour
         }
         else if(Input.GetMouseButtonUp(0))
         {
-            if (isSelected && hasReleasedSinceSelection)
+            if (isSelected && hasReleasedSinceSelection && !isMouseOverGUI)
             {
-                _Unselect();
+                // TODO verif si fonctionne bien TEST
+                if(!EventSystem.current.IsPointerOverGameObject())
+                {
+                    _Unselect();
+                }
             } else
             {
                 hasReleasedSinceSelection = true;
