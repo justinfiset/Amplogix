@@ -119,6 +119,29 @@ public class TextLabel : ElectricComponent
     {
         return SerializeCustomComponentData(new TextLabelData(this));
     }
+
+    // test gui TODO FINISH GUI IMPLEMETANTAION
+    private void OnGUI()
+    {
+        GUIStyle currentStyle = ComponentGUI.InitGUI();
+        GUIStyle buttonStyle = ComponentGUI.buttonStyle;
+        ComponentGUILayout layout = ComponentGUI.currentLayout;
+
+        ComponentGUI.CreateBackground();
+
+        // NOTE : LE RECT FONCTIONNE COMME UNE GRILLE DANS L'ESPACE DEDIÉ
+        // Make the first button. If it is pressed, Application.Loadlevel (1) will be executed
+        if (GUI.Button(ComponentGUI.CreateRect(0, 0, 4), "Level 1", buttonStyle))
+        {
+            //Application.LoadLevel(1);
+        }
+
+        // Make the second button.
+        if (GUI.Button(ComponentGUI.CreateRect(1, 0, 4), "Level 2"))
+        {
+            //Application.LoadLevel(2);
+        }
+    }
 }
 
 [Serializable]

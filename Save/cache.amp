@@ -1,0 +1,14 @@
+{
+    "name": "Nouveau Projet",
+    "componentDataList": [
+        {
+            "type": 99,
+            "x": -5.503662109375,
+            "y": 1.835906982421875,
+            "rot": 0.0,
+            "scaleX": 1.0,
+            "scaleY": 1.0,
+            "customComponentData": "{\"text\":\"Label​\",\"fontSize\":6.0}"
+        }
+    ]
+}
