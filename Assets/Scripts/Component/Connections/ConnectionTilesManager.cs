@@ -26,7 +26,7 @@ public class ConnectionTilesManager : MonoBehaviour
 
     public void ConnectComponents(ElectricComponent first, ElectricComponent second, bool horizontal)
     {
-        //todo
+        //todo connecter des composants
     }
 
     #region Spawning and hiding tiles

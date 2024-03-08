@@ -104,7 +104,6 @@ public class TextLabel : ElectricComponent
         return SerializeCustomComponentData(new TextLabelData(this));
     }
 
-    // test gui TODO FINISH GUI IMPLEMETANTAION
     private void OnGUI()
     {
         if(isSelected)
@@ -112,13 +111,10 @@ public class TextLabel : ElectricComponent
             ComponentGUI.InitGUI();
             GUIStyle buttonStyle = ComponentGUI.buttonStyle;
             GUIStyle labelStyle = ComponentGUI.labelStyle;
-            ComponentGUILayout layout = ComponentGUI.currentLayout;
+            
+            // Creation de la fenetre en bas à droite
+            ComponentGUI.CreateBackground(this, "Texte");
 
-            Rect box = ComponentGUI.CreateBackground("Texte");
-            isMouseOverGUI = box.Contains(Event.current.mousePosition); // PERMET DE NE PAS FERMER LA FENETRE SI ON CLIQUE
-
-            // NOTE : LE RECT FONCTIONNE COMME UNE GRILLE DANS L'ESPACE DEDIÉ
-            // Make the first button. If it is pressed, Application.Loadlevel (1) will be executed
             if (GUI.Button(ComponentGUI.CreateRect(0, 1, 3, 8), "-", buttonStyle))
             {
                 DecreaesTextSize();

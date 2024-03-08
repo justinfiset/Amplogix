@@ -3,12 +3,21 @@
     "componentDataList": [
         {
             "type": 99,
-            "x": -5.503662109375,
-            "y": 1.835906982421875,
+            "x": -1.39410400390625,
+            "y": 2.050933837890625,
             "rot": 0.0,
             "scaleX": 1.0,
             "scaleY": 1.0,
-            "customComponentData": "{\"text\":\"Label​\",\"fontSize\":6.0}"
+            "customComponentData": "{\"text\":\"ceci est un texte à 6\",\"fontSize\":6.0}"
+        },
+        {
+            "type": 99,
+            "x": -0.9249267578125,
+            "y": 0.81768798828125,
+            "rot": 0.0,
+            "scaleX": 1.0,
+            "scaleY": 1.0,
+            "customComponentData": "{\"text\":\"14\",\"fontSize\":14.0}"
         }
     ]
 }

@@ -76,7 +76,6 @@ public class MainMenuButtons : MonoBehaviour
                 }
                 else
                 {
-                    print(path);
                     hasChanged = true;
                 }
             } 

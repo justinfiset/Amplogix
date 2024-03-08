@@ -24,7 +24,7 @@ public class ElectricComponent : MonoBehaviour
     protected bool isHover = false;
     protected bool isSelected = false;
     protected bool listenToInputs = true;
-    protected bool isMouseOverGUI = false;
+    public bool isMouseOverGUI = false;
     [HideInInspector] public string initialComponentData = "";
 
     [Header("Move / Drag")]
@@ -88,7 +88,6 @@ public class ElectricComponent : MonoBehaviour
         {
             if (isSelected && hasReleasedSinceSelection && !isMouseOverGUI)
             {
-                // TODO verif si fonctionne bien TEST
                 if(!EventSystem.current.IsPointerOverGameObject())
                 {
                     _Unselect();

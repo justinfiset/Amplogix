@@ -10,6 +10,6 @@ public class PowerSource : ElectricComponent
     public override void RotateComponent()
     {
         base.RotateComponent();
-        // todo changer le sprite au bon
+        // todo mettre le bon sprite en fonction de la rotation
     }
 }

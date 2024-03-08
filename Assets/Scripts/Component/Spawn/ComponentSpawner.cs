@@ -150,9 +150,6 @@ public class ComponentSpawner : MonoBehaviour
             if (!m_Instance.projectManager.ContainsComponent(pos))
             {
                 CreateComponent(currentComponent, pos);
-            } else
-            {
-                // TODO ERREUR COMPONENT DEJA EXISTANT
             }
         }
     }

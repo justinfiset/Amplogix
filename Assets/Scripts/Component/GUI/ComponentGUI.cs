@@ -84,10 +84,11 @@ public class ComponentGUI : MonoBehaviour
         return result;
     }
 
-    public static Rect CreateBackground(string headerName)
+    public static Rect CreateBackground(ElectricComponent component, string headerName)
     {
         Rect rect = new Rect(currentLayout.x, currentLayout.y, currentLayout.width, currentLayout.height);
         GUI.Box(rect, headerName, currentStyle);
+        component.isMouseOverGUI = rect.Contains(Event.current.mousePosition);
         return rect;
     }
 
