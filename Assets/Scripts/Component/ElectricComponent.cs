@@ -38,7 +38,7 @@ public class ElectricComponent : MonoBehaviour
     private ResizeWinglets resizeWinglets;
     private WireTilesManager wireTilesManager;
     private ConnectionTilesManager connectionTilesManager;
-    private SpriteRenderer sprite;
+    protected SpriteRenderer sprite;
 
     [Header("Inputs")]
     private static KeyCode rotateKey = KeyCode.R;
