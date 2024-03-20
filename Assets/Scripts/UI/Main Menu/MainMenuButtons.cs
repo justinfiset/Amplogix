@@ -22,11 +22,6 @@ public class MainMenuButtons : MonoBehaviour
         SceneManager.LoadScene("CircuitCreator", LoadSceneMode.Single);
     }
 
-    public void LoadModel(/*Model model*/)
-    {
-        // TODO: LoadModel
-    }
-
     public static void OpenFile()
     {    
         string[] paths = StandaloneFileBrowser.OpenFilePanel("Ouvrir un projet", "", "amp", false);
