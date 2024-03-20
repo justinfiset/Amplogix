@@ -20,7 +20,7 @@ public class ComponentSpawner : MonoBehaviour
     public bool snapToGrid = false;
 
     private float spawnAngle;
-    private ElectricComponentType currentComponentType;
+    public ElectricComponentType currentComponentType {  get; private set; }
     public List<ElectricComponentPrefabLinker> prefabList;
     private ComponentSelection currentSelection;
 
@@ -65,7 +65,7 @@ public class ComponentSpawner : MonoBehaviour
         }
     }
 
-    private GameObject GetCurrentPrefab()
+    public GameObject GetCurrentPrefab()
     {
         foreach(ElectricComponentPrefabLinker linker in prefabList)
         {
@@ -77,7 +77,7 @@ public class ComponentSpawner : MonoBehaviour
         return null;
     }
 
-    private GameObject GetPrefab(ElectricComponentType type)
+    public GameObject GetPrefab(ElectricComponentType type)
     {
         foreach (ElectricComponentPrefabLinker linker in prefabList)
         {
@@ -120,13 +120,14 @@ public class ComponentSpawner : MonoBehaviour
             sprite.color = new Color(0, 0, 0, 0.25f);
 
             m_Instance.boxSelection.enabled = false;
+            
         }
         else
         {
             m_Instance.boxSelection.enabled = true;
             m_Instance.canSpawn = false;
         }
-
+        
         if(m_Instance.currentSelection != null)
         {
             m_Instance.currentSelection.OnUnselect();

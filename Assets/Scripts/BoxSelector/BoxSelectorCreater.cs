@@ -1,7 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.Text;
+using System.Windows.Forms;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class BoxSelectorCreater : MonoBehaviour
 {
@@ -18,9 +21,9 @@ public class BoxSelectorCreater : MonoBehaviour
     private float witdh;
     private float height;
     private Bounds bounds;
-    
-
-
+    public RaycastHit2D hit;
+    public RaycastHit hit3d;
+    private int layerMask = 5;
 
     void Start()
     {
@@ -35,6 +38,7 @@ public class BoxSelectorCreater : MonoBehaviour
                 initialMousePos = Input.mousePosition;
                 
                 firstTime = false;
+                print("firsttime");
                 rectangle = Instantiate(prefabs, initialMousePos, rotation, parent).GetComponent<RectTransform>();
                 rectangle.gameObject.SetActive(true);
             }
@@ -75,5 +79,38 @@ public class BoxSelectorCreater : MonoBehaviour
         }
     }
 
-    
+   // private void FixedUpdate()
+    //{
+      //  Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        //ray.direction = Vector3.up;
+   
+  //      hit = Physics2D.Raycast(ray.origin, ray.direction, Mathf.Infinity, 7);
+    //    if (hit.collider != null)
+      //  {
+        //    Debug.DrawLine(ray.origin, hit.point, Color.blue);
+          //  Debug.Log("test1");
+      //  }
+    //}
+  
+
+    private bool NoneIsSelected()
+    {
+
+        Vector2 min2 =  new Vector2(Input.mousePosition.x, Input.mousePosition.x);
+        Vector2 max2 = new Vector2(Input.mousePosition.y + 130, Input.mousePosition.y + 130); ;
+        min2 = Camera.main.ScreenToWorldPoint(min2);
+        max2 = Camera.main.ScreenToWorldPoint(max2);
+
+        bounds = new Bounds();
+        bounds.SetMinMax(min2, max2);
+
+        if (bounds.Contains(new Vector2(75,-75)))
+        {
+            print("test1");
+            return true;
+        }
+     
+
+        return false;
+    }
 }
