@@ -176,11 +176,15 @@ public class ElectricComponent : MonoBehaviour
         }
     }
 
-    public void _Select()
+    public void _Select(bool executeInheritedCode = true)
     {
         isSelected = true;
-        Select();
+        if(executeInheritedCode)
+        {
+            Select();
+        }
         outline.color = Color.white;
+        if(sprite != null) sprite.color = sprite.color * new Color(1, 1, 1, 0.5f);
         ProjectManager.AddComponentToSelection(this);
     }
 
@@ -230,7 +234,6 @@ public class ElectricComponent : MonoBehaviour
         resizeWinglets.GenerateWinglets(transform.position, transform.localScale);
         wireTilesManager.ShowTiles();
         connectionTilesManager.ShowTiles(this);
-        sprite.color = sprite.color * new Color(1, 1, 1, 0.5f);
     }
 
     public virtual void Unselect()
