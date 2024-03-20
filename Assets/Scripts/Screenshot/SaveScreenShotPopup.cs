@@ -33,8 +33,9 @@ public class SaveScreenShotPopup : MonoBehaviour
 
     public void SelectDirectory()
     {
+
         path = manager.SelectDirectory();
-        fileName.text = Path.GetFileName(path);
+        fileName.text = Path.GetFileNameWithoutExtension(path);
         cheminement.text = path;
         saveButton.interactable = true;
     }
