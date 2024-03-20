@@ -83,13 +83,17 @@ public class TextLabel : ElectricComponent
 
     public override void Select() {
         UpdateSize();
-        text.color = text.color * new Color(1, 1, 1, 0.5f);
         listenToInputs = false;
     }
 
     public override void Unselect() {
-        text.color = Color.black;
         listenToInputs = true;
+    }
+
+    public override void SetColor(Color newColor)
+    {
+        if (text != null)
+            text.color = newColor;
     }
 
     public override void UnpackCustomComponentData(string customDataString)
@@ -104,31 +108,22 @@ public class TextLabel : ElectricComponent
         return SerializeCustomComponentData(new TextLabelData(this));
     }
 
-    private void OnGUI()
+    public override void RenderGUI()
     {
-        if(isSelected)
+        GUIStyle buttonStyle = ComponentGUI.buttonStyle;
+        GUIStyle labelStyle = ComponentGUI.labelStyle;
+
+        if (GUI.Button(ComponentGUI.CreateRect(0, 1, 3, 8), "-", buttonStyle))
         {
-            ComponentGUI.InitGUI();
-            GUIStyle buttonStyle = ComponentGUI.buttonStyle;
-            GUIStyle labelStyle = ComponentGUI.labelStyle;
-            
-            // Creation de la fenetre en bas à droite
-            ComponentGUI.CreateBackground(this, "Texte");
+            DecreaesTextSize();
+        }
 
-            if (GUI.Button(ComponentGUI.CreateRect(0, 1, 3, 8), "-", buttonStyle))
-            {
-                DecreaesTextSize();
-            }
+        GUI.Label(ComponentGUI.CreateRect(1, 1, 3, 8), text.fontSize.ToString(), labelStyle);
 
-            GUI.Label(ComponentGUI.CreateRect(1, 1, 3, 8), text.fontSize.ToString(), labelStyle);
-
-            // Make the second button.
-            if (GUI.Button(ComponentGUI.CreateRect(2, 1, 3, 8), "+", buttonStyle))
-            {
-                IncreaseTextSize();
-            }
-
-            ComponentGUI.CreateDeleteButton(this);
+        // Make the second button.
+        if (GUI.Button(ComponentGUI.CreateRect(2, 1, 3, 8), "+", buttonStyle))
+        {
+            IncreaseTextSize();
         }
     }
 }

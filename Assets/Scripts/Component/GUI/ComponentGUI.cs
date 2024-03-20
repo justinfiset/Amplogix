@@ -21,7 +21,7 @@ public class ComponentGUI : MonoBehaviour
 
     public static ComponentGUILayout InitLayout()
     {
-        if(currentLayout == null)
+        if (currentLayout == null)
         {
             currentLayout = new ComponentGUILayout();
         }
@@ -38,7 +38,7 @@ public class ComponentGUI : MonoBehaviour
             currentStyle.normal.textColor = Color.black;
         }
 
-        if(buttonStyle == null)
+        if (buttonStyle == null)
         {
             buttonStyle = new GUIStyle(GUI.skin.box);
             buttonStyle.alignment = TextAnchor.MiddleCenter;
@@ -50,7 +50,7 @@ public class ComponentGUI : MonoBehaviour
             buttonStyle.active.textColor = Color.white;
         }
 
-        if(deleteStyle == null)
+        if (deleteStyle == null)
         {
             deleteStyle = new GUIStyle(GUI.skin.box);
             deleteStyle.alignment = TextAnchor.MiddleCenter;
@@ -62,7 +62,7 @@ public class ComponentGUI : MonoBehaviour
             deleteStyle.active.textColor = Color.white;
         }
 
-        if(labelStyle == null)
+        if (labelStyle == null)
         {
             labelStyle = new GUIStyle(currentStyle);
             labelStyle.alignment = TextAnchor.MiddleCenter;
@@ -97,7 +97,7 @@ public class ComponentGUI : MonoBehaviour
         float height = 40;
         float x = Screen.width - currentLayout.width;
         float y = Screen.height - height - currentLayout.padding * 2;
-        if(GUI.Button(new Rect(x, y, currentLayout.width - 2 * currentLayout.padding, height), "Supprimer", deleteStyle))
+        if (GUI.Button(new Rect(x, y, currentLayout.width - 2 * currentLayout.padding, height), "Supprimer", deleteStyle))
         {
             component._DestroyComponent();
         }
@@ -110,6 +110,52 @@ public class ComponentGUI : MonoBehaviour
         float x = currentLayout.x + currentLayout.padding / 2 * (col + 1) + col / widthDiv * currentLayout.width;
         float y = currentLayout.y + currentLayout.padding * (row + 1) + row / height * currentLayout.height;
         return new Rect(x, y, width, height);
+    }
+
+    private static Color[] GenerateColorList()
+    {
+        List<Color> list = new List<Color>();
+        list.Add(new Color32(255, 105, 97, 255)); // rouge 
+        list.Add(new Color32(255, 180, 128, 255)); // oragne 
+        list.Add(new Color32(248, 243, 141, 255)); // jaune
+        list.Add(new Color32(66, 214, 164, 255)); // vert
+        list.Add(new Color32(8, 202, 209, 255)); // turquoise
+        list.Add(new Color32(89, 173, 246, 255)); // bleu
+        list.Add(new Color32(157, 148, 255, 255)); // mauve
+        list.Add(new Color32(199, 128, 232, 255)); // rose
+        list.Add(new Color32(255, 255, 255, 255)); // blanc
+        list.Add(new Color32(0, 0, 0, 255)); // noir
+        return list.ToArray();
+    }
+
+    public static void CreateColorPalette()
+    {
+        Color[] colors = GenerateColorList();
+        int rowCount = 2;
+        int colCount = 5;
+
+        float size = (currentLayout.width - 2 * currentLayout.padding) / colCount;
+
+        // 2 row of 5 cokumns
+        int count = 0;
+        for(int i = 0; i < rowCount; i++)
+        {
+            float y = currentLayout.y + currentLayout.height - 40 - 2 * currentLayout.padding - 2 * size + (i * size);
+            for (int j = 0; j < colCount; j++)
+            {
+                GUIStyle style = new GUIStyle(GUI.skin.box);
+                style.normal.background = MakeTex(2, 2, colors[count]);
+
+                float x = currentLayout.x + j * size + currentLayout.padding;
+                Rect rect = new Rect(x, y, size, size);
+
+                if (GUI.Button(rect, "", style))
+                {
+                    ProjectManager.ChangeSelectionColor(colors[count]);
+                }
+                count++;
+            }
+        }
     }
 }
 

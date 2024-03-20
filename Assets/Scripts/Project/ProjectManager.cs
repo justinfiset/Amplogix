@@ -13,7 +13,7 @@ public class ProjectManager : MonoBehaviour
 {
     public static ProjectManager m_Instance { get; private set; }
 
-    public bool isProjectSaved { get; private set; } = true; // Par défault un projet n'a pas de modification
+    public bool isProjectSaved { get; private set; } = true; // Par dï¿½fault un projet n'a pas de modification
 
     public Project project;
 
@@ -360,6 +360,7 @@ public class ProjectManager : MonoBehaviour
         return first.transform.localPosition.y == second.transform.localPosition.y;
     }
     #endregion
+
     #region Orientation checks
     public bool IsComponentHorizontal(ElectricComponent component)
     {
@@ -371,6 +372,7 @@ public class ProjectManager : MonoBehaviour
         return !IsComponentHorizontal(component);
     }
     #endregion
+
     public void ChangeComponentPos(ElectricComponent component, Vector2 newPos)
     {
         if(componentList.ContainsKey(component))
@@ -385,6 +387,15 @@ public class ProjectManager : MonoBehaviour
         foreach (ElectricComponent component in electricComponentTable)
         {
             component._Unselect();
+        }
+    }
+
+    public static void ChangeSelectionColor(Color newColor)
+    {
+        ElectricComponent[] selection = m_Instance.componentSelection.ToArray();
+        foreach(ElectricComponent component in selection)
+        {
+            component._SetColor(newColor);
         }
     }
 }
