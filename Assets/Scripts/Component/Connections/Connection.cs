@@ -86,11 +86,9 @@ public class Connection : MonoBehaviour
     {
         List<ElectricComponent> allConnections = GetAllConnectedTo();
         allConnections[GetIndexFromPosition(position)].GetComponent<Connection>()
-            .DeleteLocalConnection(GetOppositeConnection(position);
+            .DeleteLocalConnection(GetOppositeConnection(position));
         DeleteLocalConnection(position);
     }
-
-
 
     public void ConnectTo(ConnectionPosition connectionPosition)
     {
