@@ -1,10 +1,49 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
+using static Connection;
 
 public class Connection : MonoBehaviour
 {
     public enum ConnectionPosition { Left, Right, Top, Bottom }
     protected Connections connections;
+    public bool hasRoundConnections;
+
+    public static ConnectionPosition GetConnectionPositionFromIndex(int index)
+    {
+        switch (index)
+        {
+            case 0: return ConnectionPosition.Left;
+            case 1: return ConnectionPosition.Right;
+            case 2: return ConnectionPosition.Top;
+            case 3: return ConnectionPosition.Bottom;
+            default: throw new System.Exception("Position index must be between 0 and 3 = " + index);
+        }
+    }
+
+    public static int GetIndexFromPosition(ConnectionPosition connectionPosition)
+    {
+        switch (connectionPosition)
+        {
+            case ConnectionPosition.Left: return 0;
+            case ConnectionPosition.Right: return 1;
+            case ConnectionPosition.Top: return 2;
+            case ConnectionPosition.Bottom: return 3;
+            default: throw new System.Exception();
+        }
+    }
+
+    public static ConnectionPosition GetOppositeConnection(ConnectionPosition connectionPosition)
+    {
+        switch (connectionPosition)
+        {
+            case ConnectionPosition.Left: return ConnectionPosition.Right;
+            case ConnectionPosition.Right: return ConnectionPosition.Left;
+            case ConnectionPosition.Top: return ConnectionPosition.Bottom;
+            case ConnectionPosition.Bottom: return ConnectionPosition.Top;
+            default: throw new System.Exception("value must not be null");
+        }
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -18,11 +57,40 @@ public class Connection : MonoBehaviour
         
     }
 
-    public void DeleteAllConnections()
+    public void DeleteAllLocalConnections()
     {
         connections.top = false; connections.bottom = false;
         connections.left = false; connections.right = false;
     }
+
+    public void DeleteLocalConnection(ConnectionPosition position)
+    {
+        switch (position)
+        {
+            case ConnectionPosition.Left: connections.left = false; break;
+            case ConnectionPosition.Right: connections.right = false; break;
+            case ConnectionPosition.Top: connections.top = false; break;
+            case ConnectionPosition.Bottom: connections.bottom = false; break;
+        }
+    }
+
+    public void DeleteAllConnections()
+    {
+        for (int i = 0; i < 4; i++)
+        {
+            DeleteConnection(GetConnectionPositionFromIndex(i));
+        }
+    }
+
+    public void DeleteConnection(ConnectionPosition position)
+    {
+        List<ElectricComponent> allConnections = GetAllConnectedTo();
+        allConnections[GetIndexFromPosition(position)].GetComponent<Connection>()
+            .DeleteLocalConnection(GetOppositeConnection(position);
+        DeleteLocalConnection(position);
+    }
+
+
 
     public void ConnectTo(ConnectionPosition connectionPosition)
     {
@@ -87,6 +155,10 @@ public class Connection : MonoBehaviour
         return result;
     }
 
+    public void OnDestroy()
+    {
+        DeleteAllConnections();
+    }
 
     public class Connections
     {
