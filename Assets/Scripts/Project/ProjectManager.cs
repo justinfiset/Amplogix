@@ -25,7 +25,7 @@ public class ProjectManager : MonoBehaviour
 
     public Dictionary<ElectricComponent, Vector2> componentList { get; private set; }
     public HashSet<ElectricComponent> componentSelection { get; private set; }
-
+    
     void Start()
     {
         if(m_Instance == null) m_Instance = this;
@@ -376,6 +376,15 @@ public class ProjectManager : MonoBehaviour
         if(componentList.ContainsKey(component))
         {
             componentList[component] = newPos;
+        }
+    }
+
+    public static void UnselectComponent()
+    {
+        ElectricComponent[] electricComponentTable = m_Instance.componentSelection.ToArray();
+        foreach (ElectricComponent component in electricComponentTable)
+        {
+            component._Unselect();
         }
     }
 }

@@ -24,6 +24,7 @@ public class SaveScreenShotPopup : MonoBehaviour
     {
         container.SetActive(true);
         saveButton.interactable = false;
+        ProjectManager.UnselectComponent();
     }
 
     public void Hide()
@@ -33,7 +34,6 @@ public class SaveScreenShotPopup : MonoBehaviour
 
     public void SelectDirectory()
     {
-
         path = manager.SelectDirectory();
         fileName.text = Path.GetFileNameWithoutExtension(path);
         cheminement.text = path;
@@ -42,7 +42,8 @@ public class SaveScreenShotPopup : MonoBehaviour
 
     public void Save()
     {
-        manager.SaveCurrentView(path);
+        ProjectManager.UnselectComponent();
+        manager.SaveCurrentView(path);        
         Hide();
     }
 }
