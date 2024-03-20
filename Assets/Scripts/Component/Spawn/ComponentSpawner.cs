@@ -156,7 +156,7 @@ public class ComponentSpawner : MonoBehaviour
 
     public static ElectricComponent CreateComponent(GameObject component, Vector3 pos)
     {
-        return CreateComponent(component, pos, Quaternion.Euler(0, 0, m_Instance.spawnAngle), Vector3.one);
+        return CreateComponent(component, pos, Quaternion.Euler(0, 0, m_Instance.spawnAngle), Vector3.one, Color.black);
     }
 
     public static ElectricComponent CreateComponent(ElectricComponentData data)
@@ -165,22 +165,24 @@ public class ComponentSpawner : MonoBehaviour
         Vector3 pos = new Vector3(data.x, data.y, 0);
         Quaternion angles = Quaternion.Euler(0, 0, data.rot);
         Vector3 scale = new Vector3(data.scaleX, data.scaleY, 1);
-        return CreateComponent(type, pos, angles, scale); 
+        Color color = new Color(data.r, data.g, data.b);
+        return CreateComponent(type, pos, angles, scale, color); 
     }
 
-    public static ElectricComponent CreateComponent(ElectricComponentType type, Vector3 pos, Quaternion angles, Vector3 scale)
+    public static ElectricComponent CreateComponent(ElectricComponentType type, Vector3 pos, Quaternion angles, Vector3 scale, Color color)
     {
         GameObject component = m_Instance.GetPrefab(type);
-        return CreateComponent(component, pos, angles, scale);
+        return CreateComponent(component, pos, angles, scale, color);
     }
 
-    public static ElectricComponent CreateComponent(GameObject component, Vector3 pos, Quaternion spawnAngle, Vector3 scale)
+    public static ElectricComponent CreateComponent(GameObject component, Vector3 pos, Quaternion spawnAngle, Vector3 scale, Color color)
     {
         GameObject instance = Instantiate(component, pos, spawnAngle, m_Instance.parent);
         ProjectManager.OnModifyProject();
         ElectricComponent electricComponent = instance.GetComponent<ElectricComponent>();
         m_Instance.projectManager.AddComponent(electricComponent);
         instance.transform.localScale = scale;
+        electricComponent._SetColor(color);
         return electricComponent;
     }
 

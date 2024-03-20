@@ -26,6 +26,7 @@ public class ElectricComponent : MonoBehaviour
     protected bool listenToInputs = true;
     public bool isMouseOverGUI = false;
     [HideInInspector] public string initialComponentData = "";
+    [HideInInspector] private Color color;
 
     [Header("Move / Drag")]
     [HideInInspector] public bool hasReleasedSinceSelection = true;
@@ -38,7 +39,7 @@ public class ElectricComponent : MonoBehaviour
     private ResizeWinglets resizeWinglets;
     private WireTilesManager wireTilesManager;
     private ConnectionTilesManager connectionTilesManager;
-    protected SpriteRenderer sprite;
+    [HideInInspector] public SpriteRenderer sprite;
 
     [Header("Inputs")]
     private static KeyCode rotateKey = KeyCode.R;
@@ -176,11 +177,35 @@ public class ElectricComponent : MonoBehaviour
         }
     }
 
-    public void _Select()
+    public void _SetColor(Color newColor, bool isTemporary = false)
+    {
+        StartCoroutine(WaitForColorChange(newColor, isTemporary));
+    }
+
+    // Used to prevent a bug where the sprite renderer is not instantiated yet
+    private IEnumerator WaitForColorChange(Color newColor, bool isTemporary = false)
+    {
+        yield return new WaitForEndOfFrame();
+
+        if (color != newColor && !isTemporary)
+        {
+            color = newColor;
+            ProjectManager.OnModifyProject();
+        }
+
+        if (isSelected) newColor = newColor * 0.5f;
+        SetColor(newColor);
+    }
+
+    public void _Select(bool executeInheritedCode = true)
     {
         isSelected = true;
-        Select();
+        if(executeInheritedCode)
+        {
+            Select();
+        }
         outline.color = Color.white;
+        _SetColor(color * new Color(1f, 1f, 1f, 0.5f), true);
         ProjectManager.AddComponentToSelection(this);
     }
 
@@ -189,6 +214,7 @@ public class ElectricComponent : MonoBehaviour
         isSelected = false;
         Unselect();
         outline.color = Color.clear;
+        _SetColor(color, true);
         ProjectManager.RemoveComponentFromSelection(this);
     }
 
@@ -221,6 +247,14 @@ public class ElectricComponent : MonoBehaviour
         transform.Rotate(Vector3.forward * -90); 
     }
 
+    public virtual void SetColor(Color newColor)
+    {
+        if(sprite != null)
+            sprite.color = newColor;
+    }
+
+    public virtual void RenderGUI() { }
+
     public virtual void UnpackCustomComponentData(string customDataString) { return; }
 
     public virtual string GetCustomComponentData() { return ""; }
@@ -230,7 +264,6 @@ public class ElectricComponent : MonoBehaviour
         resizeWinglets.GenerateWinglets(transform.position, transform.localScale);
         wireTilesManager.ShowTiles();
         connectionTilesManager.ShowTiles(this);
-        sprite.color = sprite.color * new Color(1, 1, 1, 0.5f);
     }
 
     public virtual void Unselect()
@@ -238,7 +271,6 @@ public class ElectricComponent : MonoBehaviour
         resizeWinglets.DestroyWinglets();
         wireTilesManager.HideTiles();
         connectionTilesManager.HideTiles();
-        sprite.color = Color.white;
     }
     #endregion
 
@@ -270,6 +302,21 @@ public class ElectricComponent : MonoBehaviour
         isHover = false;
     }
     #endregion
+
+    private void OnGUI()
+    {
+        if (isSelected)
+        {
+            ComponentGUI.InitGUI();
+            // Creation de la fenetre en bas à droite
+            ComponentGUI.CreateBackground(this, "Texte");
+
+            ComponentGUI.CreateColorPalette();
+            ComponentGUI.CreateDeleteButton(this);
+
+            RenderGUI(); // Creation du UI custom
+        }
+    }
 }
 
 #region Component Type
@@ -316,12 +363,15 @@ public static class ElectricComponentTypeMethods
 public class ElectricComponentData
 {
     public int type;
-    public float x;
-    public float y;
-    public float rot;
-    public float scaleX;
-    public float scaleY;
-    public string customComponentData;
+    public float x = 0f;
+    public float y = 0f;
+    public float rot = 0f;
+    public float scaleX = 1f;
+    public float scaleY = 1f;
+    public string customComponentData = "";
+    public float r = 1f;
+    public float g = 1f;
+    public float b = 1f;
 
     public ElectricComponentData(ElectricComponent component)
     {
@@ -332,6 +382,10 @@ public class ElectricComponentData
         scaleX = component.transform.localScale.x;
         scaleY = component.transform.localScale.y;
         customComponentData = component.GetCustomComponentData();
+        // Color
+        r = component.sprite.color.r;
+        g = component.sprite.color.g;
+        b = component.sprite.color.b;
     }
 }
 #endregion

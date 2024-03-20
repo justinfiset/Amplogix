@@ -68,7 +68,7 @@ public class BoxSelectorCreater : MonoBehaviour
             {
                 if (bounds.Contains(kvp.Value))
                 {
-                    kvp.Key._Select();
+                    kvp.Key._Select(false);
                 }
             }
             Destroy(rectangle.gameObject);

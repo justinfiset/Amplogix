@@ -81,7 +81,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: -79407870, guid: c6b6966af1811ea4bbd2fbab940b39d5, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0, g: 0, b: 0, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -135,9 +135,11 @@ MonoBehaviour:
   canStack: 0
   snapToGrid: 1
   respectOrientation: 1
+  isMouseOverGUI: 0
   initialComponentData: 
   hasReleasedSinceSelection: 1
   outline: {fileID: 1624132070148405415, guid: b5baa3d1b1169d148b97771d5d633605, type: 3}
+  sprite: {fileID: 0}
   closedSprite: {fileID: -1757465333, guid: c6b6966af1811ea4bbd2fbab940b39d5, type: 3}
   openSprite: {fileID: -79407870, guid: c6b6966af1811ea4bbd2fbab940b39d5, type: 3}
   isOpen: 1

@@ -83,7 +83,7 @@ public class WireTilesManager : MonoBehaviour
         ElectricComponentType type = ElectricComponentType.Wire;
         Vector3 pos = tile.transform.position;
         Quaternion angles = Quaternion.Euler(0, 0, (float) tile.position);
-        GameObject component = ComponentSpawner.CreateComponent(type, pos, angles, Vector3.one).gameObject;
+        GameObject component = ComponentSpawner.CreateComponent(type, pos, angles, Vector3.one, Color.black).gameObject;
         
         ManageNewSelection(component);
         HandleWireVariation(component);
