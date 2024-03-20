@@ -40,7 +40,7 @@ public class ElectricComponent : MonoBehaviour
     private WireTilesManager wireTilesManager;
     private ConnectionTilesManager connectionTilesManager;
     private TilesManager tilesManager;
-    protected SpriteRenderer sprite;
+    public SpriteRenderer sprite;
 
     [Header("Inputs")]
     private static KeyCode rotateKey = KeyCode.R;
@@ -266,8 +266,7 @@ public class ElectricComponent : MonoBehaviour
         resizeWinglets.GenerateWinglets(transform.position, transform.localScale);
         // wireTilesManager.ShowTiles();
         // connectionTilesManager.ShowTiles(this);
-        tilesManager.ShowWireTiles();
-        tilesManager.ShowConnectionTiles(this);
+        tilesManager.ShowTiles(this);
         sprite.color = sprite.color * new Color(1, 1, 1, 0.5f);
     }
 
