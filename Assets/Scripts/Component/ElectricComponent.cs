@@ -4,7 +4,7 @@ using UnityEngine;
 using System;
 using System.Linq;
 using UnityEditor;
-using System.ComponentModel;
+using UnityEngine.EventSystems;
 
 //[RequireComponent(typeof(SpriteRenderer))]
 //[RequireComponent(typeof(ResizeWinglets))]
@@ -24,6 +24,7 @@ public class ElectricComponent : MonoBehaviour
     protected bool isHover = false;
     protected bool isSelected = false;
     protected bool listenToInputs = true;
+    public bool isMouseOverGUI = false;
     [HideInInspector] public string initialComponentData = "";
 
     [Header("Move / Drag")]
@@ -37,7 +38,7 @@ public class ElectricComponent : MonoBehaviour
     private ResizeWinglets resizeWinglets;
     private WireTilesManager wireTilesManager;
     private ConnectionTilesManager connectionTilesManager;
-    private SpriteRenderer sprite;
+    protected SpriteRenderer sprite;
 
     [Header("Inputs")]
     private static KeyCode rotateKey = KeyCode.R;
@@ -85,9 +86,12 @@ public class ElectricComponent : MonoBehaviour
         }
         else if(Input.GetMouseButtonUp(0))
         {
-            if (isSelected && hasReleasedSinceSelection)
+            if (isSelected && hasReleasedSinceSelection && !isMouseOverGUI)
             {
-                _Unselect();
+                if(!EventSystem.current.IsPointerOverGameObject())
+                {
+                    _Unselect();
+                }
             } else
             {
                 hasReleasedSinceSelection = true;
@@ -156,17 +160,20 @@ public class ElectricComponent : MonoBehaviour
             }
         }
 
-        OnUpdate();
+        OnUpdate(); // pour les sous composants
     }
 
     #region Internal
     public void MoveComponent(Vector3 newPos)
     {
-        _Unselect();
-        transform.position = newPos;
-        ProjectManager.m_Instance.ChangeComponentPos(this, transform.position);
-        ProjectManager.OnModifyProject();
-        _Select();
+        if(newPos != transform.position)
+        {
+            _Unselect();
+            transform.position = newPos;
+            ProjectManager.m_Instance.ChangeComponentPos(this, transform.position);
+            ProjectManager.OnModifyProject();
+            _Select();
+        }
     }
 
     public void _Select()
@@ -174,6 +181,7 @@ public class ElectricComponent : MonoBehaviour
         isSelected = true;
         Select();
         outline.color = Color.white;
+        ProjectManager.AddComponentToSelection(this);
     }
 
     public void _Unselect()
@@ -181,6 +189,7 @@ public class ElectricComponent : MonoBehaviour
         isSelected = false;
         Unselect();
         outline.color = Color.clear;
+        ProjectManager.RemoveComponentFromSelection(this);
     }
 
     private void _RotateComponent()

@@ -1,18 +1,19 @@
-using SFB;
-using System.Collections;
-using System.Collections.Generic;
 using System.IO;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
+using System;
+using System.Collections;
 
 public class SaveScreenShotPopup : MonoBehaviour
 {
     public string path;
-    public ScreenShotDirectory manager;
+
+    public ScreenshotManager manager;
     public TextMeshProUGUI fileName;
     public TextMeshProUGUI cheminement;
     private GameObject container;
-   
+    public Button saveButton;
 
     private void Start()
     {
@@ -22,7 +23,7 @@ public class SaveScreenShotPopup : MonoBehaviour
     public void Show()
     {
         container.SetActive(true);
-        print("test");
+        saveButton.interactable = false;
     }
 
     public void Hide()
@@ -35,14 +36,12 @@ public class SaveScreenShotPopup : MonoBehaviour
         path = manager.SelectDirectory();
         fileName.text = Path.GetFileName(path);
         cheminement.text = path;
-        print(path);
-        print(Path.GetFileName(path));
+        saveButton.interactable = true;
     }
 
     public void Save()
     {
-        FindObjectOfType<ScreenShotDirectory>().Save(path);
+        manager.SaveCurrentView(path);
+        Hide();
     }
-
-   
 }

@@ -59,18 +59,32 @@ public class MainMenuButtons : MonoBehaviour
     public void FindRecentProject()
     {
         string paths = PlayerPrefs.GetString(recentProjectsPrefName);
-        string[] pathsList = paths.Split(';');
+        List<string> pathsList = new List<string>(paths.Split(';'));
+        List<string> newList = new List<string>();
+        bool hasChanged = false; // On nettoie la liste en même temps
         foreach (string path in pathsList)
         {
-           if(path != "")
+            if(path != "")
             {
-            string name = Path.GetFileName(path);
-            GameObject go = Instantiate(recentProjectPrefab);
-            go.transform.SetParent(list.transform);
-            go.GetComponent<RecentProject>().Setup(name, path);
-            }                      
+                if(File.Exists(path))
+                {
+                    string name = Path.GetFileName(path);
+                    GameObject go = Instantiate(recentProjectPrefab);
+                    go.transform.SetParent(list.transform);
+                    go.GetComponent<RecentProject>().Setup(name, path);
+                    newList.Add(path);
+                }
+                else
+                {
+                    hasChanged = true;
+                }
+            } 
         }
-        
-    }
 
+        if(hasChanged)
+        {
+            string newPathsString = string.Join(";", newList);
+            PlayerPrefs.SetString(recentProjectsPrefName, newPathsString);
+        }
+    }
 }

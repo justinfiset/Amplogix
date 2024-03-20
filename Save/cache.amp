@@ -2,13 +2,22 @@
     "name": "Nouveau Projet",
     "componentDataList": [
         {
-            "type": 1,
-            "x": -5.0,
-            "y": 2.0,
+            "type": 99,
+            "x": -1.39410400390625,
+            "y": 2.050933837890625,
             "rot": 0.0,
             "scaleX": 1.0,
             "scaleY": 1.0,
-            "customComponentData": ""
+            "customComponentData": "{\"text\":\"ceci est un texte à 6\",\"fontSize\":6.0}"
+        },
+        {
+            "type": 99,
+            "x": -0.9249267578125,
+            "y": 0.81768798828125,
+            "rot": 0.0,
+            "scaleX": 1.0,
+            "scaleY": 1.0,
+            "customComponentData": "{\"text\":\"14\",\"fontSize\":14.0}"
         }
     ]
 }

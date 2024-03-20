@@ -39,9 +39,16 @@ public class GridSettings : MonoBehaviour
     {
         Vector3 snappedPos;
         Vector3 gridPos = MouseInputToWorldPoint();
-        gridPos.x = Mathf.Round(gridPos.x / m_Instance.gridIncrement);
-        gridPos.y = Mathf.Round(gridPos.y / m_Instance.gridIncrement);
-        snappedPos = gridPos * m_Instance.gridIncrement;
+        try
+        {
+            gridPos.x = Mathf.Round(gridPos.x / m_Instance.gridIncrement);
+            gridPos.y = Mathf.Round(gridPos.y / m_Instance.gridIncrement);
+            snappedPos = gridPos * m_Instance.gridIncrement;
+        }
+        catch
+        {
+            snappedPos = Vector3.zero;
+        }
 
         return snappedPos;
     }

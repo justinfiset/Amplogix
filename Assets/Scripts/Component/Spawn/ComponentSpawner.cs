@@ -47,7 +47,7 @@ public class ComponentSpawner : MonoBehaviour
 
     void Update()
     {
-        if(canSpawn)
+        if(canSpawn && ProjectManager.IsSelectionEmpty())
         {
             if (Input.GetMouseButtonDown(0))
             {
@@ -150,9 +150,6 @@ public class ComponentSpawner : MonoBehaviour
             if (!m_Instance.projectManager.ContainsComponent(pos))
             {
                 CreateComponent(currentComponent, pos);
-            } else
-            {
-                // TODO ERREUR COMPONENT DEJA EXISTANT
             }
         }
     }
