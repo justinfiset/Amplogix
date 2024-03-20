@@ -1,4 +1,6 @@
+using System.Collections;
 using System.Collections.Generic;
+using System.Xml.Serialization;
 using UnityEngine;
 using UnityEngine.UIElements;
 using static Connection;
@@ -7,7 +9,9 @@ public class Connection : MonoBehaviour
 {
     public enum ConnectionPosition { Left, Right, Top, Bottom }
     protected Connections connections;
-    public bool hasRoundConnections;
+    public bool HasVisibleConnections;
+    private VisualConnection[] visualConnections = new VisualConnection[4];
+    public GameObject visualConnectionPrefab;
 
     public static ConnectionPosition GetConnectionPositionFromIndex(int index)
     {
@@ -17,6 +21,18 @@ public class Connection : MonoBehaviour
             case 1: return ConnectionPosition.Right;
             case 2: return ConnectionPosition.Top;
             case 3: return ConnectionPosition.Bottom;
+            default: throw new System.Exception("Position index must be between 0 and 3 = " + index);
+        }
+    }
+
+    public int GetConnectionMultiplier(int index)
+    {
+        switch (index)
+        {
+            case 0: return 0;
+            case 1: return 2;
+            case 2: return 1;
+            case 3: return 3;
             default: throw new System.Exception("Position index must be between 0 and 3 = " + index);
         }
     }
@@ -48,6 +64,7 @@ public class Connection : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        print("connection start");
         connections = new Connections();
     }
 
@@ -57,10 +74,43 @@ public class Connection : MonoBehaviour
         
     }
 
+    #region Visual Connections
+    public void UpdateVisualConnections()
+    {
+        if (HasVisibleConnections)
+        {
+            for (int i = 0; i < 4; i++)
+            {
+                if (connections.GetValue(i)) // si connecté et pas de connection vis.
+                {
+                    if (visualConnections[i] == null)
+                    {
+                        CreateVisualConnection(i);
+                    }
+                } else if (visualConnections[i] != null) // si déco. et il y a co. vis.
+                {
+                    Destroy(visualConnections[i].gameObject);
+                }
+            }
+        }
+    }
+
+    public void CreateVisualConnection(int index)
+    {
+        print("for " + gameObject + " at " + GetConnectionPositionFromIndex(index));
+        GameObject instantiatedVisualConnection = Instantiate(visualConnectionPrefab,
+            transform.position, Quaternion.Euler(0, 0, 90 * GetConnectionMultiplier(index)), transform);
+        visualConnections[index] = instantiatedVisualConnection.GetComponent<VisualConnection>();
+    }
+    #endregion
+
+    #region Deleting Connections
     public void DeleteAllLocalConnections()
     {
         connections.top = false; connections.bottom = false;
         connections.left = false; connections.right = false;
+
+        UpdateVisualConnections();
     }
 
     public void DeleteLocalConnection(ConnectionPosition position)
@@ -72,6 +122,7 @@ public class Connection : MonoBehaviour
             case ConnectionPosition.Top: connections.top = false; break;
             case ConnectionPosition.Bottom: connections.bottom = false; break;
         }
+        UpdateVisualConnections();
     }
 
     public void DeleteAllConnections()
@@ -85,13 +136,20 @@ public class Connection : MonoBehaviour
     public void DeleteConnection(ConnectionPosition position)
     {
         List<ElectricComponent> allConnections = GetAllConnectedTo();
+        while (allConnections.Count < 4)
+        {
+            allConnections.Add(null);
+        }
         allConnections[GetIndexFromPosition(position)].GetComponent<Connection>()
             .DeleteLocalConnection(GetOppositeConnection(position));
         DeleteLocalConnection(position);
     }
+    #endregion
 
+    #region ConnectTos
     public void ConnectTo(ConnectionPosition connectionPosition)
     {
+        print("tried connecting " + gameObject);
         switch (connectionPosition)
         {
             case ConnectionPosition.Left:connections.left = true; break;
@@ -99,10 +157,12 @@ public class Connection : MonoBehaviour
             case ConnectionPosition.Top:connections.top = true; break;
             case ConnectionPosition.Bottom:connections.bottom = true; break;
         }
+        UpdateVisualConnections();
     }
 
     public void ConnectTo(int connectionPosition)
     {
+        print("tried connecting " + gameObject + " with position " + GetConnectionPositionFromIndex(connectionPosition));
         switch (connectionPosition)
         {
             case 0: connections.left = true; break;
@@ -111,8 +171,11 @@ public class Connection : MonoBehaviour
             case 3: connections.bottom = true; break;
             default: throw new System.Exception("Position index must be between 0 and 3 = " + connectionPosition);
         }
+        UpdateVisualConnections();
     }
+    #endregion
 
+    #region Connection getters
     /*
      * Retourne un array de toutes les connection (Gauche, Droite, Haut, Bas)
      * Sauf celle reçue en argument
@@ -152,6 +215,7 @@ public class Connection : MonoBehaviour
         }
         return result;
     }
+    #endregion
 
     public void OnDestroy()
     {

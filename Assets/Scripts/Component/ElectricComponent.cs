@@ -14,8 +14,8 @@ public class ElectricComponent : MonoBehaviour
 {
     [Header("Logic")]
     public ElectricComponentType type;
-    public bool canBeRotated = true; // Le composant peut-il être rotationé par l'utilisateur?
-    public bool canBeMoved = true; // Le composant peut-il être manipulé par l'utilisateur?
+    public bool canBeRotated = true; // Le composant peut-il ï¿½tre rotationï¿½ par l'utilisateur?
+    public bool canBeMoved = true; // Le composant peut-il ï¿½tre manipulï¿½ par l'utilisateur?
     public bool canStack = false;
     public bool snapToGrid = true;
     public bool respectOrientation = false;
@@ -39,7 +39,8 @@ public class ElectricComponent : MonoBehaviour
     private ResizeWinglets resizeWinglets;
     private WireTilesManager wireTilesManager;
     private ConnectionTilesManager connectionTilesManager;
-    [HideInInspector] public SpriteRenderer sprite;
+    private TilesManager tilesManager;
+    protected SpriteRenderer sprite;
 
     [Header("Inputs")]
     private static KeyCode rotateKey = KeyCode.R;
@@ -53,6 +54,7 @@ public class ElectricComponent : MonoBehaviour
     {
         resizeWinglets = GetComponent<ResizeWinglets>();
         wireTilesManager = GetComponent<WireTilesManager>();
+        tilesManager = GetComponent<TilesManager>();
         connectionTilesManager = GetComponent<ConnectionTilesManager>();
         sprite = GetComponent<SpriteRenderer>();
 
@@ -262,15 +264,20 @@ public class ElectricComponent : MonoBehaviour
     public virtual void Select()
     {
         resizeWinglets.GenerateWinglets(transform.position, transform.localScale);
-        wireTilesManager.ShowTiles();
-        connectionTilesManager.ShowTiles(this);
+        // wireTilesManager.ShowTiles();
+        // connectionTilesManager.ShowTiles(this);
+        tilesManager.ShowWireTiles();
+        tilesManager.ShowConnectionTiles(this);
+        sprite.color = sprite.color * new Color(1, 1, 1, 0.5f);
     }
 
     public virtual void Unselect()
     {
         resizeWinglets.DestroyWinglets();
-        wireTilesManager.HideTiles();
-        connectionTilesManager.HideTiles();
+        // wireTilesManager.HideTiles();
+        // connectionTilesManager.HideTiles();
+        tilesManager.HideTiles();
+        sprite.color = Color.white;
     }
     #endregion
 
@@ -308,7 +315,7 @@ public class ElectricComponent : MonoBehaviour
         if (isSelected)
         {
             ComponentGUI.InitGUI();
-            // Creation de la fenetre en bas à droite
+            // Creation de la fenetre en bas ï¿½ droite
             ComponentGUI.CreateBackground(this, "Texte");
 
             ComponentGUI.CreateColorPalette();

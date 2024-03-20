@@ -65,13 +65,13 @@ public class ConnectionTilesManager : MonoBehaviour
 
         if (surroundingComponents.Contains(topPos))
         {
-            Instantiate(connectionTilePrefab, topPos, Quaternion.identity, parent.transform)
-                .GetComponent<ConnectionTile>().Setup(this, ConnectionTilePosition.Top, false, source);
+            // Instantiate(connectionTilePrefab, topPos, Quaternion.identity, parent.transform)
+            //     .GetComponent<ConnectionTile>().Setup(this, ConnectionTilePosition.Top, false, source);
         }
         if (surroundingComponents.Contains(bottomPos))
         {
-            Instantiate(connectionTilePrefab, bottomPos, Quaternion.identity, parent.transform)
-                .GetComponent<ConnectionTile>().Setup(this, ConnectionTilePosition.Bottom, false, source);
+            // Instantiate(connectionTilePrefab, bottomPos, Quaternion.identity, parent.transform)
+            //     .GetComponent<ConnectionTile>().Setup(this, ConnectionTilePosition.Bottom, false, source);
         }
     }
 
@@ -82,13 +82,13 @@ public class ConnectionTilesManager : MonoBehaviour
 
         if (surroundingComponents.Contains(leftPos))
         {
-            Instantiate(connectionTilePrefab, leftPos, Quaternion.identity, parent.transform)
-                .GetComponent<ConnectionTile>().Setup(this, ConnectionTilePosition.Left, true, source);
+            // Instantiate(connectionTilePrefab, leftPos, Quaternion.identity, parent.transform)
+            //     .GetComponent<ConnectionTile>().Setup(this, ConnectionTilePosition.Left, true, source);
         }
         if (surroundingComponents.Contains(rightPos))
         {
-            Instantiate(connectionTilePrefab, rightPos, Quaternion.identity, parent.transform)
-                .GetComponent<ConnectionTile>().Setup(this, ConnectionTilePosition.Right, true, source);
+            // Instantiate(connectionTilePrefab, rightPos, Quaternion.identity, parent.transform)
+            //     .GetComponent<ConnectionTile>().Setup(this, ConnectionTilePosition.Right, true, source);
         }
     }
     #endregion

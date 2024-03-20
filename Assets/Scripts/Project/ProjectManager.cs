@@ -278,16 +278,49 @@ public class ProjectManager : MonoBehaviour
             if (AreComponentsAlignedOnPlane(first, second, true)) //si les composants sont al. horizontalement
             {
                 float diff = first.transform.position.x - second.transform.position.x;
-                positionIndex = (int) (0.5 + Mathf.Sign(diff) / 2);
+                // positionIndex = (int) (0.5 + Mathf.Sign(diff) / 2);
+                positionIndex = GetPositionIndex(first, second, true);
                 first.GetComponent<Connection>().ConnectTo(positionIndex);
                 second.GetComponent<Connection>().ConnectTo(GetOtherValue(positionIndex, 0, 1));
             } else
             {
                 float diff = first.transform.position.y - second.transform.position.y;
-                positionIndex = (int)(2.5 - Mathf.Sign(diff) / 2);
+                // positionIndex = (int)(2.5 - Mathf.Sign(diff) / 2);
+                positionIndex = GetPositionIndex(first, second, false);
                 first.GetComponent<Connection>().ConnectTo(positionIndex);
-                second.GetComponent<Connection>().ConnectTo(GetOtherValue(positionIndex, 0, 1));
+                second.GetComponent<Connection>().ConnectTo(GetOtherValue(positionIndex, 2, 3));
             }
+            print("position index is " + positionIndex);
+        }
+    }
+
+    public int GetPositionIndex(ElectricComponent first, ElectricComponent second, bool areHorizontal)
+    {
+        print("first : " + first);
+        print("second : " + second);
+        float diff;
+        if (areHorizontal)
+        {
+            diff = first.transform.position.x - second.transform.position.x;
+        }
+        else
+        {
+            diff = first.transform.position.y - second.transform.position.y;
+        }
+
+        if (areHorizontal)
+        {
+            if (diff < 0)
+            {
+                return 1;
+            } else return 0;
+        } else
+        {
+            if (diff < 0)
+            {
+                return 3;
+            }
+            else return 2;
         }
     }
 
@@ -306,6 +339,7 @@ public class ProjectManager : MonoBehaviour
 
     public bool ComponentsPointToEachOther(ElectricComponent first, ElectricComponent second)
     {
+        print(second);
         bool firstRespectsOrientation = first.GetComponent<ElectricComponent>().respectOrientation;
         bool secondRespectsOrientation = second.GetComponent<ElectricComponent>().respectOrientation;
 

@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 5284010741385332986}
   - component: {fileID: -7932423738681998276}
   - component: {fileID: -7875633403541762387}
+  - component: {fileID: -8936149497432537827}
   m_Layer: 6
   m_Name: Motor
   m_TagString: Untagged
@@ -194,6 +195,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e2325cd889c2ba14387064f30e27afed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  HasVisibleConnections: 1
+  visualConnectionPrefab: {fileID: 3084868918825537089, guid: 6ee0dd37866e2f7458e0f5b3da0f9ea6, type: 3}
+--- !u!114 &-8936149497432537827
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4028369109100792875}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7404dbafe804a684f87f5e100cacc645, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isActive: 0
+  wireTilePrefab: {fileID: 729730110476256346, guid: b7b1b57ceb44fc9489faac4c0c4be09f, type: 3}
+  connectionTilePrefab: {fileID: 729730110476256346, guid: b27489a6dc4be2e468f6e233bd1e49f5, type: 3}
 --- !u!1001 &8951249173624006220
 PrefabInstance:
   m_ObjectHideFlags: 0

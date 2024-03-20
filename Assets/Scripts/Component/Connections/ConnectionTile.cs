@@ -13,7 +13,7 @@ public enum ConnectionTilePosition
 public class ConnectionTile : MonoBehaviour
 {
     private bool isHover = false;
-    private ConnectionTilesManager manager;
+    private TilesManager manager;
     public ConnectionTilePosition position;
     public ElectricComponent source;
     public bool isHorizontal;
@@ -31,7 +31,7 @@ public class ConnectionTile : MonoBehaviour
         }
     }
 
-    public void Setup(ConnectionTilesManager manager, ConnectionTilePosition position, bool isHorizontal, ElectricComponent source)
+    public void Setup(TilesManager manager, ConnectionTilePosition position, bool isHorizontal, ElectricComponent source)
     {
         this.manager = manager;
         this.position = position;

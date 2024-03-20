@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 8771387389109448797}
   - component: {fileID: 3561326550199047985}
   - component: {fileID: 6143013532739442378}
+  - component: {fileID: -6394662027084178350}
   m_Layer: 6
   m_Name: Switch
   m_TagString: Untagged
@@ -197,6 +198,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e2325cd889c2ba14387064f30e27afed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  HasVisibleConnections: 0
+  visualConnectionPrefab: {fileID: 0}
+--- !u!114 &-6394662027084178350
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5643372875791426778}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7404dbafe804a684f87f5e100cacc645, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isActive: 0
+  wireTilePrefab: {fileID: 729730110476256346, guid: b7b1b57ceb44fc9489faac4c0c4be09f, type: 3}
+  connectionTilePrefab: {fileID: 729730110476256346, guid: b27489a6dc4be2e468f6e233bd1e49f5, type: 3}
 --- !u!1001 &3126676511196591769
 PrefabInstance:
   m_ObjectHideFlags: 0

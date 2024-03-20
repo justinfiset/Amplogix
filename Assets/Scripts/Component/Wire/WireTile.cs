@@ -13,7 +13,7 @@ public enum WireTilePosition
 public class WireTile : MonoBehaviour
 {
     private bool isHover = false;
-    private WireTilesManager manager;
+    private TilesManager manager;
     public WireTilePosition position;
 
     public void Update()
@@ -27,7 +27,7 @@ public class WireTile : MonoBehaviour
         }
     }
 
-    public void Setup(WireTilesManager manager, WireTilePosition position)
+    public void Setup(TilesManager manager, WireTilePosition position)
     {
         this.manager = manager;
         this.position = position;

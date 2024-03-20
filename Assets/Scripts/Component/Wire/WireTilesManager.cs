@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using UnityEngine;
 
 public class WireTilesManager : MonoBehaviour
@@ -51,13 +52,13 @@ public class WireTilesManager : MonoBehaviour
 
         if(!surroundingComponents.Contains(topPos))
         {
-            Instantiate(wireTilePrefab, topPos, Quaternion.identity, parent.transform)
-                .GetComponent<WireTile>().Setup(this, WireTilePosition.Top);
+            // Instantiate(wireTilePrefab, topPos, Quaternion.identity, parent.transform)
+            //     .GetComponent<WireTile>().Setup(this, WireTilePosition.Top);
         }
         if (!surroundingComponents.Contains(bottomPos))
         {
-            Instantiate(wireTilePrefab, bottomPos, Quaternion.identity, parent.transform)
-                .GetComponent<WireTile>().Setup(this, WireTilePosition.Bottom);
+            // Instantiate(wireTilePrefab, bottomPos, Quaternion.identity, parent.transform)
+            //     .GetComponent<WireTile>().Setup(this, WireTilePosition.Bottom);
         }
     }
 
@@ -68,13 +69,13 @@ public class WireTilesManager : MonoBehaviour
 
         if (!surroundingComponents.Contains(leftPos))
         {
-            Instantiate(wireTilePrefab, leftPos, Quaternion.identity, parent.transform)
-                .GetComponent<WireTile>().Setup(this, WireTilePosition.Left);
+            // Instantiate(wireTilePrefab, leftPos, Quaternion.identity, parent.transform)
+            //     .GetComponent<WireTile>().Setup(this, WireTilePosition.Left);
         }
         if (!surroundingComponents.Contains(rightPos))
         {
-            Instantiate(wireTilePrefab, rightPos, Quaternion.identity, parent.transform)
-                .GetComponent<WireTile>().Setup(this, WireTilePosition.Right);
+            // Instantiate(wireTilePrefab, rightPos, Quaternion.identity, parent.transform)
+            //     .GetComponent<WireTile>().Setup(this, WireTilePosition.Right);
         }
     }
 
@@ -85,8 +86,18 @@ public class WireTilesManager : MonoBehaviour
         Quaternion angles = Quaternion.Euler(0, 0, (float) tile.position);
         GameObject component = ComponentSpawner.CreateComponent(type, pos, angles, Vector3.one, Color.black).gameObject;
         
+        StartCoroutine(WaitAndConnectTo(component));
         ManageNewSelection(component);
-        HandleWireVariation(component);
+        // ProjectManager.m_Instance.ConnectComponents(component.GetComponent<ElectricComponent>(), 
+        //     tile.GetComponentInParent<ElectricComponent>());
+        //HandleWireVariation(component);
+    }
+
+    private IEnumerator WaitAndConnectTo(GameObject component)
+    {
+        yield return new WaitForEndOfFrame();
+        ProjectManager.m_Instance.ConnectComponents(component.GetComponent<ElectricComponent>(),
+            GetComponent<ElectricComponent>());
     }
 
     public void HandleWireVariation(GameObject newWire)
