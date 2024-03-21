@@ -38,7 +38,6 @@ public class BoxSelectorCreater : MonoBehaviour
                 initialMousePos = Input.mousePosition;
                 
                 firstTime = false;
-                print("firsttime");
                 rectangle = Instantiate(prefabs, initialMousePos, rotation, parent).GetComponent<RectTransform>();
                 rectangle.gameObject.SetActive(true);
             }

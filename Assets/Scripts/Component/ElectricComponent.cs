@@ -5,6 +5,10 @@ using System;
 using System.Linq;
 using UnityEditor;
 using UnityEngine.EventSystems;
+using System.ComponentModel;
+using System.Runtime.Serialization;
+using Unity.VisualScripting;
+using System.Reflection;
 
 //[RequireComponent(typeof(SpriteRenderer))]
 //[RequireComponent(typeof(ResizeWinglets))]
@@ -12,6 +16,7 @@ using UnityEngine.EventSystems;
 [RequireComponent(typeof(BoxCollider2D))]
 public class ElectricComponent : MonoBehaviour
 {
+    string test = "test";
     [Header("Logic")]
     public ElectricComponentType type;
     public bool canBeRotated = true; // Le composant peut-il �tre rotation� par l'utilisateur?
@@ -40,7 +45,8 @@ public class ElectricComponent : MonoBehaviour
     private WireTilesManager wireTilesManager;
     private ConnectionTilesManager connectionTilesManager;
     private TilesManager tilesManager;
-    public SpriteRenderer sprite;
+    [HideInInspector] public SpriteRenderer sprite;
+    protected float GUIHeightDivider = 3f;
 
     [Header("Inputs")]
     private static KeyCode rotateKey = KeyCode.R;
@@ -69,6 +75,14 @@ public class ElectricComponent : MonoBehaviour
     {
         if(Input.GetMouseButtonDown(0))
         {
+            if (isSelected && hasReleasedSinceSelection && !isMouseOverGUI)
+            {
+                if (!EventSystem.current.IsPointerOverGameObject())
+                {
+                    _Unselect();
+                }
+            }
+
             if (isHover)
             {
                 if(snapToGrid)
@@ -89,13 +103,9 @@ public class ElectricComponent : MonoBehaviour
         }
         else if(Input.GetMouseButtonUp(0))
         {
-            if (isSelected && hasReleasedSinceSelection && !isMouseOverGUI)
-            {
-                if(!EventSystem.current.IsPointerOverGameObject())
-                {
-                    _Unselect();
-                }
-            } else
+            // TODO: remove useless statment
+            if (isSelected && hasReleasedSinceSelection && !isMouseOverGUI) {/* Unselect */} 
+            else
             {
                 hasReleasedSinceSelection = true;
             }
@@ -118,8 +128,7 @@ public class ElectricComponent : MonoBehaviour
                     _RotateComponent();
                 }
                 else if (Input.GetKeyDown(mouseDeleteKey)
-                    || Input.GetKeyDown(keyboardDeleteKey)
-                    || Input.GetKeyDown(systemDeleteKey))
+                    || Input.GetKeyDown(keyboardDeleteKey))
                 {
                     _DestroyComponent();
                 }
@@ -127,6 +136,12 @@ public class ElectricComponent : MonoBehaviour
                 {
                     _Unselect();
                 }
+            }
+
+            // On supprime quand même si on pèse sur la touche 'delete'
+            if(Input.GetKeyDown(systemDeleteKey))
+            {
+                _DestroyComponent();
             }
 
             if (!hasReleasedSinceSelection)
@@ -313,14 +328,15 @@ public class ElectricComponent : MonoBehaviour
     {
         if (isSelected)
         {
-            ComponentGUI.InitGUI();
+            ComponentGUI.InitGUI(GUIHeightDivider);
+
             // Creation de la fenetre en bas � droite
-            ComponentGUI.CreateBackground(this, "Texte");
+            ComponentGUI.CreateBackground(this, ElectricComponentTypeMethods.GetName(type));
+
+            RenderGUI(); // Creation du UI custom
 
             ComponentGUI.CreateColorPalette();
             ComponentGUI.CreateDeleteButton(this);
-
-            RenderGUI(); // Creation du UI custom
         }
     }
 }
@@ -330,20 +346,35 @@ public class ElectricComponent : MonoBehaviour
 public enum ElectricComponentType
 {
     None,
+    [Description("Resistance")]
     Resistor,
+    [Description("Source")]
     PowerSource,
+    [Description("Interrupteur")]
     Switch,
+    [Description("Ampoule")]
     LightBulb,
+    [Description("Moteur")]
     Motor,
+    [Description("Condensateur")]
     Condensator,
+    [Description("Ampèrmètre")]
     Ammeter,
+    [Description("Voltmètre")]
     Voltmeter,
+    [Description("Diode")]
     Diode,
+    [Description("Bobine")]
     Coil,
+    [Description("Fil")]
     Wire,
+    [Description("Fil")]
     WireCorner,
+    [Description("Fil")]
     WireThreeWay,
+    [Description("Fil")]
     WireFourWay,
+    [Description("Texte")]
     TextLabel = 99
 }
 
@@ -360,6 +391,14 @@ public static class ElectricComponentTypeMethods
         };
 
         return wireTypes.Contains(component.type);
+    }
+
+    public static string GetName(ElectricComponentType type)
+    {
+        FieldInfo field = type.GetType().GetField(type.ToString());
+        DescriptionAttribute attribute = Attribute.GetCustomAttribute(field, typeof(DescriptionAttribute))
+                as DescriptionAttribute;
+        return attribute == null ? type.ToString() : attribute.Description;
     }
 }
 #endregion

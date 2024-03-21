@@ -8,24 +8,21 @@ public class ComponentGUI : MonoBehaviour
     public static GUIStyle buttonStyle = null;
     public static GUIStyle deleteStyle = null;
     public static GUIStyle labelStyle = null;
+    public static GUIStyle inputStyle = null;
     public static ComponentGUILayout currentLayout;
 
-    public static GUIStyle InitGUI()
+    public static GUIStyle InitGUI(float heightDivider = 3f)
     {
         int fontSize = 32;
         GUI.skin.box.fontSize = fontSize;
         GUI.skin.button.fontSize = fontSize;
-        InitLayout();
+        InitLayout(heightDivider);
         return InitStyles();
     }
 
-    public static ComponentGUILayout InitLayout()
+    public static ComponentGUILayout InitLayout(float heightDivider)
     {
-        if (currentLayout == null)
-        {
-            currentLayout = new ComponentGUILayout();
-        }
-
+        currentLayout = new ComponentGUILayout(heightDivider);
         return currentLayout;
     }
 
@@ -66,6 +63,12 @@ public class ComponentGUI : MonoBehaviour
         {
             labelStyle = new GUIStyle(currentStyle);
             labelStyle.alignment = TextAnchor.MiddleCenter;
+        }
+
+        if (inputStyle == null)
+        {
+            inputStyle = new GUIStyle(buttonStyle);
+            inputStyle.normal.background = MakeTex(2, 2, new Color32(52, 104, 179, 255));
         }
 
         return currentStyle;
@@ -167,9 +170,9 @@ public class ComponentGUILayout
     public float x;
     public float y;
 
-    public ComponentGUILayout()
+    public ComponentGUILayout(float heightDivider)
     {
-        height = Screen.height / 2;
+        height = Screen.height / heightDivider;
         width = Screen.width / 4;
         x = Screen.width - width - padding;
         y = Screen.height - height - padding;

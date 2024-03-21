@@ -19,6 +19,8 @@ public class TextLabel : ElectricComponent
 
     override public void Setup()
     {
+        GUIHeightDivider = 2.5f; // Take half of the screen instead of a third
+
         text = GetComponent<TextMeshPro>();
         rect = GetComponent<RectTransform>();
         col = GetComponent<BoxCollider2D>();
@@ -113,15 +115,15 @@ public class TextLabel : ElectricComponent
         GUIStyle buttonStyle = ComponentGUI.buttonStyle;
         GUIStyle labelStyle = ComponentGUI.labelStyle;
 
-        if (GUI.Button(ComponentGUI.CreateRect(0, 1, 3, 8), "-", buttonStyle))
+        if (GUI.Button(ComponentGUI.CreateRect(0, 1, 3, 5), "-", buttonStyle))
         {
             DecreaesTextSize();
         }
 
-        GUI.Label(ComponentGUI.CreateRect(1, 1, 3, 8), text.fontSize.ToString(), labelStyle);
+        GUI.Label(ComponentGUI.CreateRect(1, 1, 3, 5), text.fontSize.ToString(), labelStyle);
 
         // Make the second button.
-        if (GUI.Button(ComponentGUI.CreateRect(2, 1, 3, 8), "+", buttonStyle))
+        if (GUI.Button(ComponentGUI.CreateRect(2, 1, 3, 5), "+", buttonStyle))
         {
             IncreaseTextSize();
         }

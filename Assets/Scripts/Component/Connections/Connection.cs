@@ -64,7 +64,6 @@ public class Connection : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        print("connection start");
         connections = new Connections();
     }
 
