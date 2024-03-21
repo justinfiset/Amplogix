@@ -67,13 +67,22 @@ public class BoxSelectorCreater : MonoBehaviour
             bounds = new Bounds();
             bounds.SetMinMax(min, max);
 
+            HashSet<ElectricComponent> components = new HashSet<ElectricComponent>();
             foreach (KeyValuePair<ElectricComponent, Vector2> kvp in ProjectManager.m_Instance.componentList)
             {
                 if (bounds.Contains(kvp.Value))
                 {
-                    kvp.Key._Select(false);
+                    components.Add(kvp.Key);
                 }
             }
+
+
+            bool isUnique = components.Count == 1 && ProjectManager.IsSelectionEmpty();
+            foreach (ElectricComponent component in components)
+            {
+                component._Select(isUnique);
+            }
+
             Destroy(rectangle.gameObject);
         }
     }

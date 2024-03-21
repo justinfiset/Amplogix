@@ -16,12 +16,12 @@ public class PowerSource : ElectricComponent
     public override void Setup()
     {
         GUIHeightDivider = 2.5f;
+        UpdateSprite();
     }
 
-    public override void RotateComponent()
+    public void UpdateSprite()
     {
-        base.RotateComponent();
-        if(transform.localRotation.eulerAngles.z % 180 == 0) // si horizontal
+        if (transform.localRotation.eulerAngles.z % 180 == 0) // si horizontal
         {
             sprite.sprite = horizontalSprite;
         }
@@ -29,6 +29,12 @@ public class PowerSource : ElectricComponent
         {
             sprite.sprite = verticalSprite;
         }
+    }
+
+    public override void RotateComponent()
+    {
+        base.RotateComponent();
+        UpdateSprite();
     }
 
     public override void UnpackCustomComponentData(string customDataString)

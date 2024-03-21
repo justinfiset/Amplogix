@@ -212,9 +212,8 @@ MonoBehaviour:
   hasReleasedSinceSelection: 1
   outline: {fileID: 155018022359230697}
   sprite: {fileID: 0}
-  GUIHeightDivider: 3
-  verticalSprite: {fileID: 0}
-  horizontalSprite: {fileID: 0}
+  verticalSprite: {fileID: -609352295, guid: c6b6966af1811ea4bbd2fbab940b39d5, type: 3}
+  horizontalSprite: {fileID: -1799907246, guid: c6b6966af1811ea4bbd2fbab940b39d5, type: 3}
   voltage: 0
 --- !u!1001 &1489758621188395086
 PrefabInstance:
