@@ -79,7 +79,7 @@ public class ElectricComponent : MonoBehaviour
             {
                 if (!EventSystem.current.IsPointerOverGameObject())
                 {
-                    _Unselect();
+                    UnselectAfterEndOfFrame();
                 }
             }
 
@@ -338,6 +338,17 @@ public class ElectricComponent : MonoBehaviour
             ComponentGUI.CreateColorPalette();
             ComponentGUI.CreateDeleteButton(this);
         }
+    }
+
+    public void UnselectAfterEndOfFrame()
+    {
+        StartCoroutine(IUnselectAfterEndOfFrame());
+    }
+
+    private IEnumerator IUnselectAfterEndOfFrame()
+    {
+        yield return new WaitForEndOfFrame();
+        _Unselect();
     }
 }
 
