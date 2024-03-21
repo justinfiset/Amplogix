@@ -95,14 +95,14 @@ public class ComponentGUI : MonoBehaviour
         return rect;
     }
 
-    public static void CreateDeleteButton(ElectricComponent component)
+    public static void CreateDeleteButton()
     {
         float height = 40;
         float x = Screen.width - currentLayout.width;
         float y = Screen.height - height - currentLayout.padding * 2;
         if (GUI.Button(new Rect(x, y, currentLayout.width - 2 * currentLayout.padding, height), "Supprimer", deleteStyle))
         {
-            component._DestroyComponent();
+            ProjectManager.DeleteSelectedComponents();
         }
     }
 

@@ -432,4 +432,13 @@ public class ProjectManager : MonoBehaviour
             component._SetColor(newColor);
         }
     }
+
+    public static void DeleteSelectedComponents()
+    {
+        ElectricComponent[] selection = m_Instance.componentSelection.ToArray();
+        foreach (ElectricComponent component in selection)
+        {
+            ComponentSpawner.DestroyComponent(component.gameObject);
+        }
+    }
 }

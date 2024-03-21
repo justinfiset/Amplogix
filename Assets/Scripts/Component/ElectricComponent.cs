@@ -336,7 +336,7 @@ public class ElectricComponent : MonoBehaviour
             RenderGUI(); // Creation du UI custom
 
             ComponentGUI.CreateColorPalette();
-            ComponentGUI.CreateDeleteButton(this);
+            ComponentGUI.CreateDeleteButton();
         }
     }
 
