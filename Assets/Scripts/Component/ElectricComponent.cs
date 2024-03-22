@@ -86,12 +86,12 @@ public class ElectricComponent : MonoBehaviour
 
             if (isHover)
             {
-                if(snapToGrid)
+                lastClickPos = transform.position;
+                if (snapToGrid)
                 {
                     lastClickMousePos = GridSettings.GetCurrentSnapedPosition();
                 } else
                 {
-                    lastClickPos = transform.position;
                     lastClickMousePos = GridSettings.MouseInputToWorldPoint();
                 }
 
@@ -332,16 +332,11 @@ public class ElectricComponent : MonoBehaviour
     {
         if (isSelected)
         {
-            ComponentGUI.InitGUI(GUIHeightDivider);
-
-            string headerName = "";
             bool isUnique = ProjectManager.m_Instance.componentSelection.Count < 2;
+            string headerName = isUnique ? ElectricComponentTypeMethods.GetName(type) : "Selection Multiple...";
 
             ComponentGUI.InitGUI(isUnique ? GUIHeightDivider : DefaltGUIDivider);
-            headerName = isUnique ? ElectricComponentTypeMethods.GetName(type) : "Selection Multiple...";
-
-            // Creation de la fenetre en bas � droite
-            ComponentGUI.CreateBackground(this, headerName);
+            ComponentGUI.CreateBackground(this, headerName); // Creation de la fenetre en bas � droite
 
             if (isUnique) RenderGUI(); // Creation du UI custom
 
