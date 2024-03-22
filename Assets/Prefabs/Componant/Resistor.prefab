@@ -11,12 +11,12 @@ GameObject:
   - component: {fileID: 552430997874555098}
   - component: {fileID: 552430997874555079}
   - component: {fileID: 552430997874555078}
-  - component: {fileID: 552430997874555096}
   - component: {fileID: 552430997874555099}
   - component: {fileID: 7408706888057070109}
   - component: {fileID: -2812464223352873417}
   - component: {fileID: 8202005941790188973}
   - component: {fileID: 5004955172793754296}
+  - component: {fileID: 1994204375169634837}
   m_Layer: 6
   m_Name: Resistor
   m_TagString: Untagged
@@ -118,29 +118,6 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
---- !u!114 &552430997874555096
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 552430997874555101}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fc53c17d0aff6a54f8d5664dc952d0f9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  type: 1
-  canBeRotated: 1
-  canBeMoved: 1
-  canStack: 0
-  snapToGrid: 1
-  respectOrientation: 1
-  isMouseOverGUI: 0
-  initialComponentData: 
-  hasReleasedSinceSelection: 1
-  outline: {fileID: 7114963008795337797}
-  sprite: {fileID: 0}
 --- !u!114 &552430997874555099
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -212,6 +189,29 @@ MonoBehaviour:
   isActive: 0
   wireTilePrefab: {fileID: 729730110476256346, guid: b7b1b57ceb44fc9489faac4c0c4be09f, type: 3}
   connectionTilePrefab: {fileID: 729730110476256346, guid: b27489a6dc4be2e468f6e233bd1e49f5, type: 3}
+--- !u!114 &1994204375169634837
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 552430997874555101}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a62cd1d2a7819a3418dc1762872511ed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  type: 1
+  canBeRotated: 1
+  canBeMoved: 1
+  canStack: 0
+  snapToGrid: 1
+  respectOrientation: 1
+  isMouseOverGUI: 0
+  initialComponentData: 
+  hasReleasedSinceSelection: 1
+  outline: {fileID: 7114963008795337797}
+  sprite: {fileID: 0}
 --- !u!1001 &8374301307922128098
 PrefabInstance:
   m_ObjectHideFlags: 0

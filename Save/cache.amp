@@ -2,16 +2,40 @@
     "name": "Nouveau Projet",
     "componentDataList": [
         {
-            "type": 1,
-            "x": -1.0,
-            "y": 2.0,
+            "type": 2,
+            "x": -6.0,
+            "y": 0.0,
             "rot": 0.0,
             "scaleX": 1.0,
             "scaleY": 1.0,
-            "customComponentData": "",
-            "r": 0.0,
-            "g": 0.0,
+            "customComponentData": "{\"voltage\":15.0}",
+            "r": 1.0,
+            "g": 0.4117647111415863,
+            "b": 0.3803921639919281
+        },
+        {
+            "type": 1,
+            "x": -5.0,
+            "y": 0.0,
+            "rot": 0.0,
+            "scaleX": 1.0,
+            "scaleY": 1.0,
+            "customComponentData": "{\"resistance\":15.0}",
+            "r": 0.615686297416687,
+            "g": 0.5803921818733215,
             "b": 1.0
+        },
+        {
+            "type": 3,
+            "x": -4.0,
+            "y": 0.0,
+            "rot": 0.0,
+            "scaleX": 1.0,
+            "scaleY": 1.0,
+            "customComponentData": "{\"isOpen\":false}",
+            "r": 0.25882354378700259,
+            "g": 0.8392156958580017,
+            "b": 0.6431372761726379
         }
     ]
 }

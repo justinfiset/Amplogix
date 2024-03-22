@@ -16,7 +16,6 @@ using System.Reflection;
 [RequireComponent(typeof(BoxCollider2D))]
 public class ElectricComponent : MonoBehaviour
 {
-    string test = "test";
     [Header("Logic")]
     public ElectricComponentType type;
     public bool canBeRotated = true; // Le composant peut-il �tre rotation� par l'utilisateur?
@@ -46,6 +45,7 @@ public class ElectricComponent : MonoBehaviour
     private ConnectionTilesManager connectionTilesManager;
     private TilesManager tilesManager;
     [HideInInspector] public SpriteRenderer sprite;
+    public static float DefaltGUIDivider = 3f;
     protected float GUIHeightDivider = 3f;
 
     [Header("Inputs")]
@@ -64,11 +64,12 @@ public class ElectricComponent : MonoBehaviour
         connectionTilesManager = GetComponent<ConnectionTilesManager>();
         sprite = GetComponent<SpriteRenderer>();
 
-        Setup();
+        Init();
         if(initialComponentData != "")
         {
             UnpackCustomComponentData(initialComponentData);
         }
+        Setup();
     }
 
     void Update()
@@ -254,6 +255,9 @@ public class ElectricComponent : MonoBehaviour
     #region Inheritance
     public virtual void Interact() { }
 
+    // Called before loading the data
+    public virtual void Init() { } 
+    // Called after loading the data
     public virtual void Setup() { }
 
     public virtual void OnUpdate() { }
@@ -330,10 +334,16 @@ public class ElectricComponent : MonoBehaviour
         {
             ComponentGUI.InitGUI(GUIHeightDivider);
 
-            // Creation de la fenetre en bas � droite
-            ComponentGUI.CreateBackground(this, ElectricComponentTypeMethods.GetName(type));
+            string headerName = "";
+            bool isUnique = ProjectManager.m_Instance.componentSelection.Count < 2;
 
-            RenderGUI(); // Creation du UI custom
+            ComponentGUI.InitGUI(isUnique ? GUIHeightDivider : DefaltGUIDivider);
+            headerName = isUnique ? ElectricComponentTypeMethods.GetName(type) : "Selection Multiple...";
+
+            // Creation de la fenetre en bas � droite
+            ComponentGUI.CreateBackground(this, headerName);
+
+            if (isUnique) RenderGUI(); // Creation du UI custom
 
             ComponentGUI.CreateColorPalette();
             ComponentGUI.CreateDeleteButton();

@@ -15,7 +15,6 @@ public class BoxSelectorCreater : MonoBehaviour
     private Vector2 initialMousePos;
 
     private bool firstTime = true;
- 
 
     private Quaternion rotation;
     private float witdh;

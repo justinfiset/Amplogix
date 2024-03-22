@@ -13,9 +13,13 @@ public class ElectricSwitch : ElectricComponent
 
     public bool isOpen = true;
 
-    override public void Setup()
+    public override void Init()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
+    }
+
+    override public void Setup()
+    {
         UpdateSprite();
     }
 

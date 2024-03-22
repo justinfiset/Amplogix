@@ -9,13 +9,15 @@ public class PowerSource : ElectricComponent
     public Sprite verticalSprite;
     public Sprite horizontalSprite;
 
-    public float voltage = 0;
-    private string voltageString = "";
+    public float voltage { get; private set; } = 5f;
+    private string voltageText = "";
     private bool isInputWrong = false;
 
     public override void Setup()
     {
         GUIHeightDivider = 2.5f;
+
+        voltageText = voltage.ToString();
         UpdateSprite();
     }
 
@@ -40,6 +42,7 @@ public class PowerSource : ElectricComponent
     public override void UnpackCustomComponentData(string customDataString)
     {
         PowerSourceData data = UnserializeCustomComponentData<PowerSourceData>(customDataString);
+        print(data.voltage);
         this.voltage = data.voltage;
     }
 
@@ -48,21 +51,24 @@ public class PowerSource : ElectricComponent
         return SerializeCustomComponentData(new PowerSourceData(this));
     }
 
-    string voltageText = "";
-
     public override void RenderGUI()
     {
         GUIStyle inputStyle = isInputWrong ? ComponentGUI.deleteStyle : ComponentGUI.inputStyle;
+        GUIStyle labelStyle = ComponentGUI.labelStyle;
 
         Rect inputRect = ComponentGUI.CreateRect(0, 1, 1, 4);
         voltageText = GUI.TextField(inputRect, voltageText, 10, inputStyle);
+
+        Rect labelRect = ComponentGUI.CreateRect(4, 1, 5, 4);
+        GUI.Label(labelRect, "V", labelStyle);
+
         if(GUI.changed)
         {
             try
             {
                 voltage = float.Parse(voltageText);
                 isInputWrong = false;
-            } catch (Exception e)
+            } catch
             {
                 isInputWrong = true;
             }
@@ -73,7 +79,7 @@ public class PowerSource : ElectricComponent
 [Serializable]
 public class PowerSourceData
 {
-    public float voltage = 9;
+    public float voltage = 5f;
 
     public PowerSourceData(PowerSource component)
     {

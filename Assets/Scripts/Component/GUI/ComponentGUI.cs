@@ -68,6 +68,8 @@ public class ComponentGUI : MonoBehaviour
         if (inputStyle == null)
         {
             inputStyle = new GUIStyle(buttonStyle);
+            inputStyle.alignment = TextAnchor.MiddleLeft;
+            inputStyle.padding.left = (int) currentLayout.padding;
             inputStyle.normal.background = MakeTex(2, 2, new Color32(52, 104, 179, 255));
         }
 
@@ -108,9 +110,9 @@ public class ComponentGUI : MonoBehaviour
 
     public static Rect CreateRect(float col, float row, float widthDiv, float heightDiv = 20)
     {
-        float width = currentLayout.width / widthDiv - currentLayout.padding * 2;
+        float width = (currentLayout.width - currentLayout.padding * (widthDiv + 1)) / widthDiv;
         float height = currentLayout.height / heightDiv;
-        float x = currentLayout.x + currentLayout.padding / 2 * (col + 1) + col / widthDiv * currentLayout.width;
+        float x = currentLayout.x + (col + 1) * currentLayout.padding + (col) * width;
         float y = currentLayout.y + currentLayout.padding * (row + 1) + row / height * currentLayout.height;
         return new Rect(x, y, width, height);
     }
