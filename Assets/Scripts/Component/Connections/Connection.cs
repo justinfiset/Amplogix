@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Xml.Serialization;
@@ -15,14 +16,7 @@ public class Connection : MonoBehaviour
 
     public static ConnectionPosition GetConnectionPositionFromIndex(int index)
     {
-        switch (index)
-        {
-            case 0: return ConnectionPosition.Left;
-            case 1: return ConnectionPosition.Right;
-            case 2: return ConnectionPosition.Top;
-            case 3: return ConnectionPosition.Bottom;
-            default: throw new System.Exception("Position index must be between 0 and 3 = " + index);
-        }
+        return (ConnectionPosition)index;
     }
 
     public int GetConnectionMultiplier(int index)
@@ -39,14 +33,7 @@ public class Connection : MonoBehaviour
 
     public static int GetIndexFromPosition(ConnectionPosition connectionPosition)
     {
-        switch (connectionPosition)
-        {
-            case ConnectionPosition.Left: return 0;
-            case ConnectionPosition.Right: return 1;
-            case ConnectionPosition.Top: return 2;
-            case ConnectionPosition.Bottom: return 3;
-            default: throw new System.Exception();
-        }
+        return (int)connectionPosition;
     }
 
     public static ConnectionPosition GetOppositeConnection(ConnectionPosition connectionPosition)
@@ -61,16 +48,9 @@ public class Connection : MonoBehaviour
         }
     }
 
-    // Start is called before the first frame update
     void Start()
     {
         connections = new Connections();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 
     #region Visual Connections
@@ -96,7 +76,7 @@ public class Connection : MonoBehaviour
 
     public void CreateVisualConnection(int index)
     {
-        print("for " + gameObject + " at " + GetConnectionPositionFromIndex(index));
+        //print("for " + gameObject + " at " + GetConnectionPositionFromIndex(index));
         GameObject instantiatedVisualConnection = Instantiate(visualConnectionPrefab,
             transform.position, Quaternion.Euler(0, 0, 90 * GetConnectionMultiplier(index)), transform);
         visualConnections[index] = instantiatedVisualConnection.GetComponent<VisualConnection>();
@@ -134,14 +114,20 @@ public class Connection : MonoBehaviour
 
     public void DeleteConnection(ConnectionPosition position)
     {
-        List<ElectricComponent> allConnections = GetAllConnectedTo();
-        while (allConnections.Count < 4)
+        List<ElectricComponent> allConnected = GetAllConnectedTo();
+        while (allConnected.Count < 4)
         {
-            allConnections.Add(null);
+            allConnected.Add(null);
         }
-        allConnections[GetIndexFromPosition(position)].GetComponent<Connection>()
-            .DeleteLocalConnection(GetOppositeConnection(position));
-        DeleteLocalConnection(position);
+
+        ElectricComponent component = allConnected[GetIndexFromPosition(position)];
+        if (component != null)
+        {
+            print(position);
+            Connection connection = GetComponent<Connection>();
+            connection.DeleteLocalConnection(GetOppositeConnection(position));
+            DeleteLocalConnection(position);
+        }
     }
     #endregion
 
@@ -161,7 +147,6 @@ public class Connection : MonoBehaviour
 
     public void ConnectTo(int connectionPosition)
     {
-        print("tried connecting " + gameObject + " with position " + GetConnectionPositionFromIndex(connectionPosition));
         switch (connectionPosition)
         {
             case 0: connections.left = true; break;

@@ -30,7 +30,6 @@ public class Resistor : ElectricComponent
 
     public override void RenderGUI()
     {
-        print("rendering");
         GUIStyle inputStyle = isInputWrong ? ComponentGUI.deleteStyle : ComponentGUI.inputStyle;
         GUIStyle labelStyle = ComponentGUI.labelStyle;
 

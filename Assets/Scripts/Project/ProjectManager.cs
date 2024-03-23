@@ -290,14 +290,11 @@ public class ProjectManager : MonoBehaviour
                 first.GetComponent<Connection>().ConnectTo(positionIndex);
                 second.GetComponent<Connection>().ConnectTo(GetOtherValue(positionIndex, 2, 3));
             }
-            print("position index is " + positionIndex);
         }
     }
 
     public int GetPositionIndex(ElectricComponent first, ElectricComponent second, bool areHorizontal)
     {
-        print("first : " + first);
-        print("second : " + second);
         float diff;
         if (areHorizontal)
         {
@@ -339,7 +336,6 @@ public class ProjectManager : MonoBehaviour
 
     public bool ComponentsPointToEachOther(ElectricComponent first, ElectricComponent second)
     {
-        print(second);
         bool firstRespectsOrientation = first.GetComponent<ElectricComponent>().respectOrientation;
         bool secondRespectsOrientation = second.GetComponent<ElectricComponent>().respectOrientation;
 

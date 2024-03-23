@@ -13,6 +13,7 @@ using System.Reflection;
 //[RequireComponent(typeof(SpriteRenderer))]
 //[RequireComponent(typeof(ResizeWinglets))]
 //[RequireComponent(typeof(WireTilesManager))]
+[RequireComponent(typeof(Connection))]
 [RequireComponent(typeof(BoxCollider2D))]
 public class ElectricComponent : MonoBehaviour
 {
