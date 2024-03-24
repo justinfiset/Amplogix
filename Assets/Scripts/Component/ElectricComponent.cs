@@ -32,6 +32,7 @@ public class ElectricComponent : MonoBehaviour
     public bool isMouseOverGUI = false;
     [HideInInspector] public string initialComponentData = "";
     [HideInInspector] private Color color;
+    [HideInInspector] public Connection connectionManager;
 
     [Header("Move / Drag")]
     [HideInInspector] public bool hasReleasedSinceSelection = true;
@@ -64,6 +65,7 @@ public class ElectricComponent : MonoBehaviour
         tilesManager = GetComponent<TilesManager>();
         connectionTilesManager = GetComponent<ConnectionTilesManager>();
         sprite = GetComponent<SpriteRenderer>();
+        connectionManager = GetComponent<Connection>();
 
         Init();
         if(initialComponentData != "")

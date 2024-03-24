@@ -8,11 +8,21 @@ using static Connection;
 
 public class Connection : MonoBehaviour
 {
-    public enum ConnectionPosition { Left, Right, Top, Bottom }
-    protected Connections connections;
+    public enum ConnectionPosition { Left = 0, Right = 1, Top = 2, Bottom = 3 }
+    protected ConnectionsValue connections;
     public bool HasVisibleConnections;
     private VisualConnection[] visualConnections = new VisualConnection[4];
     public GameObject visualConnectionPrefab;
+
+    public bool IsConnected()
+    {
+        return connections.IsConnected();
+    }
+
+    public int ConnecitonCount()
+    {
+        return connections.ConnectionCount();
+    }
 
     public static ConnectionPosition GetConnectionPositionFromIndex(int index)
     {
@@ -50,7 +60,7 @@ public class Connection : MonoBehaviour
 
     void Start()
     {
-        connections = new Connections();
+        connections = new ConnectionsValue();
     }
 
     #region Visual Connections
@@ -60,7 +70,7 @@ public class Connection : MonoBehaviour
         {
             for (int i = 0; i < 4; i++)
             {
-                if (connections.GetValue(i)) // si connecté et pas de connection vis.
+                if (connections.IsConnected(i)) // si connecté et pas de connection vis.
                 {
                     if (visualConnections[i] == null)
                     {
@@ -86,21 +96,13 @@ public class Connection : MonoBehaviour
     #region Deleting Connections
     public void DeleteAllLocalConnections()
     {
-        connections.top = false; connections.bottom = false;
-        connections.left = false; connections.right = false;
-
+        connections.DeleteAll();
         UpdateVisualConnections();
     }
 
     public void DeleteLocalConnection(ConnectionPosition position)
     {
-        switch (position)
-        {
-            case ConnectionPosition.Left: connections.left = false; break;
-            case ConnectionPosition.Right: connections.right = false; break;
-            case ConnectionPosition.Top: connections.top = false; break;
-            case ConnectionPosition.Bottom: connections.bottom = false; break;
-        }
+        connections.SetValue((int)position, false);
         UpdateVisualConnections();
     }
 
@@ -134,27 +136,14 @@ public class Connection : MonoBehaviour
     #region ConnectTos
     public void ConnectTo(ConnectionPosition connectionPosition)
     {
-        print("tried connecting " + gameObject);
-        switch (connectionPosition)
-        {
-            case ConnectionPosition.Left:connections.left = true; break;
-            case ConnectionPosition.Right:connections.right = true; break;
-            case ConnectionPosition.Top:connections.top = true; break;
-            case ConnectionPosition.Bottom:connections.bottom = true; break;
-        }
+        //print("tried connecting " + gameObject);
+        connections.SetValue((int)connectionPosition, true);
         UpdateVisualConnections();
     }
 
     public void ConnectTo(int connectionPosition)
     {
-        switch (connectionPosition)
-        {
-            case 0: connections.left = true; break;
-            case 1: connections.right = true; break;
-            case 2: connections.top = true; break;
-            case 3: connections.bottom = true; break;
-            default: throw new System.Exception("Position index must be between 0 and 3 = " + connectionPosition);
-        }
+        connections.SetValue(connectionPosition, true);
         UpdateVisualConnections();
     }
     #endregion
@@ -187,7 +176,7 @@ public class Connection : MonoBehaviour
 
         for (int i = 0; i < keyValuePairs.Count; i++)
         {
-            if (connections.GetValue(i))
+            if (connections.IsConnected(i))
             {
                 ElectricComponent connectedComponent = keyValuePairs[i].Value;
                 if (!discardEntry || connectedComponent != entryPoint)
@@ -206,35 +195,50 @@ public class Connection : MonoBehaviour
         DeleteAllConnections();
     }
 
-    public class Connections
+    public class ConnectionsValue
     {
-        public bool left = false;
-        public bool right = false;
-        public bool top = false;
-        public bool bottom = false;
+        public bool[] connections = new bool[4];
 
-        public bool GetValue(ConnectionPosition position)
+        public void DeleteAll()
         {
-            switch (position)
+            connections = new bool[connections.Length];
+        }
+
+        public void SetValue(int position, bool value)
+        {
+            try
             {
-                case ConnectionPosition.Left:return left;
-                case ConnectionPosition.Right:return right;
-                case ConnectionPosition.Top:return top;
-                case ConnectionPosition.Bottom:return bottom;
-                default:return false;
+                connections[position] = value;
+            }
+            catch
+            {
+                throw new System.Exception("Position index must be between 0 and 3 = " + position);
             }
         }
 
-        public bool GetValue(int position)
+        public bool IsConnected(int position)
         {
-            switch (position)
+            bool isConnected = false;
+            try
             {
-                case 0: return left;
-                case 1: return right;
-                case 2: return top;
-                case 3: return bottom;
-                default: return false;
-            }
+                isConnected = connections[position];
+            } catch { }
+            return isConnected;
+        }
+
+        public bool IsConnected()
+        {
+            foreach (bool connection in connections)
+                if (connection) return true;
+            return false;
+        }
+
+        public int ConnectionCount()
+        {
+            int count = 0;
+            foreach (bool connection in connections)
+                if(connection) count++;
+            return count;
         }
     }
 }
