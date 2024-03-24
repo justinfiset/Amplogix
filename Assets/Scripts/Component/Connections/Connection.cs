@@ -14,6 +14,11 @@ public class Connection : MonoBehaviour
     private VisualConnection[] visualConnections = new VisualConnection[4];
     public GameObject visualConnectionPrefab;
 
+    public ElectricComponent[] GetConnectedComponents()
+    {
+        return connections.connections;
+    }
+
     public bool IsConnected()
     {
         return connections.IsConnected();
@@ -102,7 +107,7 @@ public class Connection : MonoBehaviour
 
     public void DeleteLocalConnection(ConnectionPosition position)
     {
-        connections.SetValue((int)position, false);
+        connections.SetValue((int)position, null);
         UpdateVisualConnections();
     }
 
@@ -134,16 +139,14 @@ public class Connection : MonoBehaviour
     #endregion
 
     #region ConnectTos
-    public void ConnectTo(ConnectionPosition connectionPosition)
+    public void ConnectTo(ConnectionPosition connectionPosition, ElectricComponent component)
     {
-        //print("tried connecting " + gameObject);
-        connections.SetValue((int)connectionPosition, true);
-        UpdateVisualConnections();
+        ConnectTo((int)connectionPosition, component);
     }
 
-    public void ConnectTo(int connectionPosition)
+    public void ConnectTo(int connectionPosition, ElectricComponent component)
     {
-        connections.SetValue(connectionPosition, true);
+        connections.SetValue(connectionPosition, component);
         UpdateVisualConnections();
     }
     #endregion
@@ -197,14 +200,14 @@ public class Connection : MonoBehaviour
 
     public class ConnectionsValue
     {
-        public bool[] connections = new bool[4];
+        public ElectricComponent[] connections = new ElectricComponent[4];
 
         public void DeleteAll()
         {
-            connections = new bool[connections.Length];
+            connections = new ElectricComponent[connections.Length];
         }
 
-        public void SetValue(int position, bool value)
+        public void SetValue(int position, ElectricComponent value)
         {
             try
             {

@@ -268,7 +268,7 @@ public class ElectricComponent : MonoBehaviour
     public virtual void DestroyComponent() { }
 
     public virtual void RotateComponent() { 
-        transform.Rotate(Vector3.forward * -90); 
+        transform.Rotate(Vector3.back * 90); 
     }
 
     public virtual void SetColor(Color newColor)
