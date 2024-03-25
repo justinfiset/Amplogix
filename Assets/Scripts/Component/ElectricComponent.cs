@@ -3,17 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using System.Linq;
-using UnityEditor;
 using UnityEngine.EventSystems;
 using System.ComponentModel;
-using System.Runtime.Serialization;
-using Unity.VisualScripting;
 using System.Reflection;
 
 //[RequireComponent(typeof(SpriteRenderer))]
 //[RequireComponent(typeof(ResizeWinglets))]
 //[RequireComponent(typeof(WireTilesManager))]
-[RequireComponent(typeof(Connection))]
+//[RequireComponent(typeof(Connection))]
 [RequireComponent(typeof(BoxCollider2D))]
 public class ElectricComponent : MonoBehaviour
 {
@@ -216,6 +213,9 @@ public class ElectricComponent : MonoBehaviour
 
         if (isSelected) newColor = newColor * 0.5f;
         SetColor(newColor);
+
+        if(connectionManager != null) 
+            connectionManager.SetColor(newColor);
     }
 
     public void _Select(bool executeInheritedCode = true)

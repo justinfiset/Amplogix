@@ -1,0 +1,101 @@
+{
+    "name": "Nouveau Projet",
+    "componentDataList": [
+        {
+            "type": 2,
+            "x": -2.0,
+            "y": 1.0,
+            "rot": 270.0,
+            "scaleX": 1.0,
+            "scaleY": 1.0,
+            "customComponentData": "{\"voltage\":5.0}",
+            "r": 0.0,
+            "g": 0.0,
+            "b": 0.0
+        },
+        {
+            "type": 2,
+            "x": -4.0,
+            "y": 1.0,
+            "rot": 270.0,
+            "scaleX": 1.0,
+            "scaleY": 1.0,
+            "customComponentData": "{\"voltage\":5.0}",
+            "r": 0.0,
+            "g": 0.0,
+            "b": 0.0
+        },
+        {
+            "type": 1,
+            "x": -3.0,
+            "y": 2.0,
+            "rot": 0.0,
+            "scaleX": 1.0,
+            "scaleY": 1.0,
+            "customComponentData": "{\"resistance\":25.0}",
+            "r": 0.0,
+            "g": 0.0,
+            "b": 0.0
+        },
+        {
+            "type": 1,
+            "x": -3.0,
+            "y": 0.0,
+            "rot": 0.0,
+            "scaleX": 1.0,
+            "scaleY": 1.0,
+            "customComponentData": "{\"resistance\":25.0}",
+            "r": 0.0,
+            "g": 0.0,
+            "b": 0.0
+        },
+        {
+            "type": 11,
+            "x": -4.0,
+            "y": 2.0,
+            "rot": 270.0,
+            "scaleX": 1.0,
+            "scaleY": 1.0,
+            "customComponentData": "",
+            "r": 0.0,
+            "g": 0.0,
+            "b": 0.0
+        },
+        {
+            "type": 11,
+            "x": -2.0,
+            "y": 2.0,
+            "rot": 0.0,
+            "scaleX": 1.0,
+            "scaleY": 1.0,
+            "customComponentData": "",
+            "r": 0.0,
+            "g": 0.0,
+            "b": 0.0
+        },
+        {
+            "type": 11,
+            "x": -2.0,
+            "y": 0.0,
+            "rot": 90.0,
+            "scaleX": 1.0,
+            "scaleY": 1.0,
+            "customComponentData": "",
+            "r": 0.0,
+            "g": 0.0,
+            "b": 0.0
+        },
+        {
+            "type": 11,
+            "x": -4.0,
+            "y": 0.0,
+            "rot": 180.0,
+            "scaleX": 1.0,
+            "scaleY": 1.0,
+            "customComponentData": "",
+            "r": 0.0,
+            "g": 0.0,
+            "b": 0.0
+        }
+    ]
+}

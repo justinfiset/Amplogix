@@ -34,7 +34,7 @@ Transform:
   - {fileID: 843977023433166162}
   - {fileID: 4094030663576746454}
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &2616239815534115399
 SpriteRenderer:
@@ -112,7 +112,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 1.1, y: 1.1}
   m_EdgeRadius: 0
 --- !u!114 &1740017445438873630
 MonoBehaviour:
@@ -126,6 +126,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 86b9711a4f509104f930ac079a2d45dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  position: 0
 --- !u!1 &1985075847813984004
 GameObject:
   m_ObjectHideFlags: 0

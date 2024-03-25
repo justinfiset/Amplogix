@@ -209,12 +209,12 @@ MonoBehaviour:
   respectOrientation: 1
   isMouseOverGUI: 0
   initialComponentData: 
+  connectionManager: {fileID: 0}
   hasReleasedSinceSelection: 1
   outline: {fileID: 155018022359230697}
   sprite: {fileID: 0}
   verticalSprite: {fileID: -609352295, guid: c6b6966af1811ea4bbd2fbab940b39d5, type: 3}
   horizontalSprite: {fileID: -1799907246, guid: c6b6966af1811ea4bbd2fbab940b39d5, type: 3}
-  voltage: 0
 --- !u!1001 &1489758621188395086
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -226,6 +226,10 @@ PrefabInstance:
     - target: {fileID: 475578015003214662, guid: b5baa3d1b1169d148b97771d5d633605, type: 3}
       propertyPath: m_Name
       value: Component Outline
+      objectReference: {fileID: 0}
+    - target: {fileID: 1624132070148405415, guid: b5baa3d1b1169d148b97771d5d633605, type: 3}
+      propertyPath: m_Color.a
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3678502852632036175, guid: b5baa3d1b1169d148b97771d5d633605, type: 3}
       propertyPath: m_RootOrder

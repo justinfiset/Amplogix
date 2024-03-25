@@ -1,10 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Xml.Serialization;
 using UnityEngine;
-using UnityEngine.UIElements;
-using static Connection;
 
 public class Connection : MonoBehaviour
 {
@@ -13,6 +10,17 @@ public class Connection : MonoBehaviour
     public bool HasVisibleConnections;
     private VisualConnection[] visualConnections = new VisualConnection[4];
     public GameObject visualConnectionPrefab;
+
+    public void SetColor(Color newColor)
+    {
+        foreach(VisualConnection c in visualConnections)
+        {
+            if(c != null)
+            {
+                c.SetColor(newColor);
+            }
+        }
+    }
 
     public ElectricComponent[] GetConnectedComponents()
     {
@@ -130,7 +138,7 @@ public class Connection : MonoBehaviour
         ElectricComponent component = allConnected[GetIndexFromPosition(position)];
         if (component != null)
         {
-            print(position);
+            //print(position);
             Connection connection = GetComponent<Connection>();
             connection.DeleteLocalConnection(GetOppositeConnection(position));
             DeleteLocalConnection(position);
