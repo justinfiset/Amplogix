@@ -35,8 +35,8 @@ public class BoxSelectorCreater : MonoBehaviour
     {
         if (Input.GetMouseButton(0))
         {   
-             nothingSelected = ProjectManager.IsSelectionEmpty();
-            print(nothingSelected);
+           nothingSelected = ProjectManager.IsSelectionEmpty();
+
            if (firstTime && IsNotInComponentArea() && nothingSelected) {
                 initialMousePos = Input.mousePosition;
                 
@@ -44,12 +44,13 @@ public class BoxSelectorCreater : MonoBehaviour
                 rectangle = Instantiate(prefabs, initialMousePos, rotation, parent).GetComponent<RectTransform>();
                 rectangle.gameObject.SetActive(true);
             }
+
+            if (rectangle == null) return;
+
             rectangle.sizeDelta = Vector2.zero;
   
             witdh = Input.mousePosition.x - initialMousePos.x;
             height = Input.mousePosition.y - initialMousePos.y;
-
-      
 
             rectangle.anchoredPosition = (initialMousePos) + new Vector2 (witdh/2,height/2);
             rectangle.sizeDelta = new Vector2(Math.Abs(witdh), Math.Abs(height));
@@ -58,9 +59,11 @@ public class BoxSelectorCreater : MonoBehaviour
 
 
 
-        if (Input.GetMouseButtonUp(0)) {
-            
+        if (Input.GetMouseButtonUp(0)) 
+        {
             firstTime = true;
+
+            if (rectangle == null) return;
 
             Vector2 min = rectangle.anchoredPosition - (rectangle.sizeDelta / 2);
             Vector2 max = rectangle.anchoredPosition + (rectangle.sizeDelta / 2);
@@ -93,13 +96,8 @@ public class BoxSelectorCreater : MonoBehaviour
 
     private bool IsNotInComponentArea(){
         if(Input.mousePosition.x <= 150 ){
-            print("condition respecter");
-            print(Camera.main.ScreenToWorldPoint(Input.mousePosition).x);
-            print(Input.mousePosition.x);
-            print(Camera.main.ScreenPointToRay(Input.mousePosition));
             return false;
-            }
-            return true;
-            }
-
+        }
+        return true;
+    }
 }
