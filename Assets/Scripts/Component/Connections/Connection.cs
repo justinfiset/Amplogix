@@ -37,6 +37,11 @@ public class Connection : MonoBehaviour
         return connections.IsConnected();
     }
 
+    public bool IsConnectedTo(ElectricComponent electricComponent)
+    {
+        return connections.connections.Contains(electricComponent);
+    }
+
     public int ConnectionCount()
     {
         return connections.ConnectionCount();
@@ -101,6 +106,7 @@ public class Connection : MonoBehaviour
     #region Visual Connections
     public void UpdateVisualConnections()
     {
+        print("updating " + gameObject);
         if (HasVisibleConnections)
         {
             for (int i = 0; i < 4; i++)
@@ -117,6 +123,13 @@ public class Connection : MonoBehaviour
                 }
             }
         }
+    }
+
+    public IEnumerator WaitToUpdateVisualConnections()
+    {
+        yield return new WaitForEndOfFrame();
+
+        UpdateVisualConnections();
     }
 
     public void CreateVisualConnection(int index)
@@ -138,7 +151,26 @@ public class Connection : MonoBehaviour
     public void DeleteLocalConnection(Position position)
     {
         connections.SetValue((int)position, null);
+        DoWireCheck();
         UpdateVisualConnections();
+    }
+
+    public void DeleteLocalConnection(ElectricComponent component)
+    {
+        for (int i = 0; i < connections.connections.Count(); i++)
+        {
+            if (connections.connections[i] == component)
+            {
+                connections.connections[i] = null;
+                return;
+            }
+        }
+        DoWireCheck();
+        UpdateVisualConnections();
+    }
+
+    private void DoWireCheck()
+    {
         ElectricComponent electricComponent = gameObject.GetComponent<ElectricComponent>();
         if (electricComponent.type == ElectricComponentType.Wire)
         {
@@ -151,10 +183,18 @@ public class Connection : MonoBehaviour
 
     public void DeleteAllConnections()
     {
-        for (int i = 0; i < 4; i++)
+        foreach (ElectricComponent component in connections.connections)
         {
-            DeleteConnection(GetConnectionPositionFromIndex(i));
+            DeleteConnection(component);
         }
+    }
+
+    public void DeleteConnection(ElectricComponent target)
+    {
+        Connection targetConnection = target.GetComponent<Connection>();
+
+        targetConnection.DeleteLocalConnection(GetComponent<ElectricComponent>());
+        DeleteLocalConnection(target);
     }
 
     public void DeleteConnection(Position position)

@@ -180,6 +180,7 @@ MonoBehaviour:
   isActive: 0
   wireTilePrefab: {fileID: 729730110476256346, guid: b7b1b57ceb44fc9489faac4c0c4be09f, type: 3}
   connectionTilePrefab: {fileID: 729730110476256346, guid: b27489a6dc4be2e468f6e233bd1e49f5, type: 3}
+  disconnectionTilePrefab: {fileID: 729730110476256346, guid: 570d34a7276d2c740a07511f01010b96, type: 3}
 --- !u!114 &1994204375169634837
 MonoBehaviour:
   m_ObjectHideFlags: 0
