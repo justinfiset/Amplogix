@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 1076454670309057300}
   - component: {fileID: 1076454670309057303}
   - component: {fileID: 2980815537632601155}
-  - component: {fileID: 7911583279381353041}
+  - component: {fileID: -472168623347545226}
   m_Layer: 6
   m_Name: Coil
   m_TagString: Untagged
@@ -189,7 +189,7 @@ MonoBehaviour:
   HasVisibleConnections: 0
   visualConnectionPrefab: {fileID: 0}
   ConnectsAutomaticallyToNeighbors: 1
---- !u!114 &7911583279381353041
+--- !u!114 &-472168623347545226
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -204,6 +204,7 @@ MonoBehaviour:
   isActive: 0
   wireTilePrefab: {fileID: 729730110476256346, guid: b7b1b57ceb44fc9489faac4c0c4be09f, type: 3}
   connectionTilePrefab: {fileID: 729730110476256346, guid: b27489a6dc4be2e468f6e233bd1e49f5, type: 3}
+  disconnectionTilePrefab: {fileID: 729730110476256346, guid: 570d34a7276d2c740a07511f01010b96, type: 3}
 --- !u!1001 &3032213113677669294
 PrefabInstance:
   m_ObjectHideFlags: 0

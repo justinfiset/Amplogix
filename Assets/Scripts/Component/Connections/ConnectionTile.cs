@@ -1,20 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
-public enum ConnectionTilePosition
+public class ConnectionTile : Tile
 {
-    Top = 270,
-    Bottom = 90,
-    Left = 180,
-    Right = 0
-}
-
-public class ConnectionTile : MonoBehaviour
-{
-    private bool isHover = false;
-    private TilesManager manager;
-    public ConnectionTilePosition position;
     public ElectricComponent source;
     public bool isHorizontal;
 
@@ -26,28 +16,16 @@ public class ConnectionTile : MonoBehaviour
             {
                 ElectricComponent second;
                 second = ProjectManager.m_Instance.GetComponent(gameObject.transform.localPosition);
-                ProjectManager.m_Instance.ConnectComponents(source, second); //todo: changer pour connecter
+                ProjectManager.m_Instance.ConnectComponents(source, second);
             }
         }
     }
 
-    public void Setup(TilesManager manager, ConnectionTilePosition position, bool isHorizontal, ElectricComponent source)
+    public void Setup(TilesManager manager, TilePosition position, bool isHorizontal, ElectricComponent source)
     {
-        this.manager = manager;
-        this.position = position;
+        base.Setup(manager, position);
         this.isHorizontal = isHorizontal;
         this.source = source;
     }
 
-    #region Mouse callbacks
-    private void OnMouseEnter()
-    {
-        isHover = true;
-    }
-
-    private void OnMouseExit()
-    {
-        isHover = false;
-    }
-    #endregion
 }
