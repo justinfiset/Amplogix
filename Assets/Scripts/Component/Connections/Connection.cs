@@ -5,8 +5,9 @@ using UnityEngine;
 
 public class Connection : MonoBehaviour
 {
-    public enum ConnectionPosition { Left = 0, Right = 1, Top = 2, Bottom = 3 }
-    protected ConnectionsValue connections;
+    public enum Position { Left = 0, Right = 1, Top = 2, Bottom = 3 }
+
+    public ConnectionsValue connections { get; private set; }
     public bool HasVisibleConnections;
     private VisualConnection[] visualConnections = new VisualConnection[4];
     public GameObject visualConnectionPrefab;
@@ -32,14 +33,14 @@ public class Connection : MonoBehaviour
         return connections.IsConnected();
     }
 
-    public int ConnecitonCount()
+    public int ConnectionCount()
     {
         return connections.ConnectionCount();
     }
 
-    public static ConnectionPosition GetConnectionPositionFromIndex(int index)
+    public static Position GetConnectionPositionFromIndex(int index)
     {
-        return (ConnectionPosition)index;
+        return (Position)index;
     }
 
     public int GetConnectionMultiplier(int index)
@@ -54,19 +55,19 @@ public class Connection : MonoBehaviour
         }
     }
 
-    public static int GetIndexFromPosition(ConnectionPosition connectionPosition)
+    public static int GetIndexFromPosition(Position connectionPosition)
     {
         return (int)connectionPosition;
     }
 
-    public static ConnectionPosition GetOppositeConnection(ConnectionPosition connectionPosition)
+    public static Position GetOppositeConnection(Position connectionPosition)
     {
         switch (connectionPosition)
         {
-            case ConnectionPosition.Left: return ConnectionPosition.Right;
-            case ConnectionPosition.Right: return ConnectionPosition.Left;
-            case ConnectionPosition.Top: return ConnectionPosition.Bottom;
-            case ConnectionPosition.Bottom: return ConnectionPosition.Top;
+            case Position.Left: return Position.Right;
+            case Position.Right: return Position.Left;
+            case Position.Top: return Position.Bottom;
+            case Position.Bottom: return Position.Top;
             default: throw new System.Exception("value must not be null");
         }
     }
@@ -113,7 +114,7 @@ public class Connection : MonoBehaviour
         UpdateVisualConnections();
     }
 
-    public void DeleteLocalConnection(ConnectionPosition position)
+    public void DeleteLocalConnection(Position position)
     {
         connections.SetValue((int)position, null);
         UpdateVisualConnections();
@@ -127,7 +128,7 @@ public class Connection : MonoBehaviour
         }
     }
 
-    public void DeleteConnection(ConnectionPosition position)
+    public void DeleteConnection(Position position)
     {
         List<ElectricComponent> allConnected = GetAllConnectedTo();
         while (allConnected.Count < 4)
@@ -147,7 +148,7 @@ public class Connection : MonoBehaviour
     #endregion
 
     #region ConnectTos
-    public void ConnectTo(ConnectionPosition connectionPosition, ElectricComponent component)
+    public void ConnectTo(Position connectionPosition, ElectricComponent component)
     {
         ConnectTo((int)connectionPosition, component);
     }
