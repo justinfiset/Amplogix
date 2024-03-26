@@ -40,8 +40,8 @@ public class ElectricComponent : MonoBehaviour
     [Header("UI")]
     [SerializeField] protected SpriteRenderer outline;
     private ResizeWinglets resizeWinglets;
-    private WireTilesManager wireTilesManager;
-    private ConnectionTilesManager connectionTilesManager;
+    // private WireTilesManager wireTilesManager;
+    // private ConnectionTilesManager connectionTilesManager;
     private TilesManager tilesManager;
     [HideInInspector] public SpriteRenderer sprite;
     public static float DefaltGUIDivider = 3f;
@@ -58,9 +58,7 @@ public class ElectricComponent : MonoBehaviour
     private void Start()
     {
         resizeWinglets = GetComponent<ResizeWinglets>();
-        wireTilesManager = GetComponent<WireTilesManager>();
         tilesManager = GetComponent<TilesManager>();
-        connectionTilesManager = GetComponent<ConnectionTilesManager>();
         sprite = GetComponent<SpriteRenderer>();
         connectionManager = GetComponent<Connection>();
 
@@ -251,6 +249,7 @@ public class ElectricComponent : MonoBehaviour
     {
         _Unselect();
         DestroyComponent();
+        connectionManager.DeleteAllConnections();
         ComponentSpawner.DestroyComponent(gameObject);
     }
     #endregion

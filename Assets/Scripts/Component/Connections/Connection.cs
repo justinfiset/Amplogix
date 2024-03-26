@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Connection : MonoBehaviour
@@ -11,6 +13,8 @@ public class Connection : MonoBehaviour
     public bool HasVisibleConnections;
     private VisualConnection[] visualConnections = new VisualConnection[4];
     public GameObject visualConnectionPrefab;
+    public bool ConnectsAutomaticallyToNeighbors;
+
 
     public void SetColor(Color newColor)
     {
@@ -75,6 +79,23 @@ public class Connection : MonoBehaviour
     void Start()
     {
         connections = new ConnectionsValue();
+        StartCoroutine(WaitForAutoConnections());
+    }
+
+    private IEnumerator WaitForAutoConnections()
+    {
+        yield return new WaitForEndOfFrame();
+        if (ConnectsAutomaticallyToNeighbors)
+        {
+            ElectricComponent electricComponent = GetComponent<ElectricComponent>();
+            List<KeyValuePair<Vector2, ElectricComponent>> surroundingComps;
+            surroundingComps = ProjectManager.m_Instance.GetSurroundingComponents(transform.position);
+
+            foreach (KeyValuePair<Vector2, ElectricComponent> k in surroundingComps)
+            {
+                ProjectManager.m_Instance.ConnectComponents(electricComponent, k.Value);
+            }
+        }
     }
 
     #region Visual Connections
@@ -118,6 +139,14 @@ public class Connection : MonoBehaviour
     {
         connections.SetValue((int)position, null);
         UpdateVisualConnections();
+        ElectricComponent electricComponent = gameObject.GetComponent<ElectricComponent>();
+        if (electricComponent.type == ElectricComponentType.Wire)
+        {
+            if (connections.connections.Count() == 0)
+            {
+                electricComponent._DestroyComponent();
+            }
+        }
     }
 
     public void DeleteAllConnections()
@@ -131,18 +160,22 @@ public class Connection : MonoBehaviour
     public void DeleteConnection(Position position)
     {
         List<ElectricComponent> allConnected = GetAllConnectedTo();
-        while (allConnected.Count < 4)
-        {
-            allConnected.Add(null);
+
+
+        if (GetIndexFromPosition(position) >= allConnected.Count)
+        { 
+        return;
         }
 
         ElectricComponent component = allConnected[GetIndexFromPosition(position)];
+        print(component);
         if (component != null)
         {
             //print(position);
-            Connection connection = GetComponent<Connection>();
+            Connection connection = component.GetComponent<Connection>();
             connection.DeleteLocalConnection(GetOppositeConnection(position));
             DeleteLocalConnection(position);
+            print(connection.ToString());
         }
     }
     #endregion
@@ -157,6 +190,10 @@ public class Connection : MonoBehaviour
     {
         connections.SetValue(connectionPosition, component);
         UpdateVisualConnections();
+    }
+    public void ConnectTo(ElectricComponent component)
+    {
+        // TODO simplified ConnectTo
     }
     #endregion
 
@@ -181,31 +218,22 @@ public class Connection : MonoBehaviour
 
     private List<ElectricComponent> GetConnectedTo(bool discardEntry, ElectricComponent entryPoint)
     {
-        List<KeyValuePair<Vector2, ElectricComponent>> keyValuePairs;
-        keyValuePairs = ProjectManager.m_Instance.GetSurroundingComponents(gameObject.transform.localPosition);
+        List<ElectricComponent> result = new(connections.connections);
 
-        List<ElectricComponent> result = new List<ElectricComponent>();
-
-        for (int i = 0; i < keyValuePairs.Count; i++)
+        if (discardEntry)
         {
-            if (connections.IsConnected(i))
+            foreach (ElectricComponent e in result)
             {
-                ElectricComponent connectedComponent = keyValuePairs[i].Value;
-                if (!discardEntry || connectedComponent != entryPoint)
+                if (e == entryPoint)
                 {
-                    result.Add(connectedComponent);
+                    result.Remove(e);
                 }
             }
-
         }
+
         return result;
     }
     #endregion
-
-    public void OnDestroy()
-    {
-        DeleteAllConnections();
-    }
 
     public class ConnectionsValue
     {

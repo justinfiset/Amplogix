@@ -293,6 +293,11 @@ public class ProjectManager : MonoBehaviour
         }
     }
 
+    public int GetPositionIndex(ElectricComponent first, ElectricComponent second)
+    {
+        return GetPositionIndex(first, second, AreComponentsAlignedOnPlane(first, second, true));
+    }
+
     public int GetPositionIndex(ElectricComponent first, ElectricComponent second, bool areHorizontal)
     {
         float diff;
@@ -434,7 +439,7 @@ public class ProjectManager : MonoBehaviour
         ElectricComponent[] selection = m_Instance.componentSelection.ToArray();
         foreach (ElectricComponent component in selection)
         {
-            ComponentSpawner.DestroyComponent(component.gameObject);
+            component._DestroyComponent();
         }
     }
 }

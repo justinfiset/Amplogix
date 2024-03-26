@@ -187,10 +187,11 @@ public class ComponentSpawner : MonoBehaviour
         return electricComponent;
     }
 
-    public static void DestroyComponent(GameObject component)
+    public static void DestroyComponent(GameObject gO)
     {
-        m_Instance.projectManager.RemoveComponent(component.GetComponent<ElectricComponent>());
-        Destroy(component);
+        ElectricComponent electricComponent = gO.GetComponent<ElectricComponent>();
+        m_Instance.projectManager.RemoveComponent(electricComponent);
+        Destroy(gO);
         ProjectManager.OnModifyProject();
     }
 }
