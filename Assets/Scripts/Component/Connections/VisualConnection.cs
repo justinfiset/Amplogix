@@ -14,6 +14,9 @@ public class VisualConnection : MonoBehaviour
 
     public void SetColor(Color color)
     {
-        sprite.color = color;
+        if(sprite != null)
+        {
+            sprite.color = color;
+        }
     }
 }

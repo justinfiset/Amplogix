@@ -8,6 +8,7 @@ using System.Collections;
 // simplification des listes
 using ElectricMeshList = System.Collections.Generic.Dictionary<int, System.Collections.Generic.List<ElectricComponent>>;
 using Unity.VisualScripting;
+using System.Reflection;
 
 public class MeshBuilder : MonoBehaviour
 {
@@ -16,11 +17,28 @@ public class MeshBuilder : MonoBehaviour
     // TODO Tester - RemoveDuplicatedMeshes
     public List<HashSet<ElectricComponent>> RemoveDuplicatedMeshes(List<HashSet<ElectricComponent>> original)
     {
-        List<HashSet<ElectricComponent>> cleaned = new();
+        List<HashSet<ElectricComponent>> uniqueMeshes = new();
 
-        cleaned.Add(original.First());
+        foreach(HashSet<ElectricComponent> unsafeMesh in original)
+        {
+            bool wasFound = false;
+            foreach(HashSet<ElectricComponent> uniqueMesh in uniqueMeshes)
+            {
+                if (unsafeMesh.SetEquals(uniqueMesh))
+                {
+                    wasFound = true;
+                    break;
+                }
+            }
 
-        return cleaned;
+            if(!wasFound)
+            {
+                uniqueMeshes.Add(original.First());
+            }
+        }
+
+        print("Unique mesh detected: " + uniqueMeshes.Count);
+        return uniqueMeshes;
     }
 
     /*
@@ -55,6 +73,9 @@ if (clean.SetEquals(mesh))
     #region Mesh Creation
     public void CreateAndCalculateMeshes()
     {
+        CreateMeshes();
+        Matrix<float> voltageMatrix = GetVoltageMatrix(meshList);
+        /*
         try
         {
             CreateMeshes();
@@ -64,24 +85,32 @@ if (clean.SetEquals(mesh))
             print(e.Message);
             // TODO afficher l'excpetion à l'utilisateur (avec une popup si possible)
         }
+        */
     }
 
     public void CreateMeshes()
     {
-        ElectricComponent[] componentList = ProjectManager.m_Instance.componentList.Keys.ToArray();
+        List<ElectricComponent> componentList = ProjectManager.GetAllConnectedComponents();
 
         List<HashSet<ElectricComponent>> unsafeMeshList = new();
-        if (componentList.Length > 0)
+        if (componentList.Count > 0)
         {
+            /*
             ElectricComponent root = componentList.First();
             HashSet<ElectricComponent> ancestors = new HashSet<ElectricComponent> { root };
-            AnalyseConnections(root, root, ancestors, unsafeMeshList);
-            /*
+            AnalyseConnections(root, null, root, ancestors, unsafeMeshList);
+            */
+            
             foreach (ElectricComponent root in componentList)
             {
-                HashSet<ElectricComponent> ancestors = new HashSet<ElectricComponent> { root };
-                AnalyseConnections(root, root, ancestors, unsafeMeshList);
-            }*/
+                // TODO : enlever?????
+                if(root.type != ElectricComponentType.Wire)
+                {
+                    HashSet<ElectricComponent> ancestors = new HashSet<ElectricComponent> { root };
+                    AnalyseConnections(root, null, root, ancestors, unsafeMeshList);
+                }
+            }
+            
         } else
         {
             throw new IncorrectCircuitException("Un circuit doit avoir au moin un composant!");
@@ -89,11 +118,13 @@ if (clean.SetEquals(mesh))
 
         unsafeMeshList = RemoveIncorrectMeshes(unsafeMeshList);
         unsafeMeshList = RemoveDuplicatedMeshes(unsafeMeshList);
+        DetectShortCircuit(unsafeMeshList);
         PopulateMeshMap(unsafeMeshList);
     }
 
     public List<HashSet<ElectricComponent>> RemoveIncorrectMeshes(List<HashSet<ElectricComponent>> toCorrect)
     {
+        print("Meshes to correct: " + toCorrect.Count);
         List<HashSet<ElectricComponent>> correctMeshes = new List<HashSet<ElectricComponent>>();
         foreach(HashSet<ElectricComponent> mesh in toCorrect)
         {
@@ -119,34 +150,78 @@ if (clean.SetEquals(mesh))
     }
 
     // TODO optimiser le nombre d'appel
-    public void AnalyseConnections(ElectricComponent node, ElectricComponent root, HashSet<ElectricComponent> ancestors, List<HashSet<ElectricComponent>> list)
+    // retourne vrai si on a trouvé une maille, faux si on doit continuer la recherche
+    public bool AnalyseConnections(ElectricComponent node, ElectricComponent parent, ElectricComponent root, HashSet<ElectricComponent> ancestors, List<HashSet<ElectricComponent>> list)
     {
         if(node != null)
         {
-            if(ancestors.Contains(node))
-            {
-                if (node == root && ancestors.Count > 1) // On a trouvé une maille
+            if (!IsMeshComponentValid(node)) // Si un composant n'est pas valide ex interrupteur ouvert
+            { 
+                return false;
+            }
+            else if (ancestors.Count > 2)
+            { // Si on est pas à la première itération (1 de base)
+                if (node == root) // On a trouvé une maille
                 {
                     HashSet<ElectricComponent> mesh = new HashSet<ElectricComponent>();
                     mesh.UnionWith(ancestors);
                     list.Add(mesh);
-                    return;
-                } else if(ancestors.Count > 2)
+                    return true;
+                }
+                else if (ancestors.Contains(node))
                 {
-                    return;
+                    return false; // Ca ne sert à rien d'explorer cette branche
                 }
             }
 
+
             List<ElectricComponent> childrens = node.connectionManager.connections.connections.ToList();
-            if(childrens.Count > 0)
+            childrens.Remove(parent); // On ne revient pas sur nos pas
+            //childrens.RemoveAll(component => component == null);
+            foreach (ElectricComponent edge in childrens)
             {
-                foreach (ElectricComponent edge in childrens)
+                if (edge != null)
                 {
                     HashSet<ElectricComponent> childrenAncestors = new();
                     childrenAncestors.UnionWith(ancestors);
                     childrenAncestors.Add(node);
-                    AnalyseConnections(edge, root, childrenAncestors, list);
+
+                    if (AnalyseConnections(edge, node, root, childrenAncestors, list))
+                    {
+                        return true;
+                    }
                 }
+            }
+        }
+        return false; // ne doit pas être appelé
+    }
+
+    // TODO prendre en compte la fem pour une source
+    public void DetectShortCircuit(List<HashSet<ElectricComponent>> setList)
+    {
+        // Les composants qui n'ont aucune résistance
+        List<ElectricComponentType> unsafeTypes = new() { 
+            ElectricComponentType.Wire, 
+            ElectricComponentType.PowerSource, // IMPLEMENTER LA FEM 
+            ElectricComponentType.Switch
+        };
+
+        foreach(HashSet<ElectricComponent> set in setList)
+        {
+            bool isShortCircuit = true;
+            foreach(ElectricComponent component in set)
+            {
+                ElectricComponentType type = component.type;
+                if(!unsafeTypes.Contains(type))
+                {
+                    isShortCircuit = false;
+                    break;
+                }
+            }
+
+            if(isShortCircuit)
+            {
+                throw new ShortCircuitException();
             }
         }
     }
@@ -326,7 +401,8 @@ if (clean.SetEquals(mesh))
                 ////////////////////////////////////////////////////////////
 
                 int multiplier = 1;
-                if (previous.type == ElectricComponentType.Wire)
+                // TODO aller cherche le previous manuellement?
+                if (previous != null && previous.type == ElectricComponentType.Wire)
                     multiplier = GetPowerSourceMultiplier(previous.connectionManager, component);
                 else // si on a pas un fil avant
                     multiplier = (prevAngle == angle) ? -1 : 1;
@@ -349,12 +425,23 @@ if (clean.SetEquals(mesh))
     public static Matrix<float> GetVoltageMatrix(ElectricMeshList meshList)
     {
         Matrix<float> voltageMatrix = Matrix<float>.Build.Dense(1, meshList.Count);
-        
+
         ////////////////////// TODO REMOVE THIS DEBUG CODE
+        List<Color> colors = new List<Color> { Color.red, Color.blue, Color.green };
+        int index = 0;
         foreach (KeyValuePair<int, List<ElectricComponent>> mesh in meshList)
-            foreach(ElectricComponent comp in mesh.Value)
-                if(comp.type != ElectricComponentType.PowerSource)
-                    comp._SetColor(Color.red);
+        {
+            print("Mesh a calculer: " + meshList.Count);
+            foreach (ElectricComponent comp in mesh.Value)
+            {
+                if (comp.type != ElectricComponentType.PowerSource)
+                {
+                    comp._SetColor(colors[index]);
+                }
+            }
+            index++;
+        }
+
         //////////////////////////////////////////////////
 
         foreach (KeyValuePair<int, List<ElectricComponent>> mesh in meshList)

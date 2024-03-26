@@ -162,13 +162,9 @@ public class Connection : MonoBehaviour
         List<ElectricComponent> allConnected = GetAllConnectedTo();
 
 
-        if (GetIndexFromPosition(position) >= allConnected.Count)
-        { 
-        return;
-        }
+        if (GetIndexFromPosition(position) >= allConnected.Count) return;
 
         ElectricComponent component = allConnected[GetIndexFromPosition(position)];
-        print(component);
         if (component != null)
         {
             //print(position);

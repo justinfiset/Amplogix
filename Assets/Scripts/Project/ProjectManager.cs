@@ -442,4 +442,19 @@ public class ProjectManager : MonoBehaviour
             component._DestroyComponent();
         }
     }
+
+    public static List<ElectricComponent> GetAllConnectedComponents()
+    {
+        List<ElectricComponent> connectedComponents = new List<ElectricComponent> ();
+
+        foreach(ElectricComponent component in m_Instance.componentList.Keys)
+        {
+            if(component.connectionManager.ConnectionCount() > 1) // Si il possède plus de deux connection / nécessaire pour avoir une maille circulaire
+            {
+                connectedComponents.Add(component);
+            }
+        }
+
+        return connectedComponents;
+    }
 }
