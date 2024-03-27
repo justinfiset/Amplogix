@@ -457,4 +457,13 @@ public class ProjectManager : MonoBehaviour
 
         return connectedComponents;
     }
+
+    public static List<ElectricComponent> GetAllElectricComponentsOfType(List<ElectricComponent> components, ElectricComponentType type)
+    {
+        List<ElectricComponent> componentsOfType = new List<ElectricComponent> ();
+        foreach(ElectricComponent component in components)
+            if(component.type == type)
+                componentsOfType.Add(component);
+        return componentsOfType;
+    }
 }

@@ -7,11 +7,10 @@ using System.Collections;
 
 // simplification des listes
 using ElectricMeshList = System.Collections.Generic.Dictionary<int, System.Collections.Generic.List<ElectricComponent>>;
+using UnityEngine.Rendering.VirtualTexturing;
 
 public class MeshBuilder : MonoBehaviour
 {
-    ElectricMeshList meshList = new ElectricMeshList();
-
     // TODO Tester - RemoveDuplicatedMeshes
     public List<List<ElectricComponent>> RemoveDuplicatedMeshes(List<List<ElectricComponent>> original)
     {
@@ -51,31 +50,33 @@ public class MeshBuilder : MonoBehaviour
         }
     }
 
-    public void ClearState()
-    {
-        meshList = new ElectricMeshList();
-    }
-
     #region Mesh Creation
     public void CreateAndCalculateMeshes()
     {
-        CreateMeshes();
-        Matrix<float> voltageMatrix = GetVoltageMatrix(meshList);
+        try
+        {
+            ElectricMeshList meshList = CreateMeshes();
+            Matrix<float> voltageMatrix = GetVoltageMatrix(meshList);
+            Matrix<float> resistanceMatrix = GetResistanceMatrix(meshList);
+
+            Debug.Log(voltageMatrix.ToString());
+            Debug.Log(resistanceMatrix.ToString());
+        } catch (Exception e)
+        {
+            print(e.Message);
+            // TODO afficher les erreurs dans le UI pour l'utilisateur
+        }
     }
 
-    public void CreateMeshes()
+    public ElectricMeshList CreateMeshes()
     {
+        ElectricMeshList meshList = new ElectricMeshList();
+
         List<ElectricComponent> componentList = ProjectManager.GetAllConnectedComponents();
 
         List<List<ElectricComponent>> unsafeMeshList = new();
         if (componentList.Count > 0)
         {
-            /*
-            ElectricComponent root = componentList.First();
-            HashSet<ElectricComponent> ancestors = new HashSet<ElectricComponent> { root };
-            AnalyseConnections(root, null, root, ancestors, unsafeMeshList);
-            */
-            
             foreach (ElectricComponent root in componentList)
             {
                 // TODO : enlever?????
@@ -94,7 +95,8 @@ public class MeshBuilder : MonoBehaviour
         unsafeMeshList = RemoveIncorrectMeshes(unsafeMeshList);
         unsafeMeshList = RemoveDuplicatedMeshes(unsafeMeshList);
         DetectShortCircuit(unsafeMeshList);
-        PopulateMeshMap(unsafeMeshList);
+        PopulateMeshMap(unsafeMeshList, meshList);
+        return meshList;
     }
 
     public List<List<ElectricComponent>> RemoveIncorrectMeshes(List<List<ElectricComponent>> toCorrect)
@@ -108,16 +110,14 @@ public class MeshBuilder : MonoBehaviour
             }
             else
             {
-                print("Mesh had not enought components");
+                throw new IncorrectCircuitException("A mesh needs to have more than four components");
             }
         }
         return correctMeshes;
     }
 
-    public void PopulateMeshMap(List<List<ElectricComponent>> setList)
+    public void PopulateMeshMap(List<List<ElectricComponent>> setList, ElectricMeshList meshList)
     {
-        ClearState();
-
         int index = 0;
 
         foreach(List<ElectricComponent> set in setList)
@@ -173,7 +173,9 @@ public class MeshBuilder : MonoBehaviour
                 }
             }
         }
-        return false; // ne doit pas être appelé
+
+        return false;
+        //throw (new Exception("Node Analysis was called for a null node!"));
     }
 
     // TODO prendre en compte la fem pour une source
@@ -282,7 +284,6 @@ public class MeshBuilder : MonoBehaviour
 
             previous = component;
         }
-        print(meshVoltage);
         // TODO FIX DOIT DONNER LE BON SIGNE
         return meshVoltage;
     }
@@ -292,7 +293,7 @@ public class MeshBuilder : MonoBehaviour
         Matrix<float> voltageMatrix = Matrix<float>.Build.Dense(1, meshList.Count);
 
         ////////////////////// TODO REMOVE THIS DEBUG CODE
-        List<Color> colors = new List<Color> { Color.red, Color.blue, Color.green };
+        List<Color> colors = new List<Color> { Color.red, Color.blue, Color.cyan, Color.yellow };
         int index = 0;
         foreach (KeyValuePair<int, List<ElectricComponent>> mesh in meshList)
         {
@@ -322,17 +323,50 @@ public class MeshBuilder : MonoBehaviour
     #endregion
 
     #region Matrice de résistance
+    // TODO : prendre en compte la FEM et la résistivité des fils
     public static Matrix<float> GetResistanceMatrix(ElectricMeshList meshList)
     {
-        Matrix<float> voltageMatrix = Matrix<float>.Build.Dense(meshList.Count, meshList.Count);
+        // Matrice [Count, Count]
+        Matrix<float> resistanceMatrix = Matrix<float>.Build.Dense(meshList.Count, meshList.Count);
 
-        foreach (KeyValuePair<int, List<ElectricComponent>> mesh in meshList)
+        List<int> managedKeys = new List<int>();
+        foreach (KeyValuePair<int, List<ElectricComponent>> main in meshList)
         {
-            float result = GetMeshVoltage(mesh.Value);
-            voltageMatrix[0, mesh.Key] = result;
+            List<ElectricComponent> resistors = ProjectManager.GetAllElectricComponentsOfType(main.Value, ElectricComponentType.Resistor);
+
+            foreach (KeyValuePair<int, List<ElectricComponent>> secondary in meshList)
+            {
+                float resistance = 0f;
+                // Si on passe pas sur la diagonale et que l'on n'a pas déjà géré les résistances
+                if (main.Key != secondary.Key && !managedKeys.Contains(secondary.Key))
+                {
+                    if (!managedKeys.Contains(secondary.Key))
+                    {
+                        foreach (Resistor resistor in resistors)
+                        {
+                            if(secondary.Value.Contains(resistor))
+                            {
+                                resistance += resistor.resistance;
+                            }
+                        }
+
+                        // c'est égale de chaque coté, Ex: R12, R21, etc...
+                        resistanceMatrix[secondary.Key, main.Key] = resistance;
+                        resistanceMatrix[main.Key, secondary.Key] = resistance;
+                    }
+                }
+                else // La diagonale ex : R11, R22, R33
+                {
+                    foreach (Resistor resistor in resistors)
+                    {
+                        resistance += resistor.resistance;
+                    }
+                    resistanceMatrix[main.Key, main.Key] = resistance;
+                }
+            }
         }
 
-        return voltageMatrix;
+        return resistanceMatrix;
     }
     #endregion
 }
