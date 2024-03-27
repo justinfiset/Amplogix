@@ -106,7 +106,6 @@ public class Connection : MonoBehaviour
     #region Visual Connections
     public void UpdateVisualConnections()
     {
-        print("updating " + gameObject);
         if (HasVisibleConnections)
         {
             for (int i = 0; i < 4; i++)
@@ -191,10 +190,13 @@ public class Connection : MonoBehaviour
 
     public void DeleteConnection(ElectricComponent target)
     {
-        Connection targetConnection = target.GetComponent<Connection>();
+        if(target != null)
+        {
+            Connection targetConnection = target.GetComponent<Connection>();
 
-        targetConnection.DeleteLocalConnection(GetComponent<ElectricComponent>());
-        DeleteLocalConnection(target);
+            targetConnection.DeleteLocalConnection(GetComponent<ElectricComponent>());
+            DeleteLocalConnection(target);
+        }
     }
 
     public void DeleteConnection(Position position)
