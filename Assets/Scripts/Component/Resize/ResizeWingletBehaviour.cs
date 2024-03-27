@@ -13,7 +13,7 @@ public class ResizeWingletBehaviour : MonoBehaviour
 
     private void Start()
     {
-        sprite = GetComponent<SpriteRenderer>();
+      //  sprite = GetComponent<SpriteRenderer>();
     }
 
     private void Update()
