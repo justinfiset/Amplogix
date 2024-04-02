@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8955067292259548851}
   - component: {fileID: -4051573644628365220}
   - component: {fileID: -3884140171261460846}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: VisualRoundWire
   m_TagString: Untagged
   m_Icon: {fileID: 0}
