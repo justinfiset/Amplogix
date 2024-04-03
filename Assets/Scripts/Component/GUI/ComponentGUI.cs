@@ -28,50 +28,35 @@ public class ComponentGUI : MonoBehaviour
 
     public static GUIStyle InitStyles()
     {
-        if (currentStyle == null)
-        {
-            currentStyle = new GUIStyle(GUI.skin.box);
-            currentStyle.normal.background = MakeTex(2, 2, Color.white);
-            currentStyle.normal.textColor = Color.black;
-        }
+        currentStyle = new GUIStyle(GUI.skin.box);
+        currentStyle.normal.background = MakeTex(2, 2, Color.white);
+        currentStyle.normal.textColor = Color.black;
 
-        if (buttonStyle == null)
-        {
-            buttonStyle = new GUIStyle(GUI.skin.box);
-            buttonStyle.alignment = TextAnchor.MiddleCenter;
-            buttonStyle.normal.background = MakeTex(2, 2, new Color32(49, 106, 189, 255));
-            buttonStyle.normal.textColor = Color.white;
-            buttonStyle.hover.background = MakeTex(2, 2, new Color32(20, 56, 105, 255));
-            buttonStyle.hover.textColor = Color.white;
-            buttonStyle.active.background = MakeTex(2, 2, new Color32(19, 34, 56, 255));
-            buttonStyle.active.textColor = Color.white;
-        }
+        buttonStyle = new GUIStyle(GUI.skin.box);
+        buttonStyle.alignment = TextAnchor.MiddleCenter;
+        buttonStyle.normal.background = MakeTex(2, 2, new Color32(49, 106, 189, 255));
+        buttonStyle.normal.textColor = Color.white;
+        buttonStyle.hover.background = MakeTex(2, 2, new Color32(20, 56, 105, 255));
+        buttonStyle.hover.textColor = Color.white;
+        buttonStyle.active.background = MakeTex(2, 2, new Color32(19, 34, 56, 255));
+        buttonStyle.active.textColor = Color.white;
 
-        if (deleteStyle == null)
-        {
-            deleteStyle = new GUIStyle(GUI.skin.box);
-            deleteStyle.alignment = TextAnchor.MiddleCenter;
-            deleteStyle.normal.background = MakeTex(2, 2, new Color32(191, 54, 54, 255));
-            deleteStyle.normal.textColor = Color.white;
-            deleteStyle.hover.background = MakeTex(2, 2, new Color32(125, 30, 30, 255));
-            deleteStyle.hover.textColor = Color.white;
-            deleteStyle.active.background = MakeTex(2, 2, new Color32(59, 12, 9, 255));
-            deleteStyle.active.textColor = Color.white;
-        }
+        deleteStyle = new GUIStyle(GUI.skin.box);
+        deleteStyle.alignment = TextAnchor.MiddleCenter;
+        deleteStyle.normal.background = MakeTex(2, 2, new Color32(191, 54, 54, 255));
+        deleteStyle.normal.textColor = Color.white;
+        deleteStyle.hover.background = MakeTex(2, 2, new Color32(125, 30, 30, 255));
+        deleteStyle.hover.textColor = Color.white;
+        deleteStyle.active.background = MakeTex(2, 2, new Color32(59, 12, 9, 255));
+        deleteStyle.active.textColor = Color.white;
 
-        if (labelStyle == null)
-        {
-            labelStyle = new GUIStyle(currentStyle);
-            labelStyle.alignment = TextAnchor.MiddleCenter;
-        }
+        labelStyle = new GUIStyle(currentStyle);
+        labelStyle.alignment = TextAnchor.MiddleCenter;
 
-        if (inputStyle == null)
-        {
-            inputStyle = new GUIStyle(buttonStyle);
-            inputStyle.alignment = TextAnchor.MiddleLeft;
-            inputStyle.padding.left = (int) currentLayout.padding;
-            inputStyle.normal.background = MakeTex(2, 2, new Color32(52, 104, 179, 255));
-        }
+        inputStyle = new GUIStyle(buttonStyle);
+        inputStyle.alignment = TextAnchor.MiddleLeft;
+        inputStyle.padding.left = (int)currentLayout.padding;
+        inputStyle.normal.background = MakeTex(2, 2, new Color32(52, 104, 179, 255));
 
         return currentStyle;
     }
