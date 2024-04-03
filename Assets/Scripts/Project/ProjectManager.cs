@@ -26,6 +26,7 @@ public class ProjectManager : MonoBehaviour
 
     public Dictionary<ElectricComponent, Vector2> componentList { get; private set; }
     public HashSet<ElectricComponent> componentSelection { get; private set; }
+    public static bool canInteract = true;
     
     void Start()
     {

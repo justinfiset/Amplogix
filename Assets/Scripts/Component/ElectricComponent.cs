@@ -85,6 +85,8 @@ public class ElectricComponent : MonoBehaviour
 
     void Update()
     {
+        if (!ProjectManager.canInteract) return;
+
         if(Input.GetMouseButtonDown(0))
         {
             if (isSelected && hasReleasedSinceSelection && !isMouseOverGUI)

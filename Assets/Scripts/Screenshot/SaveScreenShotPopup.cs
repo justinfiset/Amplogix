@@ -25,10 +25,12 @@ public class SaveScreenShotPopup : MonoBehaviour
         container.SetActive(true);
         saveButton.interactable = false;
         ProjectManager.UnselectComponent();
+        ProjectManager.canInteract = false;
     }
 
     public void Hide()
     {
+        ProjectManager.canInteract = true;
         container.SetActive(false);
     }
 
@@ -45,5 +47,7 @@ public class SaveScreenShotPopup : MonoBehaviour
         ProjectManager.UnselectComponent();
         manager.SaveCurrentView(path);        
         Hide();
+        ProjectManager.canInteract = true;
+
     }
 }
