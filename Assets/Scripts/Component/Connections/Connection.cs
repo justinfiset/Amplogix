@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
+using static UnityEditor.PlayerSettings;
 
 public class Connection : MonoBehaviour
 {
@@ -68,8 +69,8 @@ public class Connection : MonoBehaviour
         {
             case 0: return 0;
             case 1: return 2;
-            case 2: return 1;
-            case 3: return 3;
+            case 2: return 3;
+            case 3: return 1;
             default: throw new System.Exception("Position index must be between 0 and 3 = " + index);
         }
     }
@@ -185,11 +186,13 @@ public class Connection : MonoBehaviour
 
     private void DoWireCheck()
     {
+        print("wirecheck");
         ElectricComponent electricComponent = gameObject.GetComponent<ElectricComponent>();
         if (electricComponent.type == ElectricComponentType.Wire)
         {
             if (connections.connections.Count() == 0)
             {
+                print("deleting wire");
                 electricComponent._DestroyComponent();
             }
         }
@@ -234,20 +237,28 @@ public class Connection : MonoBehaviour
     #endregion
 
     #region ConnectTos
-    public void ConnectTo(Position connectionPosition, ElectricComponent component)
+    private void ConnectTo(Position connectionPosition, ElectricComponent component)
     {
         ConnectTo((int)connectionPosition, component);
     }
 
-    public void ConnectTo(Position connectionPosition)
+    public void ConnectTo(int connectionPosition)
     {
-        ConnectTo((int)connectionPosition,
-            ProjectManager.m_Instance.
-            GetSurroundingComponentsWithNulls(transform.position)[(int)connectionPosition].Value);
+        List<KeyValuePair<Vector2, ElectricComponent>> list = 
+            ProjectManager.m_Instance.GetSurroundingComponentsWithNulls(transform.position);
+
+        ConnectTo(connectionPosition, list[connectionPosition].Value);
     }
 
-    public void ConnectTo(int connectionPosition, ElectricComponent component)
+    public void ConnectTo(Position connectionPosition)
     {
+        ConnectTo((int)connectionPosition);
+    }
+
+    private void ConnectTo(int connectionPosition, ElectricComponent component)
+    {
+        print(component == null);
+        print("Base ConnectTo " + component.ToString() + " at " + connectionPosition);
         connections.SetValue(connectionPosition, component);
         UpdateVisualConnections();
     }
