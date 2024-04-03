@@ -224,6 +224,13 @@ public class Connection : MonoBehaviour
         ConnectTo((int)connectionPosition, component);
     }
 
+    public void ConnectTo(Position connectionPosition)
+    {
+        ConnectTo((int)connectionPosition,
+            ProjectManager.m_Instance.
+            GetSurroundingComponentsWithNulls(transform.position)[(int)connectionPosition].Value);
+    }
+
     public void ConnectTo(int connectionPosition, ElectricComponent component)
     {
         connections.SetValue(connectionPosition, component);

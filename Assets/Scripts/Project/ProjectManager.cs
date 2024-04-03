@@ -270,6 +270,34 @@ public class ProjectManager : MonoBehaviour
         return list;
     }
 
+    public List<KeyValuePair<Vector2, ElectricComponent>> GetSurroundingComponentsWithNulls(Vector2 pos)
+    {
+        List<KeyValuePair<Vector2, ElectricComponent>> list = new List<KeyValuePair<Vector2, ElectricComponent>>();
+
+        float posDiff = GridSettings.m_Instance.gridIncrement;
+        Vector2 xDiff = new Vector2(posDiff, 0);
+        Vector2 yDiff = new Vector2(0, posDiff);
+
+        List<Vector2> positions = new List<Vector2>
+        {
+            pos - xDiff, // Gauche
+            pos + xDiff, // Droite
+            pos + yDiff, // Haut
+            pos - yDiff, // Bas
+        };
+
+        foreach (Vector2 position in positions)
+        {
+            ElectricComponent component;
+            component = GetComponent(position);
+            
+            list.Add(new KeyValuePair<Vector2, ElectricComponent>(position, component));
+            
+        }
+
+        return list;
+    }
+
     public void ConnectComponents(ElectricComponent first, ElectricComponent second)
     {
         if (ComponentsPointToEachOther(first, second))
