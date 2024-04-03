@@ -15,6 +15,16 @@ public class Connection : MonoBehaviour
     public GameObject visualConnectionPrefab;
     public bool ConnectsAutomaticallyToNeighbors;
 
+    public void CreateInitialConnections(ConnectionValueData data)
+    {
+        for(int i = 0; i < data.connections.Length; i++)
+        {
+            if (data.connections[i])
+            {
+                ConnectTo((Position)i);
+            }
+        }
+    }
 
     public void SetColor(Color newColor)
     {
@@ -129,6 +139,11 @@ public class Connection : MonoBehaviour
         yield return new WaitForEndOfFrame();
 
         UpdateVisualConnections();
+    }
+
+    public ConnectionValueData GetData()
+    {
+        return new ConnectionValueData(this);
     }
 
     public void CreateVisualConnection(int index)
@@ -279,6 +294,22 @@ public class Connection : MonoBehaviour
         return result;
     }
     #endregion
+
+    [Serializable]
+    public class ConnectionValueData
+    {
+        public bool[] connections = new bool[4];
+
+        public ConnectionValueData(Connection value)
+        {
+            var indexList = Enum.GetValues(typeof(Position));
+            foreach (Position position in indexList)
+            {
+                int index = (int)position;
+                this.connections[index] = (value.connections.connections[index] != null);
+            }
+        }
+    }
 
     public class ConnectionsValue
     {

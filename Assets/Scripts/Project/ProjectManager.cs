@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -64,11 +65,23 @@ public class ProjectManager : MonoBehaviour
             if(data != null)
             {
                 ElectricComponent component = ComponentSpawner.CreateComponent(data);
+                component.initialConnectionData = data.connectionData;
                 component.initialComponentData = data.customComponentData;
             }
         }
-
         OnSaveProject();
+
+        StartCoroutine(InitializeAllConnections());
+    }
+
+    IEnumerator InitializeAllConnections()
+    {
+        yield return new WaitForNextFrameUnit();
+        //yield return new WaitForFixedUpdate();
+        foreach (ElectricComponent component in componentList.Keys)
+        {
+            component.InitConnections();
+        }
     }
 
     public void SetProjectName()

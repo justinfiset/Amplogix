@@ -28,6 +28,7 @@ public class ElectricComponent : MonoBehaviour
     protected bool listenToInputs = true;
     public bool isMouseOverGUI = false;
     [HideInInspector] public string initialComponentData = "";
+    [HideInInspector] public string initialConnectionData = "";
     [HideInInspector] private Color color;
     [HideInInspector] public Connection connectionManager;
 
@@ -68,6 +69,18 @@ public class ElectricComponent : MonoBehaviour
             UnpackCustomComponentData(initialComponentData);
         }
         Setup();
+    }
+
+    public void InitConnections()
+    {
+        if (initialConnectionData != null)
+        {
+            Connection.ConnectionValueData data = UnserializeCustomComponentData<Connection.ConnectionValueData>(initialConnectionData);
+            if (data != null)
+            {
+                connectionManager.CreateInitialConnections(data);
+            }
+        }
     }
 
     void Update()
@@ -302,6 +315,12 @@ public class ElectricComponent : MonoBehaviour
     #endregion
 
     #region Data / Serialization / Unpack
+    public string GetConnectionsnData()
+    {
+        Connection.ConnectionValueData data = connectionManager.GetData();
+        return SerializeCustomComponentData(data);
+    }
+
     public ElectricComponentData GetData()
     {
         return new ElectricComponentData(this);
@@ -435,6 +454,7 @@ public class ElectricComponentData
     public float r = 1f;
     public float g = 1f;
     public float b = 1f;
+    public string connectionData = "";
 
     public ElectricComponentData(ElectricComponent component)
     {
@@ -449,6 +469,8 @@ public class ElectricComponentData
         r = component.sprite.color.r;
         g = component.sprite.color.g;
         b = component.sprite.color.b;
+        // Connections
+        connectionData = component.GetConnectionsnData();
     }
 }
 #endregion
