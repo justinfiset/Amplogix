@@ -1,16 +1,27 @@
 using SFB;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class ScreenshotManager : MonoBehaviour
 {
     private Camera cam;
 
+    public Camera mainCam;
+    
+
     private void Start()
     {
         cam = GetComponent<Camera>();
+        
+    }
+
+    private void Update()
+    {
+        cam.orthographicSize = mainCam.orthographicSize;
     }
 
     public string SelectDirectory()
@@ -30,6 +41,7 @@ public class ScreenshotManager : MonoBehaviour
 
     public static Texture2D GetCurrentViewTexture(Camera cam)
     {
+
         RenderTexture screenTexture = new RenderTexture(Screen.width, Screen.height, 16);
         cam.targetTexture = screenTexture;
         RenderTexture.active = screenTexture;
@@ -40,6 +52,10 @@ public class ScreenshotManager : MonoBehaviour
         RenderTexture.active = null;
         return renderedTexture;
     }
+
+   
+
+   
 
     public static void SavecamView(Camera cam, string path)
     {
