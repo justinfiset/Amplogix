@@ -264,7 +264,8 @@ public class ElectricComponent : MonoBehaviour
     {
         _Unselect();
         DestroyComponent();
-        connectionManager.DeleteAllConnections();
+        if(connectionManager != null)
+            connectionManager.DeleteAllConnections();
         ComponentSpawner.DestroyComponent(gameObject);
     }
     #endregion
@@ -356,7 +357,7 @@ public class ElectricComponent : MonoBehaviour
         if (isSelected)
         {
             bool isUnique = ProjectManager.m_Instance.componentSelection.Count < 2;
-            string headerName = isUnique ? ElectricComponentTypeMethods.GetName(type) : "Selection Multiple...";
+            string headerName = isUnique ? ElectricComponentTypeMethods.GetName(type) : "Sélection Multiple...";
 
             ComponentGUI.InitGUI(isUnique ? GUIHeightDivider : DefaltGUIDivider);
             ComponentGUI.CreateBackground(this, headerName); // Creation de la fenetre en bas � droite
@@ -397,7 +398,7 @@ public enum ElectricComponentType
     Motor,
     [Description("Condensateur")]
     Condensator,
-    [Description("Ampèrmètre")]
+    [Description("Ampéremètre")]
     Ammeter,
     [Description("Voltmètre")]
     Voltmeter,

@@ -1,31 +1,31 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static Resistor;
 
-public class Resistor : ElectricComponent
+public class Ampoule : ElectricComponent
 {
-    public float resistance { get; private set; } = 25f;
+    public float ampoule { get; private set; } = 0f;
 
-    private string resistanceText = "";
+    private string AmpouleText = "";
     private bool isInputWrong = false;
 
     public override void Setup()
     {
         GUIHeightDivider = 2.5f;
 
-        resistanceText = resistance.ToString();
+        AmpouleText = ampoule.ToString();
     }
 
     public override void UnpackCustomComponentData(string customDataString)
     {
         ResistorData data = UnserializeCustomComponentData<ResistorData>(customDataString);
-        this.resistance = data.resistance;
+        this.ampoule = data.resistance;
     }
 
     public override string GetCustomComponentData()
     {
-        return SerializeCustomComponentData(new ResistorData(resistance));
+        return SerializeCustomComponentData(new ResistorData(ampoule));
     }
 
     public override void RenderGUI()
@@ -34,7 +34,7 @@ public class Resistor : ElectricComponent
         GUIStyle labelStyle = ComponentGUI.labelStyle;
 
         Rect inputRect = ComponentGUI.CreateRect(0, 1, 1, 4);
-        resistanceText = GUI.TextField(inputRect, resistanceText, 15, inputStyle);
+        AmpouleText = GUI.TextField(inputRect, AmpouleText, 15, inputStyle);
 
         Rect labelRect = ComponentGUI.CreateRect(4, 1, 5, 4);
         GUI.Label(labelRect, "Ω", labelStyle);
@@ -43,24 +43,13 @@ public class Resistor : ElectricComponent
         {
             try
             {
-                resistance = float.Parse(resistanceText);
+                ampoule = float.Parse(AmpouleText);
                 isInputWrong = false;
             }
             catch
             {
                 isInputWrong = true;
             }
-        }
-    }
-
-    [Serializable]
-    public class ResistorData
-    {
-        public float resistance = 25f;
-
-        public ResistorData(float resistance)
-        {
-            this.resistance = resistance;
         }
     }
 }
