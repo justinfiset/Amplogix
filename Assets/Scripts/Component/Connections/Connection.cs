@@ -165,7 +165,12 @@ public class Connection : MonoBehaviour
 
     public void DeleteLocalConnection(Position position)
     {
-        connections.SetValue((int)position, null);
+        DeleteLocalConnection((int)position);
+    }
+
+    public void DeleteLocalConnection(int position)
+    {
+        connections.SetValue(position, null);
         DoWireCheck();
         UpdateVisualConnections();
     }
@@ -177,7 +182,7 @@ public class Connection : MonoBehaviour
             if (connections.connections[i] == component)
             {
                 connections.connections[i] = null;
-                return;
+                break;
             }
         }
         DoWireCheck();
@@ -186,16 +191,26 @@ public class Connection : MonoBehaviour
 
     private void DoWireCheck()
     {
-        print("wirecheck");
         ElectricComponent electricComponent = gameObject.GetComponent<ElectricComponent>();
         if (electricComponent.type == ElectricComponentType.Wire)
         {
-            if (connections.connections.Count() == 0)
+            if (!HasActiveConnections())
             {
-                print("deleting wire");
                 electricComponent._DestroyComponent();
             }
         }
+    }
+
+    public bool HasActiveConnections()
+    {
+        foreach (ElectricComponent connection in connections.connections)
+        {
+            if (connection != null)
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
     public void DeleteAllConnections()
@@ -231,7 +246,6 @@ public class Connection : MonoBehaviour
             Connection connection = component.GetComponent<Connection>();
             connection.DeleteLocalConnection(GetOppositeConnection(position));
             DeleteLocalConnection(position);
-            print(connection.ToString());
         }
     }
     #endregion
@@ -257,8 +271,6 @@ public class Connection : MonoBehaviour
 
     private void ConnectTo(int connectionPosition, ElectricComponent component)
     {
-        print(component == null);
-        print("Base ConnectTo " + component.ToString() + " at " + connectionPosition);
         connections.SetValue(connectionPosition, component);
         UpdateVisualConnections();
     }
