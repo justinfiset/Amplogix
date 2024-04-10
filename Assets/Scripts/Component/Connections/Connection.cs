@@ -108,8 +108,6 @@ public class Connection : MonoBehaviour
     {
         if (ConnectsAutomaticallyToNeighbors)
         {
-            print("connecting automatically");
-
             ElectricComponent electricComponent = GetComponent<ElectricComponent>();
             List<KeyValuePair<Vector2, ElectricComponent>> surroundingComps;
             surroundingComps = ProjectManager.m_Instance.GetSurroundingComponents(transform.position);

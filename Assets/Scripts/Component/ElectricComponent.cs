@@ -267,7 +267,9 @@ public class ElectricComponent : MonoBehaviour
     {
         _Unselect();
         RotateComponent();
-        GetComponent<Connection>().AutoConnect();
+        Connection connection = GetComponent<Connection>();
+        connection.DeleteAllConnections();
+        connection.AutoConnect();
         _Select();
         ProjectManager.OnModifyProject();
     }
