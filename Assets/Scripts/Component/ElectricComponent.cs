@@ -6,6 +6,7 @@ using System.Linq;
 using UnityEngine.EventSystems;
 using System.ComponentModel;
 using System.Reflection;
+using UnityEngine.UIElements;
 
 //[RequireComponent(typeof(SpriteRenderer))]
 //[RequireComponent(typeof(ResizeWinglets))]
@@ -59,7 +60,7 @@ public class ElectricComponent : MonoBehaviour
     [Header("Current")]
     public bool isLightSource;
     [HideInInspector] protected float currentIntensity = 0;
-
+    private int numberOfSelectedComponent = 0;
     private void Start()
     {
         resizeWinglets = GetComponent<ResizeWinglets>();
@@ -95,9 +96,14 @@ public class ElectricComponent : MonoBehaviour
         {
             if (isSelected && hasReleasedSinceSelection && !isMouseOverGUI)
             {
-                if (!EventSystem.current.IsPointerOverGameObject())
+                if (Input.GetKey(KeyCode.LeftControl))
+                    {
+                    tilesManager.HideTiles();
+                   
+                }else if (!EventSystem.current.IsPointerOverGameObject())
                 {
                     UnselectAfterEndOfFrame();
+                   
                 }
             }
 
@@ -150,10 +156,17 @@ public class ElectricComponent : MonoBehaviour
                 {
                     _DestroyComponent();
                 }
-                else if (Input.GetKeyDown(unselectKey))
+                else if (Input.GetKeyDown(unselectKey) && !Input.GetKey(KeyCode.LeftControl))
                 {
+                    tilesManager.HideTiles();
+                    print("in unselected");
                     _Unselect();
-                }
+                } //else if ( Input.GetMouseButtonUp(0) && Input.GetKey(KeyCode.LeftControl))
+                //{
+                 //   print("number:" + numberOfSelectedComponent);
+                 //   print("in OverGUI");
+                  //  tilesManager.HideTiles();
+               // }
             }
 
             // On supprime quand même si on pèse sur la touche 'delete'
@@ -245,7 +258,7 @@ public class ElectricComponent : MonoBehaviour
     public void _Select(bool executeInheritedCode = true)
     {
         isSelected = true;
-        if(executeInheritedCode)
+        if (executeInheritedCode && !Input.GetKey(KeyCode.LeftControl))
         {
             Select();
         }
@@ -317,6 +330,7 @@ public class ElectricComponent : MonoBehaviour
         resizeWinglets.GenerateWinglets(transform.position, transform.localScale);
         // wireTilesManager.ShowTiles();
         // connectionTilesManager.ShowTiles(this);
+        numberOfSelectedComponent++;
         tilesManager.ShowTiles(this);
         sprite.color = sprite.color * new Color(1, 1, 1, 0.5f);
     }
