@@ -9,6 +9,12 @@ public class RecentProject : MonoBehaviour
 {
     public string path;
     public TextMeshProUGUI text;
+    public GameObject delete;
+
+    public void Start()
+    {
+        OnExit();
+    }
 
     public void Setup(string name, string path)
     {
@@ -25,5 +31,15 @@ public class RecentProject : MonoBehaviour
     {
         MainMenuButtons.RemovePath(path);
         FindObjectOfType<MainMenuButtons>().ResetList();
+    }
+
+    public void OnHover()
+    {
+        delete.SetActive(true);
+    }
+
+    public void OnExit()
+    {
+        delete.SetActive(false);
     }
 }
