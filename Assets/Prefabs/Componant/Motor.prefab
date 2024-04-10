@@ -11,10 +11,10 @@ GameObject:
   - component: {fileID: 4028369109100792874}
   - component: {fileID: 4028369109100792865}
   - component: {fileID: 4028369109100792870}
-  - component: {fileID: 4028369109100792868}
   - component: {fileID: 4028369109100792869}
   - component: {fileID: -7875633403541762387}
   - component: {fileID: -8936149497432537827}
+  - component: {fileID: -1231152513492310333}
   m_Layer: 6
   m_Name: Motor
   m_TagString: Untagged
@@ -29,7 +29,6 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4028369109100792875}
-  serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 2, y: -2, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -37,6 +36,7 @@ Transform:
   m_Children:
   - {fileID: 5707630178817729795}
   m_Father: {fileID: 0}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &4028369109100792865
 SpriteRenderer:
@@ -100,25 +100,6 @@ BoxCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
@@ -135,30 +116,6 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
---- !u!114 &4028369109100792868
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4028369109100792875}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fc53c17d0aff6a54f8d5664dc952d0f9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  type: 5
-  canBeRotated: 0
-  canBeMoved: 1
-  canStack: 0
-  snapToGrid: 1
-  respectOrientation: 0
-  isMouseOverGUI: 0
-  initialComponentData: 
-  connectionManager: {fileID: 0}
-  hasReleasedSinceSelection: 1
-  outline: {fileID: 7688535382490472171}
-  sprite: {fileID: 0}
 --- !u!114 &4028369109100792869
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -205,12 +162,37 @@ MonoBehaviour:
   wireTilePrefab: {fileID: 729730110476256346, guid: b7b1b57ceb44fc9489faac4c0c4be09f, type: 3}
   connectionTilePrefab: {fileID: 729730110476256346, guid: b27489a6dc4be2e468f6e233bd1e49f5, type: 3}
   disconnectionTilePrefab: {fileID: 729730110476256346, guid: 570d34a7276d2c740a07511f01010b96, type: 3}
+--- !u!114 &-1231152513492310333
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4028369109100792875}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 836b7d4ca0bd3f04c8923ba8b2f4f77c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  type: 5
+  canBeRotated: 0
+  canBeMoved: 1
+  canStack: 0
+  snapToGrid: 1
+  respectOrientation: 0
+  isMouseOverGUI: 0
+  initialComponentData: 
+  initialConnectionData: 
+  connectionManager: {fileID: 0}
+  hasReleasedSinceSelection: 1
+  outline: {fileID: 7688535382490472171}
+  sprite: {fileID: 0}
 --- !u!1001 &8951249173624006220
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    serializedVersion: 3
+    serializedVersion: 2
     m_TransformParent: {fileID: 4028369109100792874}
     m_Modifications:
     - target: {fileID: 475578015003214662, guid: b5baa3d1b1169d148b97771d5d633605, type: 3}
@@ -266,9 +248,7 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b5baa3d1b1169d148b97771d5d633605, type: 3}
 --- !u!4 &5707630178817729795 stripped
 Transform:

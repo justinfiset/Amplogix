@@ -3,29 +3,29 @@ using System.Collections.Generic;
 using UnityEngine;
 using static Resistor;
 
-public class Voltmetre : ElectricComponent
+public class Diode : ElectricComponent
 {
-    public float voltmetre { get; private set; } = 0f; //Modifier la valeur lorsque l'accessibilité des données sera plus simple
+    public float diode { get; private set; } = 0f; 
 
-    private string voltmetreText = "";
+    private string diodeText = "";
     private bool isInputWrong = false;
 
     public override void Setup()
     {
         GUIHeightDivider = 2.5f;
 
-        voltmetreText = voltmetre.ToString();
+        diodeText = diode.ToString();
     }
 
     public override void UnpackCustomComponentData(string customDataString)
     {
         ResistorData data = UnserializeCustomComponentData<ResistorData>(customDataString);
-        this.voltmetre = data.resistance;
+        this.diode = data.resistance;
     }
 
     public override string GetCustomComponentData()
     {
-        return SerializeCustomComponentData(new ResistorData(voltmetre));
+        return SerializeCustomComponentData(new ResistorData(diode));
     }
 
     public override void RenderGUI()
@@ -34,16 +34,16 @@ public class Voltmetre : ElectricComponent
         GUIStyle labelStyle = ComponentGUI.labelStyle;
 
         Rect inputRect = ComponentGUI.CreateRect(0, 1, 1, 4);
-        voltmetreText = GUI.TextField(inputRect, voltmetreText, 15, inputStyle);
+        diodeText = GUI.TextField(inputRect, diodeText, 15, inputStyle);
 
         Rect labelRect = ComponentGUI.CreateRect(4, 1, 5, 4);
-        GUI.Label(labelRect, "V", labelStyle);
+        GUI.Label(labelRect, "Ω", labelStyle);
 
         if (GUI.changed)
         {
             try
             {
-                voltmetre = float.Parse(voltmetreText);
+                diode = float.Parse(diodeText);
                 isInputWrong = false;
             }
             catch

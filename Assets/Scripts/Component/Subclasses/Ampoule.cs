@@ -7,14 +7,14 @@ public class Ampoule : ElectricComponent
 {
     public float ampoule { get; private set; } = 0f;
 
-    private string AmpouleText = "";
+    private string ampouleText = "";
     private bool isInputWrong = false;
 
     public override void Setup()
     {
         GUIHeightDivider = 2.5f;
 
-        AmpouleText = ampoule.ToString();
+        ampouleText = ampoule.ToString();
     }
 
     public override void UnpackCustomComponentData(string customDataString)
@@ -34,7 +34,7 @@ public class Ampoule : ElectricComponent
         GUIStyle labelStyle = ComponentGUI.labelStyle;
 
         Rect inputRect = ComponentGUI.CreateRect(0, 1, 1, 4);
-        AmpouleText = GUI.TextField(inputRect, AmpouleText, 15, inputStyle);
+        ampouleText = GUI.TextField(inputRect, ampouleText, 15, inputStyle);
 
         Rect labelRect = ComponentGUI.CreateRect(4, 1, 5, 4);
         GUI.Label(labelRect, "Ω", labelStyle);
@@ -43,7 +43,7 @@ public class Ampoule : ElectricComponent
         {
             try
             {
-                ampoule = float.Parse(AmpouleText);
+                ampoule = float.Parse(ampouleText);
                 isInputWrong = false;
             }
             catch
