@@ -278,6 +278,7 @@ public class Connection : MonoBehaviour
     {
         connections.SetValue(connectionPosition, component);
         UpdateVisualConnections();
+        ProjectManager.OnModifyProject(ProjectModificationType.CircuitModification);
     }
     public void ConnectTo(ElectricComponent component)
     {

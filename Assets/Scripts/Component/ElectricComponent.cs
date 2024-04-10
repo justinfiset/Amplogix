@@ -6,6 +6,7 @@ using System.Linq;
 using UnityEngine.EventSystems;
 using System.ComponentModel;
 using System.Reflection;
+using UnityEngine.UIElements;
 
 //[RequireComponent(typeof(SpriteRenderer))]
 //[RequireComponent(typeof(ResizeWinglets))]
@@ -59,7 +60,7 @@ public class ElectricComponent : MonoBehaviour
     [Header("Current")]
     public bool isLightSource;
     [HideInInspector] protected float currentIntensity = 0;
-
+    private int numberOfSelectedComponent = 0;
     private void Start()
     {
         resizeWinglets = GetComponent<ResizeWinglets>();
@@ -95,9 +96,14 @@ public class ElectricComponent : MonoBehaviour
         {
             if (isSelected && hasReleasedSinceSelection && !isMouseOverGUI)
             {
-                if (!EventSystem.current.IsPointerOverGameObject())
+                if (Input.GetKey(KeyCode.LeftControl))
+                    {
+                    tilesManager.HideTiles();
+                   
+                }else if (!EventSystem.current.IsPointerOverGameObject())
                 {
                     UnselectAfterEndOfFrame();
+                   
                 }
             }
 
@@ -152,6 +158,8 @@ public class ElectricComponent : MonoBehaviour
                 }
                 else if (Input.GetKeyDown(unselectKey))
                 {
+                    tilesManager.HideTiles();
+                    print("in unselected");
                     _Unselect();
                 }
             }
@@ -214,7 +222,7 @@ public class ElectricComponent : MonoBehaviour
             _Unselect();
             transform.position = newPos;
             ProjectManager.m_Instance.ChangeComponentPos(this, transform.position);
-            ProjectManager.OnModifyProject();
+            ProjectManager.OnModifyProject(ProjectModificationType.CircuitModification);
             _Select();
         }
     }
@@ -232,7 +240,7 @@ public class ElectricComponent : MonoBehaviour
         if (color != newColor && !isTemporary)
         {
             color = newColor;
-            ProjectManager.OnModifyProject();
+            ProjectManager.OnModifyProject(ProjectModificationType.VisualModification);
         }
 
         if (isSelected) newColor = newColor * 0.5f;
@@ -245,7 +253,7 @@ public class ElectricComponent : MonoBehaviour
     public void _Select(bool executeInheritedCode = true)
     {
         isSelected = true;
-        if(executeInheritedCode)
+        if (executeInheritedCode && !Input.GetKey(KeyCode.LeftControl))// && ProjectManager.m_Instance.componentSelection.Count <= 1)
         {
             Select();
         }
@@ -271,7 +279,7 @@ public class ElectricComponent : MonoBehaviour
         connection.DeleteAllConnections();
         connection.AutoConnect();
         _Select();
-        ProjectManager.OnModifyProject();
+        ProjectManager.OnModifyProject(ProjectModificationType.CircuitModification);
     }
 
     public void _DestroyComponent()
@@ -317,6 +325,7 @@ public class ElectricComponent : MonoBehaviour
         resizeWinglets.GenerateWinglets(transform.position, transform.localScale);
         // wireTilesManager.ShowTiles();
         // connectionTilesManager.ShowTiles(this);
+        numberOfSelectedComponent++;
         tilesManager.ShowTiles(this);
         sprite.color = sprite.color * new Color(1, 1, 1, 0.5f);
     }

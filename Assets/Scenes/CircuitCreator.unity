@@ -185,6 +185,7 @@ MonoBehaviour:
   pauseButton: {fileID: 803602625}
   stopButton: {fileID: 195011592}
   timeText: {fileID: 1264293848}
+  timeShouldBeHandled: 0
   startTime: 0
   isSimulating: 0
   isPaused: 0
@@ -4515,6 +4516,7 @@ GameObject:
   - component: {fileID: 1030773707}
   - component: {fileID: 1030773710}
   - component: {fileID: 1030773711}
+  - component: {fileID: 1030773712}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -4721,6 +4723,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   prefabs: {fileID: 8679180107115639344, guid: 0ef51ea6ece3a3847be7872d3f0cde21, type: 3}
   parent: {fileID: 1611551107}
+--- !u!114 &1030773712
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1030773701}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 242a2d61c1fbe3f428d83b620de4f947, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1054064567
 GameObject:
   m_ObjectHideFlags: 0
@@ -7821,6 +7835,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1560259319}
   - component: {fileID: 1560259320}
+  - component: {fileID: 1560259321}
   m_Layer: 5
   m_Name: Simulation Setup
   m_TagString: Untagged
@@ -7859,6 +7874,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1560259318}
   m_CullTransparentMesh: 1
+--- !u!114 &1560259321
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1560259318}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eb094f1340e7da34bb8c9fcaa1aca036, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1578595629
 GameObject:
   m_ObjectHideFlags: 0
@@ -8962,7 +8989,6 @@ GameObject:
   - component: {fileID: 1792950223}
   - component: {fileID: 1792950222}
   - component: {fileID: 1792950221}
-  - component: {fileID: 1792950224}
   m_Layer: 0
   m_Name: EventSystem
   m_TagString: Untagged
@@ -9019,18 +9045,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1792950224
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1792950220}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9150c0928b2a2214f827eb438a1ee165, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1797486201
 GameObject:
   m_ObjectHideFlags: 0
