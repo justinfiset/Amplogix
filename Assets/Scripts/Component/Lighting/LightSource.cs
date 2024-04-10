@@ -8,6 +8,7 @@ public class LightSource : MonoBehaviour
     [HideInInspector] public VisualLight visualLight;
     public float opacityMultiplier;
     public Color lightColor;
+    private float intensity = 0f;
 
     public bool doLighting;
 
@@ -31,6 +32,13 @@ public class LightSource : MonoBehaviour
         UpdateLighting();
     }
 
+    public void SetIntensity(float intensity)
+    {
+        print("intensity set to " + intensity);
+        this.intensity = Mathf.Abs(intensity);
+        OnIntensityChange();
+    }
+
     public void OnIntensityChange()
     {
         if (doLighting)
@@ -41,11 +49,7 @@ public class LightSource : MonoBehaviour
 
     public void UpdateLighting()
     {
-        visualLight.SetOpacity(GetIntensity() * opacityMultiplier);
-    }
-
-    private float GetIntensity()
-    {
-        return 255f; //TODO: changer la méthode pour get la vraie intensité
+        visualLight.SetOpacity(intensity);
+        visualLight.SetOpacity(intensity * opacityMultiplier);
     }
 }

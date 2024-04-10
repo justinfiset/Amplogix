@@ -179,11 +179,11 @@ public class ComponentSpawner : MonoBehaviour
     public static ElectricComponent CreateComponent(GameObject component, Vector3 pos, Quaternion spawnAngle, Vector3 scale, Color color)
     {
         GameObject instance = Instantiate(component, pos, spawnAngle, m_Instance.parent);
-        ProjectManager.OnModifyProject();
+        //ProjectManager.OnModifyProject(ProjectModificationType.CircuitModification);
         ElectricComponent electricComponent = instance.GetComponent<ElectricComponent>();
-        m_Instance.projectManager.AddComponent(electricComponent);
         instance.transform.localScale = scale;
         electricComponent._SetColor(color);
+        m_Instance.projectManager.AddComponent(electricComponent);
         return electricComponent;
     }
 
@@ -192,6 +192,6 @@ public class ComponentSpawner : MonoBehaviour
         ElectricComponent electricComponent = gO.GetComponent<ElectricComponent>();
         m_Instance.projectManager.RemoveComponent(electricComponent);
         Destroy(gO);
-        ProjectManager.OnModifyProject();
+        //ProjectManager.OnModifyProject(ProjectModificationType.CircuitModification);
     }
 }

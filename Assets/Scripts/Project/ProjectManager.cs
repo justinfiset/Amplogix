@@ -90,7 +90,7 @@ public class ProjectManager : MonoBehaviour
         if(project.name != nameText.text)
         {
             project.name = nameText.text;
-            OnModifyProject();
+            OnModifyProject(ProjectModificationType.ProjectDataModification);
         }
     }
 
@@ -159,11 +159,14 @@ public class ProjectManager : MonoBehaviour
         m_Instance.isNotSavedIndicator.SetActive(false);
     }
 
-    public static void OnModifyProject()
+    public static void OnModifyProject(ProjectModificationType type)
     {
         m_Instance.isProjectSaved = false;
         m_Instance.savedIndicator.SetActive(false);
         m_Instance.isNotSavedIndicator.SetActive(true);
+
+        if(type == ProjectModificationType.CircuitModification || type == ProjectModificationType.CircuitDataModification)
+            SimulationManager.ProjectModificationCallback(); // TODO appeler dans un fonction moin appelé
     }
 
     public static bool IsSelectionEmpty()
@@ -184,13 +187,13 @@ public class ProjectManager : MonoBehaviour
     public void AddComponent(ElectricComponent component)
     {
         componentList.Add(component, component.transform.position);
-        OnModifyProject();
+        OnModifyProject(ProjectModificationType.CircuitModification);
     }
 
     public void RemoveComponent(ElectricComponent component)
     {
         componentList.Remove(component);
-        OnModifyProject();
+        OnModifyProject(ProjectModificationType.CircuitModification);
     }
 
     public bool ContainsComponent(Vector2 pos)
@@ -445,6 +448,15 @@ public class ProjectManager : MonoBehaviour
     }
     #endregion
 
+    public static void ResetCurrentIntensity()
+    {
+        ElectricComponent[] selection = m_Instance.componentList.Keys.ToArray();
+        foreach (ElectricComponent component in selection)
+        {
+            component.SetCalculatedIntensity(0f);
+        }
+    }
+
     public void ChangeComponentPos(ElectricComponent component, Vector2 newPos)
     {
         if(componentList.ContainsKey(component))
@@ -459,6 +471,15 @@ public class ProjectManager : MonoBehaviour
         foreach (ElectricComponent component in electricComponentTable)
         {
             component._Unselect();
+        }
+    }
+
+    public static void ChangeAllComponentsColor(Color newColor)
+    {
+        ElectricComponent[] selection = m_Instance.componentList.Keys.ToArray();
+        foreach (ElectricComponent component in selection)
+        {
+            component._SetColor(newColor);
         }
     }
 

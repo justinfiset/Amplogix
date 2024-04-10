@@ -65,13 +65,14 @@ public class UICircle : Graphic
     }
 
 
-    //    protected override void OnFillVBO(List<UIVertex> vbo)
+    //protected override void OnFillVBO(List<UIVertex> vbo)
+    [System.Obsolete]
     protected override void OnPopulateMesh(Mesh toFill)
     {
         float outer = -rectTransform.pivot.x * rectTransform.rect.width;
         float inner = -rectTransform.pivot.x * rectTransform.rect.width + this.thikness;
 
-        //        vbo.Clear();
+        //vbo.Clear();
         toFill.Clear();
         var vbo = new VertexHelper(toFill);
 

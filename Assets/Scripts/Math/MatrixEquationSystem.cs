@@ -3,10 +3,10 @@ using MathNet.Numerics.LinearAlgebra;
 
 public class MatrixEquationSystem
 {
-    private int meshCount;
-    private Matrix<float> resistanceMatrix;
-    private Vector<float> meshVoltage;
-
+    public int meshCount                    { get; private set; }
+    public Matrix<float> resistanceMatrix   { get; private set; }
+    public Vector<float> meshVoltage        { get; private set; }
+    public Vector<float> meshCurrent        { get; private set; }
     /*
     private static void Test()
     {
@@ -27,7 +27,7 @@ public class MatrixEquationSystem
     }
     */
 
-    MatrixEquationSystem(Matrix<float> resistanceMatrix, Vector<float> meshVoltage)
+    public MatrixEquationSystem(Matrix<float> resistanceMatrix, Vector<float> meshVoltage)
     {
         this.resistanceMatrix = resistanceMatrix;
         this.meshVoltage = meshVoltage;
@@ -38,6 +38,8 @@ public class MatrixEquationSystem
         {
             throw new IncorrectCircuitException("Matrices de tailles incompatibles fournisent"); 
         }
+
+        this.meshCurrent = GetCalculatedCurrents();
     }
 
     public Vector<float> GetCalculatedCurrents()

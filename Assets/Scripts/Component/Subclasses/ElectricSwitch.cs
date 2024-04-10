@@ -32,6 +32,7 @@ public class ElectricSwitch : ElectricComponent
     {
         isOpen = !isOpen;
         UpdateSprite();
+        ProjectManager.OnModifyProject(ProjectModificationType.CircuitDataModification);
     }
 
     public override void UnpackCustomComponentData(string customDataString)

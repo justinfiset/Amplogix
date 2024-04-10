@@ -7,12 +7,10 @@ using System.Collections;
 
 // simplification des listes
 using ElectricMeshList = System.Collections.Generic.Dictionary<int, System.Collections.Generic.List<ElectricComponent>>;
-using UnityEngine.Rendering.VirtualTexturing;
 
 public class MeshBuilder : MonoBehaviour
 {
-    // TODO Tester - RemoveDuplicatedMeshes
-    public List<List<ElectricComponent>> RemoveDuplicatedMeshes(List<List<ElectricComponent>> original)
+    public static List<List<ElectricComponent>> RemoveDuplicatedMeshes(List<List<ElectricComponent>> original)
     {
         List<List<ElectricComponent>> uniqueMeshes = new();
 
@@ -41,6 +39,7 @@ public class MeshBuilder : MonoBehaviour
         return uniqueMeshes;
     }
 
+    /*
     public void Update()
     {
         // TODO REMOVE TESET
@@ -49,26 +48,40 @@ public class MeshBuilder : MonoBehaviour
             CreateAndCalculateMeshes();
         }
     }
+    */
 
     #region Mesh Creation
-    public void CreateAndCalculateMeshes()
+    public static MatrixEquationSystem CreateAndCalculateMeshes()
     {
+        // Preps avant les calculs
+        ProjectManager.ResetCurrentIntensity();
+
         try
         {
             ElectricMeshList meshList = CreateMeshes();
-            Matrix<float> voltageMatrix = GetVoltageMatrix(meshList);
+            Vector<float> voltageMatrix = GetVoltageMatrix(meshList);
             Matrix<float> resistanceMatrix = GetResistanceMatrix(meshList);
+            MatrixEquationSystem system = new MatrixEquationSystem(resistanceMatrix, voltageMatrix);
 
-            Debug.Log(voltageMatrix.ToString());
-            Debug.Log(resistanceMatrix.ToString());
-        } catch (Exception e)
+            for(int i = 0; i < system.meshCount; i++)
+            {
+                float meshCurrent = system.meshCurrent[i];
+                foreach(ElectricComponent component in meshList[i])
+                {
+                    component.SetCalculatedIntensity(meshCurrent);
+                }
+            }
+
+            return system;
+        } catch (IncorrectCircuitException e)
         {
             print(e.Message);
-            // TODO afficher les erreurs dans le UI pour l'utilisateur
         }
+
+        return null;
     }
 
-    public ElectricMeshList CreateMeshes()
+    public static ElectricMeshList CreateMeshes()
     {
         ElectricMeshList meshList = new ElectricMeshList();
 
@@ -91,7 +104,6 @@ public class MeshBuilder : MonoBehaviour
             throw new IncorrectCircuitException("Un circuit doit avoir au moin un composant!");
         }
 
-        print("Meshes to correct: " + unsafeMeshList.Count);
         unsafeMeshList = RemoveIncorrectMeshes(unsafeMeshList);
         unsafeMeshList = RemoveDuplicatedMeshes(unsafeMeshList);
         DetectShortCircuit(unsafeMeshList);
@@ -99,7 +111,7 @@ public class MeshBuilder : MonoBehaviour
         return meshList;
     }
 
-    public List<List<ElectricComponent>> RemoveIncorrectMeshes(List<List<ElectricComponent>> toCorrect)
+    public static List<List<ElectricComponent>> RemoveIncorrectMeshes(List<List<ElectricComponent>> toCorrect)
     {
         List<List<ElectricComponent>> correctMeshes = new List<List<ElectricComponent>>();
         foreach(List<ElectricComponent> mesh in toCorrect)
@@ -116,7 +128,7 @@ public class MeshBuilder : MonoBehaviour
         return correctMeshes;
     }
 
-    public void PopulateMeshMap(List<List<ElectricComponent>> setList, ElectricMeshList meshList)
+    public static void PopulateMeshMap(List<List<ElectricComponent>> setList, ElectricMeshList meshList)
     {
         int index = 0;
 
@@ -129,7 +141,7 @@ public class MeshBuilder : MonoBehaviour
 
     // TODO optimiser le nombre d'appel
     // retourne vrai si on a trouvé une maille, faux si on doit continuer la recherche
-    public bool AnalyseConnections(ElectricComponent node, ElectricComponent parent, ElectricComponent root, HashSet<ElectricComponent> ancestors, List<List<ElectricComponent>> list)
+    public static bool AnalyseConnections(ElectricComponent node, ElectricComponent parent, ElectricComponent root, HashSet<ElectricComponent> ancestors, List<List<ElectricComponent>> list)
     {
         ancestors.Remove(root); // Par mesure de sécurité, on veut séparer les ancetres de la racine
         if(node != null) // Empeche de lancer une exception
@@ -179,7 +191,7 @@ public class MeshBuilder : MonoBehaviour
     }
 
     // TODO prendre en compte la fem pour une source
-    public void DetectShortCircuit(List<List<ElectricComponent>> setList)
+    public static void DetectShortCircuit(List<List<ElectricComponent>> setList)
     {
         // Les composants qui n'ont aucune résistance
         List<ElectricComponentType> unsafeTypes = new() { 
@@ -208,7 +220,7 @@ public class MeshBuilder : MonoBehaviour
         }
     }
 
-    public bool IsMeshComponentValid(ElectricComponent component)
+    public static bool IsMeshComponentValid(ElectricComponent component)
     {
         switch (component.type)
         {
@@ -288,11 +300,12 @@ public class MeshBuilder : MonoBehaviour
         return meshVoltage;
     }
 
-    public static Matrix<float> GetVoltageMatrix(ElectricMeshList meshList)
+    public static Vector<float> GetVoltageMatrix(ElectricMeshList meshList)
     {
-        Matrix<float> voltageMatrix = Matrix<float>.Build.Dense(1, meshList.Count);
+        Vector<float> voltageMatrix = Vector<float>.Build.Dense(meshList.Count);
 
         ////////////////////// TODO REMOVE THIS DEBUG CODE
+        ProjectManager.ChangeAllComponentsColor(Color.black);
         List<Color> colors = new List<Color> { Color.red, Color.blue, Color.cyan, Color.yellow };
         int index = 0;
         foreach (KeyValuePair<int, List<ElectricComponent>> mesh in meshList)
@@ -314,7 +327,7 @@ public class MeshBuilder : MonoBehaviour
         foreach (KeyValuePair<int, List<ElectricComponent>> mesh in meshList)
         {
             float result = GetMeshVoltage(mesh.Value);
-            voltageMatrix[0, mesh.Key] = result;
+            voltageMatrix[mesh.Key] = result;
         }
 
         return voltageMatrix;

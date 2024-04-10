@@ -227,7 +227,7 @@ public class ElectricComponent : MonoBehaviour
             _Unselect();
             transform.position = newPos;
             ProjectManager.m_Instance.ChangeComponentPos(this, transform.position);
-            ProjectManager.OnModifyProject();
+            ProjectManager.OnModifyProject(ProjectModificationType.CircuitModification);
             _Select();
         }
     }
@@ -245,7 +245,7 @@ public class ElectricComponent : MonoBehaviour
         if (color != newColor && !isTemporary)
         {
             color = newColor;
-            ProjectManager.OnModifyProject();
+            ProjectManager.OnModifyProject(ProjectModificationType.VisualModification);
         }
 
         if (isSelected) newColor = newColor * 0.5f;
@@ -284,7 +284,7 @@ public class ElectricComponent : MonoBehaviour
         connection.DeleteAllConnections();
         connection.AutoConnect();
         _Select();
-        ProjectManager.OnModifyProject();
+        ProjectManager.OnModifyProject(ProjectModificationType.CircuitModification);
     }
 
     public void _DestroyComponent()

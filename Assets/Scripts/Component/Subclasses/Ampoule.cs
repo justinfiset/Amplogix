@@ -23,7 +23,7 @@ public class Ampoule : ElectricComponent
 
         if (isLightSource)
         {
-            GetComponent<LightSource>().OnIntensityChange();
+            GetComponent<LightSource>().SetIntensity(currentIntensity);
         }
     }
 
