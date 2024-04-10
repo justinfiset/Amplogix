@@ -156,17 +156,12 @@ public class ElectricComponent : MonoBehaviour
                 {
                     _DestroyComponent();
                 }
-                else if (Input.GetKeyDown(unselectKey) && !Input.GetKey(KeyCode.LeftControl))
+                else if (Input.GetKeyDown(unselectKey))
                 {
                     tilesManager.HideTiles();
                     print("in unselected");
                     _Unselect();
-                } //else if ( Input.GetMouseButtonUp(0) && Input.GetKey(KeyCode.LeftControl))
-                //{
-                 //   print("number:" + numberOfSelectedComponent);
-                 //   print("in OverGUI");
-                  //  tilesManager.HideTiles();
-               // }
+                }
             }
 
             // On supprime quand même si on pèse sur la touche 'delete'
@@ -258,7 +253,7 @@ public class ElectricComponent : MonoBehaviour
     public void _Select(bool executeInheritedCode = true)
     {
         isSelected = true;
-        if (executeInheritedCode && !Input.GetKey(KeyCode.LeftControl))
+        if (executeInheritedCode && !Input.GetKey(KeyCode.LeftControl))// && ProjectManager.m_Instance.componentSelection.Count <= 1)
         {
             Select();
         }
