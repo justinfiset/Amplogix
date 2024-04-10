@@ -17,6 +17,16 @@ public class Ampoule : ElectricComponent
         ampouleText = ampoule.ToString();
     }
 
+    public override void SetCalculatedIntensity(float calculatedIntensity)
+    {
+        base.SetCalculatedIntensity(calculatedIntensity);
+
+        if (isLightSource)
+        {
+            GetComponent<LightSource>().OnIntensityChange();
+        }
+    }
+
     public override void UnpackCustomComponentData(string customDataString)
     {
         ResistorData data = UnserializeCustomComponentData<ResistorData>(customDataString);

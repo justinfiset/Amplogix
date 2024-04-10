@@ -22,7 +22,7 @@ public class Connection : MonoBehaviour
         {
             if (data.connections[i])
             {
-                ConnectTo((Position)i);
+                ConnectTo(i);
             }
         }
     }
@@ -98,11 +98,18 @@ public class Connection : MonoBehaviour
         StartCoroutine(WaitForAutoConnections());
     }
 
-    private IEnumerator WaitForAutoConnections()
+    public IEnumerator WaitForAutoConnections()
     {
         yield return new WaitForEndOfFrame();
+        AutoConnect();
+    }
+
+    public void AutoConnect()
+    {
         if (ConnectsAutomaticallyToNeighbors)
         {
+            print("connecting automatically");
+
             ElectricComponent electricComponent = GetComponent<ElectricComponent>();
             List<KeyValuePair<Vector2, ElectricComponent>> surroundingComps;
             surroundingComps = ProjectManager.m_Instance.GetSurroundingComponents(transform.position);

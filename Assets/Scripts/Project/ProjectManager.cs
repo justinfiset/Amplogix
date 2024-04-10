@@ -318,15 +318,11 @@ public class ProjectManager : MonoBehaviour
             int positionIndex;
             if (AreComponentsAlignedOnPlane(first, second, true)) //si les composants sont al. horizontalement
             {
-                float diff = first.transform.position.x - second.transform.position.x;
-                // positionIndex = (int) (0.5 + Mathf.Sign(diff) / 2);
                 positionIndex = GetPositionIndex(first, second, true);
                 first.connectionManager.ConnectTo(positionIndex);
                 second.connectionManager.ConnectTo(GetOtherValue(positionIndex, 0, 1));
             } else
             {
-                float diff = first.transform.position.y - second.transform.position.y;
-                // positionIndex = (int)(2.5 - Mathf.Sign(diff) / 2);
                 positionIndex = GetPositionIndex(first, second, false);
                 first.connectionManager.ConnectTo(GetOtherValue(positionIndex, 2, 3));
                 second.connectionManager.ConnectTo(positionIndex);

@@ -20,7 +20,6 @@ public class DisconnectionTile : Tile
         {
             if (Input.GetMouseButtonDown(0))
             {
-                print(target);
                 source.GetComponent<Connection>().DeleteConnection(target);
             }
         }

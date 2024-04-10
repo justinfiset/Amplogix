@@ -56,6 +56,10 @@ public class ElectricComponent : MonoBehaviour
     private static KeyCode unselectKey = KeyCode.Escape;
     private static KeyCode interactKey = KeyCode.Mouse1;
 
+    [Header("Current")]
+    public bool isLightSource;
+    [HideInInspector] protected float currentIntensity = 0;
+
     private void Start()
     {
         resizeWinglets = GetComponent<ResizeWinglets>();
@@ -195,6 +199,13 @@ public class ElectricComponent : MonoBehaviour
         OnUpdate(); // pour les sous composants
     }
 
+    public virtual void SetCalculatedIntensity(float calculatedIntensity) {
+        if (calculatedIntensity != currentIntensity)
+        {
+            currentIntensity = calculatedIntensity;
+        }
+    }
+
     #region Internal
     public void MoveComponent(Vector3 newPos)
     {
@@ -256,6 +267,7 @@ public class ElectricComponent : MonoBehaviour
     {
         _Unselect();
         RotateComponent();
+        GetComponent<Connection>().AutoConnect();
         _Select();
         ProjectManager.OnModifyProject();
     }
@@ -283,7 +295,7 @@ public class ElectricComponent : MonoBehaviour
     public virtual void DestroyComponent() { }
 
     public virtual void RotateComponent() { 
-        transform.Rotate(Vector3.back * 90); 
+        transform.Rotate(Vector3.back * 90);
     }
 
     public virtual void SetColor(Color newColor)

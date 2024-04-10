@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: -912319818469094512}
   - component: {fileID: 7210757780453098940}
   - component: {fileID: 7274095291378919601}
+  - component: {fileID: 5941780666261531923}
   m_Layer: 6
   m_Name: Light Bulb
   m_TagString: Untagged
@@ -187,6 +188,23 @@ MonoBehaviour:
   hasReleasedSinceSelection: 1
   outline: {fileID: 368607867078495382}
   sprite: {fileID: 0}
+  isLightSource: 1
+--- !u!114 &5941780666261531923
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3364640599128778684}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0bb36b9e9882017458e8ae93861dfb54, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  visualLightPrefab: {fileID: 3084868918825537089, guid: 11d08fcce365ec648be6988ce8dba08e, type: 3}
+  visualLight: {fileID: 0}
+  opacityMultiplier: 1
+  lightColor: {r: 1, g: 0.94509804, b: 0.46666667, a: 1}
 --- !u!1001 &1411770068393735217
 PrefabInstance:
   m_ObjectHideFlags: 0
