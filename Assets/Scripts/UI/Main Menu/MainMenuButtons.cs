@@ -59,7 +59,7 @@ public class MainMenuButtons : MonoBehaviour
         bool hasChanged = false; // On nettoie la liste en même temps
         foreach (string path in pathsList)
         {
-            if(path != "")
+            if(path != null && path != "")
             {
                 if(File.Exists(path))
                 {
@@ -81,5 +81,26 @@ public class MainMenuButtons : MonoBehaviour
             string newPathsString = string.Join(";", newList);
             PlayerPrefs.SetString(recentProjectsPrefName, newPathsString);
         }
+    }
+
+    public static void RemovePath(string path)
+    {
+        string paths = PlayerPrefs.GetString(recentProjectsPrefName);
+        List<string> pathsList = new List<string>(paths.Split(';'));
+        pathsList.Remove(path);
+
+        string newPathsString = string.Join(";", pathsList);
+        PlayerPrefs.SetString(recentProjectsPrefName, newPathsString);
+
+    }
+
+    public void ResetList()
+    {
+        for(int i = 0; i < list.transform.childCount; i++)
+        {
+            Destroy(list.transform.GetChild(i).gameObject);
+        }
+
+        FindRecentProject();
     }
 }

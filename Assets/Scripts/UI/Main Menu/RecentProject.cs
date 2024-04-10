@@ -2,8 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
-[RequireComponent(typeof(TextMeshProUGUI))]
+[RequireComponent(typeof(Image))]
 public class RecentProject : MonoBehaviour
 {
     public string path;
@@ -19,5 +20,10 @@ public class RecentProject : MonoBehaviour
     {
         MainMenuButtons.OpenFile(path);
     }
-    
+
+    public void Delete()
+    {
+        MainMenuButtons.RemovePath(path);
+        FindObjectOfType<MainMenuButtons>().ResetList();
+    }
 }
