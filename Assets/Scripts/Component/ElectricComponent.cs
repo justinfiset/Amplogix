@@ -129,7 +129,6 @@ public class ElectricComponent : MonoBehaviour
         }
         else if(Input.GetMouseButtonUp(0))
         {
-            // TODO: remove useless statment
             if (isSelected && hasReleasedSinceSelection && !isMouseOverGUI) {/* Unselect */} 
             else
             {

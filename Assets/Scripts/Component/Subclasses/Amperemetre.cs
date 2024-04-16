@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Ampermetre : ElectricComponent
+public class Amperemetre : ElectricComponent
 {
     private string currentText = "";
 

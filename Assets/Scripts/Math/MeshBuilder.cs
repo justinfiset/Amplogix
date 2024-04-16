@@ -42,7 +42,6 @@ public class MeshBuilder : MonoBehaviour
     /*
     public void Update()
     {
-        // TODO REMOVE TESET
         if (Input.GetKeyDown(KeyCode.Insert))
         {
             CreateAndCalculateMeshes();
@@ -92,7 +91,6 @@ public class MeshBuilder : MonoBehaviour
         {
             foreach (ElectricComponent root in componentList)
             {
-                // TODO : enlever?????
                 if(root.type != ElectricComponentType.Wire)
                 {
                     HashSet<ElectricComponent> ancestors = new HashSet<ElectricComponent>();
@@ -139,7 +137,6 @@ public class MeshBuilder : MonoBehaviour
         }
     }
 
-    // TODO optimiser le nombre d'appel
     // retourne vrai si on a trouvé une maille, faux si on doit continuer la recherche
     public static bool AnalyseConnections(ElectricComponent node, ElectricComponent parent, ElectricComponent root, HashSet<ElectricComponent> ancestors, List<List<ElectricComponent>> list)
     {
@@ -264,6 +261,7 @@ public class MeshBuilder : MonoBehaviour
     }
 
     // TODO tester
+    // TODO prendre en compte les condensateurs et / ou bobines
     // On analyse les sources en sens horaire selon les lois de kirchoff
     public static float GetMeshVoltage(List<ElectricComponent> mesh)
     {
@@ -279,9 +277,12 @@ public class MeshBuilder : MonoBehaviour
             if (component.type == ElectricComponentType.PowerSource)
             {
                 PowerSource powerSource = (PowerSource)component;
+
+                /*
                 ////////////////////////////////////////////////////////////
                 powerSource.SetColor(Color.green); // TODO REMOVE (FOR DEBUG)
                 ////////////////////////////////////////////////////////////
+                */
 
                 int multiplier = 1;
                 // TODO aller cherche le previous manuellement?
@@ -304,7 +305,8 @@ public class MeshBuilder : MonoBehaviour
     {
         Vector<float> voltageMatrix = Vector<float>.Build.Dense(meshList.Count);
 
-        ////////////////////// TODO REMOVE THIS DEBUG CODE
+        /*
+        ////////////////////// DEBUG CODE
         ProjectManager.ChangeAllComponentsColor(Color.black);
         List<Color> colors = new List<Color> { Color.red, Color.blue, Color.cyan, Color.yellow };
         int index = 0;
@@ -323,6 +325,7 @@ public class MeshBuilder : MonoBehaviour
             index++;
         }
         //////////////////////////////////////////////////
+        */
 
         foreach (KeyValuePair<int, List<ElectricComponent>> mesh in meshList)
         {
