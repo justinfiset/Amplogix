@@ -5,22 +5,20 @@ using static Resistor;
 
 public class Ampoule : ElectricComponent
 {
-    public float ampoule { get; private set; } = 0f;
-
-    private string ampouleText = "";
+    private string resistanceText = "";
     private bool isInputWrong = false;
 
     public override void Setup()
     {
         GUIHeightDivider = 2.5f;
 
-        ampouleText = ampoule.ToString();
+        resistance = 10f;
+
+        resistanceText = resistance.ToString();
     }
 
-    public override void SetCalculatedIntensity(float calculatedIntensity)
+    public override void OnCurrentChange(float calculatedIntensity)
     {
-        base.SetCalculatedIntensity(calculatedIntensity);
-
         if (isLightSource)
         {
             GetComponent<LightSource>().SetIntensity(currentIntensity);
@@ -30,12 +28,12 @@ public class Ampoule : ElectricComponent
     public override void UnpackCustomComponentData(string customDataString)
     {
         ResistorData data = UnserializeCustomComponentData<ResistorData>(customDataString);
-        this.ampoule = data.resistance;
+        this.resistance = data.resistance;
     }
 
     public override string GetCustomComponentData()
     {
-        return SerializeCustomComponentData(new ResistorData(ampoule));
+        return SerializeCustomComponentData(new ResistorData(resistance));
     }
 
     public override void RenderGUI()
@@ -44,7 +42,7 @@ public class Ampoule : ElectricComponent
         GUIStyle labelStyle = ComponentGUI.labelStyle;
 
         Rect inputRect = ComponentGUI.CreateRect(0, 1, 1, 4);
-        ampouleText = GUI.TextField(inputRect, ampouleText, 15, inputStyle);
+        resistanceText = GUI.TextField(inputRect, resistanceText, 15, inputStyle);
 
         Rect labelRect = ComponentGUI.CreateRect(4, 1, 5, 4);
         GUI.Label(labelRect, "Ω", labelStyle);
@@ -53,7 +51,7 @@ public class Ampoule : ElectricComponent
         {
             try
             {
-                ampoule = float.Parse(ampouleText);
+                resistance = float.Parse(resistanceText);
                 isInputWrong = false;
             }
             catch

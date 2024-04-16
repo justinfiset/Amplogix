@@ -34,7 +34,6 @@ public class LightSource : MonoBehaviour
 
     public void SetIntensity(float intensity)
     {
-        print("intensity set to " + intensity);
         this.intensity = Mathf.Abs(intensity);
         OnIntensityChange();
     }

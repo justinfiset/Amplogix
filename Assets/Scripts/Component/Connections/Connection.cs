@@ -190,6 +190,9 @@ public class Connection : MonoBehaviour
                 break;
             }
         }
+
+        ProjectManager.OnModifyProject(ProjectModificationType.CircuitModification);
+
         DoWireCheck();
         UpdateVisualConnections();
     }
@@ -279,10 +282,6 @@ public class Connection : MonoBehaviour
         connections.SetValue(connectionPosition, component);
         UpdateVisualConnections();
         ProjectManager.OnModifyProject(ProjectModificationType.CircuitModification);
-    }
-    public void ConnectTo(ElectricComponent component)
-    {
-        // TODO simplified ConnectTo
     }
     #endregion
 

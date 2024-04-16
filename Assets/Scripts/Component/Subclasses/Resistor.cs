@@ -5,14 +5,14 @@ using UnityEngine;
 
 public class Resistor : ElectricComponent
 {
-    public float resistance { get; private set; } = 25f;
-
     private string resistanceText = "";
     private bool isInputWrong = false;
 
     public override void Setup()
     {
         GUIHeightDivider = 2.5f;
+
+        resistance = 25f;
 
         resistanceText = resistance.ToString();
     }

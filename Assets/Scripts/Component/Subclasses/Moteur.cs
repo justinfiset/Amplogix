@@ -5,27 +5,27 @@ using static Resistor;
 
 public class Moteur : ElectricComponent
 {
-    public float moteur { get; private set; } = 0f;
-
-    private string moteurText = "";
+    private string resistanceText = "";
     private bool isInputWrong = false;
 
     public override void Setup()
     {
         GUIHeightDivider = 2.5f;
 
-        moteurText = moteur.ToString();
+        resistance = 5f;
+
+        resistanceText = resistance.ToString();
     }
 
     public override void UnpackCustomComponentData(string customDataString)
     {
         ResistorData data = UnserializeCustomComponentData<ResistorData>(customDataString);
-        this.moteur = data.resistance;
+        this.resistance = data.resistance;
     }
 
     public override string GetCustomComponentData()
     {
-        return SerializeCustomComponentData(new ResistorData(moteur));
+        return SerializeCustomComponentData(new ResistorData(resistance));
     }
 
     public override void RenderGUI()
@@ -34,7 +34,7 @@ public class Moteur : ElectricComponent
         GUIStyle labelStyle = ComponentGUI.labelStyle;
 
         Rect inputRect = ComponentGUI.CreateRect(0, 1, 1, 4);
-        moteurText = GUI.TextField(inputRect, moteurText, 15, inputStyle);
+        resistanceText = GUI.TextField(inputRect, resistanceText, 15, inputStyle);
 
         Rect labelRect = ComponentGUI.CreateRect(4, 1, 5, 4);
         GUI.Label(labelRect, "Ω", labelStyle);
@@ -43,7 +43,7 @@ public class Moteur : ElectricComponent
         {
             try
             {
-                moteur = float.Parse(moteurText);
+                resistance = float.Parse(resistanceText);
                 isInputWrong = false;
             }
             catch

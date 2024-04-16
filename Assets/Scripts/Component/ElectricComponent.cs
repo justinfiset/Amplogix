@@ -59,8 +59,10 @@ public class ElectricComponent : MonoBehaviour
 
     [Header("Current")]
     public bool isLightSource;
-    [HideInInspector] protected float currentIntensity = 0;
-    private int numberOfSelectedComponent = 0;
+    [HideInInspector] public float currentIntensity { get; private set; } = 0;
+    [HideInInspector] public float componentPotential { get; private set; } = 0;
+    [HideInInspector] public float resistance { get; protected set; } = 0f;
+
     private void Start()
     {
         resizeWinglets = GetComponent<ResizeWinglets>();
@@ -207,11 +209,25 @@ public class ElectricComponent : MonoBehaviour
         OnUpdate(); // pour les sous composants
     }
 
-    public virtual void SetCalculatedIntensity(float calculatedIntensity) {
+    public void SetCalculatedIntensity(float calculatedIntensity) {
         if (calculatedIntensity != currentIntensity)
         {
-            currentIntensity = calculatedIntensity;
+            currentIntensity = Math.Abs(calculatedIntensity);
+            SetCalculatedPotential(CalculatePotential(currentIntensity));
+            OnCurrentChange(currentIntensity);
         }
+    }
+
+    public virtual void OnCurrentChange(float newCurrent) { }
+
+    public virtual void SetCalculatedPotential(float potential)
+    {
+        componentPotential = Math.Abs(potential);
+    }
+
+    public virtual float CalculatePotential(float current)
+    {
+        return current * resistance;
     }
 
     #region Internal
@@ -325,7 +341,6 @@ public class ElectricComponent : MonoBehaviour
         resizeWinglets.GenerateWinglets(transform.position, transform.localScale);
         // wireTilesManager.ShowTiles();
         // connectionTilesManager.ShowTiles(this);
-        numberOfSelectedComponent++;
         tilesManager.ShowTiles(this);
         sprite.color = sprite.color * new Color(1, 1, 1, 0.5f);
     }
@@ -389,6 +404,11 @@ public class ElectricComponent : MonoBehaviour
 
             ComponentGUI.CreateColorPalette();
             ComponentGUI.CreateDeleteButton();
+
+            if(GUI.changed) // Si on a modifié quelque chose, on relance les calculs
+            {
+                ProjectManager.OnModifyProject(ProjectModificationType.CircuitDataModification);
+            }
         }
     }
 

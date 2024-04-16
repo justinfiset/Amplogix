@@ -345,8 +345,6 @@ public class MeshBuilder : MonoBehaviour
         List<int> managedKeys = new List<int>();
         foreach (KeyValuePair<int, List<ElectricComponent>> main in meshList)
         {
-            List<ElectricComponent> resistors = ProjectManager.GetAllElectricComponentsOfType(main.Value, ElectricComponentType.Resistor);
-
             foreach (KeyValuePair<int, List<ElectricComponent>> secondary in meshList)
             {
                 float resistance = 0f;
@@ -355,11 +353,11 @@ public class MeshBuilder : MonoBehaviour
                 {
                     if (!managedKeys.Contains(secondary.Key))
                     {
-                        foreach (Resistor resistor in resistors)
+                        foreach (ElectricComponent component in main.Value)
                         {
-                            if(secondary.Value.Contains(resistor))
+                            if(secondary.Value.Contains(component))
                             {
-                                resistance += resistor.resistance;
+                                resistance += component.resistance;
                             }
                         }
 
@@ -370,7 +368,7 @@ public class MeshBuilder : MonoBehaviour
                 }
                 else // La diagonale ex : R11, R22, R33
                 {
-                    foreach (Resistor resistor in resistors)
+                    foreach (ElectricComponent resistor in main.Value)
                     {
                         resistance += resistor.resistance;
                     }

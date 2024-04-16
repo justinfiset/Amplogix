@@ -5,27 +5,27 @@ using static Resistor;
 
 public class Diode : ElectricComponent
 {
-    public float diode { get; private set; } = 0f; 
-
-    private string diodeText = "";
+    private string resistanceText = "";
     private bool isInputWrong = false;
 
     public override void Setup()
     {
         GUIHeightDivider = 2.5f;
 
-        diodeText = diode.ToString();
+        resistance = 0.1f;
+
+        resistanceText = resistance.ToString();
     }
 
     public override void UnpackCustomComponentData(string customDataString)
     {
         ResistorData data = UnserializeCustomComponentData<ResistorData>(customDataString);
-        this.diode = data.resistance;
+        this.resistance = data.resistance;
     }
 
     public override string GetCustomComponentData()
     {
-        return SerializeCustomComponentData(new ResistorData(diode));
+        return SerializeCustomComponentData(new ResistorData(resistance));
     }
 
     public override void RenderGUI()
@@ -34,7 +34,7 @@ public class Diode : ElectricComponent
         GUIStyle labelStyle = ComponentGUI.labelStyle;
 
         Rect inputRect = ComponentGUI.CreateRect(0, 1, 1, 4);
-        diodeText = GUI.TextField(inputRect, diodeText, 15, inputStyle);
+        resistanceText = GUI.TextField(inputRect, resistanceText, 15, inputStyle);
 
         Rect labelRect = ComponentGUI.CreateRect(4, 1, 5, 4);
         GUI.Label(labelRect, "Ω", labelStyle);
@@ -43,7 +43,7 @@ public class Diode : ElectricComponent
         {
             try
             {
-                diode = float.Parse(diodeText);
+                resistance = float.Parse(resistanceText);
                 isInputWrong = false;
             }
             catch
