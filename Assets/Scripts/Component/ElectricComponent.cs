@@ -22,6 +22,7 @@ public class ElectricComponent : MonoBehaviour
     public bool canStack = false;
     public bool snapToGrid = true;
     public bool respectOrientation = false;
+    public bool canGenerateMeshes = true; // La création de mailles part-elle du composant?
 
     [Header("State")]
     protected bool isHover = false;

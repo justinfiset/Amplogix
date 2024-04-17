@@ -180,6 +180,7 @@ MonoBehaviour:
   canStack: 0
   snapToGrid: 1
   respectOrientation: 0
+  canGenerateMeshes: 0
   isMouseOverGUI: 0
   initialComponentData: 
   initialConnectionData: 
@@ -187,6 +188,7 @@ MonoBehaviour:
   hasReleasedSinceSelection: 1
   outline: {fileID: 7581558312388452172}
   sprite: {fileID: 0}
+  isLightSource: 0
 --- !u!1001 &9204522690265819115
 PrefabInstance:
   m_ObjectHideFlags: 0

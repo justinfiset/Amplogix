@@ -507,7 +507,7 @@ public class ProjectManager : MonoBehaviour
 
         foreach(ElectricComponent component in m_Instance.componentList.Keys)
         {
-            if(component.connectionManager.ConnectionCount() > 1) // Si il possède plus de deux connection / nécessaire pour avoir une maille circulaire
+            if(component.canGenerateMeshes && component.connectionManager.ConnectionCount() > 1) // Si il possède plus de deux connection / nécessaire pour avoir une maille circulaire
             {
                 connectedComponents.Add(component);
             }
