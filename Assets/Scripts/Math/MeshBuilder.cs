@@ -62,12 +62,43 @@ public class MeshBuilder : MonoBehaviour
             Matrix<float> resistanceMatrix = GetResistanceMatrix(meshList);
             MatrixEquationSystem system = new MatrixEquationSystem(resistanceMatrix, voltageMatrix);
 
+            // todo séparer dans une autre méthode
+            List<ElectricComponent> calledComponents = new List<ElectricComponent>();
             for(int i = 0; i < system.meshCount; i++)
             {
                 float meshCurrent = system.meshCurrent[i];
+                float secondMeshCurrent = 0f;
                 foreach(ElectricComponent component in meshList[i])
                 {
-                    component.SetCalculatedIntensity(meshCurrent);
+                    if(!calledComponents.Contains(component)) // Si pas déja appelé
+                    {
+                        // On vérifie si un composant est contenu dans plusieurs mailles
+                        for (int j = 0; j < system.meshCount; j++)
+                        {
+                            if (j != i)
+                            {
+                                bool wasFound = false;
+                                foreach (ElectricComponent temp in meshList[j])
+                                {
+                                    if (component == temp)
+                                    {
+                                        wasFound = true;
+                                        break;
+                                    }
+                                }
+
+                                if(wasFound)
+                                {
+                                    secondMeshCurrent = system.meshCurrent[j];
+                                    break;
+                                }
+                            }
+                        }
+
+                        float current = Math.Abs(Math.Abs(meshCurrent) - Math.Abs(secondMeshCurrent));
+                        component.SetCalculatedIntensity(current);
+                        calledComponents.Add(component);
+                    }
                 }
             }
 

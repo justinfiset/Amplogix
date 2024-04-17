@@ -9,8 +9,12 @@ public class Voltmetre : ElectricComponent
     public override void Setup()
     {
         GUIHeightDivider = 2.5f;
-
         potentialText = componentPotential.ToString();
+    }
+
+    public override float CalculatePotential(float current)
+    {
+        return current * 10; // POURQUOI????!!!
     }
 
     public override void RenderGUI()
@@ -19,6 +23,7 @@ public class Voltmetre : ElectricComponent
         GUIStyle labelStyle = ComponentGUI.labelStyle;
 
         Rect inputRect = ComponentGUI.CreateRect(0, 1, 1, 4);
+
         potentialText = componentPotential.ToString();
         potentialText = GUI.TextField(inputRect, potentialText, 15, inputStyle);
 
