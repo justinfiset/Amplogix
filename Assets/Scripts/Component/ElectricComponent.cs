@@ -7,6 +7,7 @@ using UnityEngine.EventSystems;
 using System.ComponentModel;
 using System.Reflection;
 using UnityEngine.UIElements;
+using System.Threading;
 
 //[RequireComponent(typeof(SpriteRenderer))]
 //[RequireComponent(typeof(ResizeWinglets))]
@@ -49,6 +50,7 @@ public class ElectricComponent : MonoBehaviour
     [HideInInspector] public SpriteRenderer sprite;
     public static float DefaltGUIDivider = 3f;
     protected float GUIHeightDivider = 3f;
+    private int firstComponentSelected = 0;
 
     [Header("Inputs")]
     private static KeyCode rotateKey = KeyCode.R;
@@ -60,9 +62,14 @@ public class ElectricComponent : MonoBehaviour
 
     [Header("Current")]
     public bool isLightSource;
+
     [HideInInspector] public float currentIntensity { get; private set; } = 0;
     [HideInInspector] public float componentPotential { get; private set; } = 0;
     [HideInInspector] public float resistance { get; protected set; } = 0f;
+
+    private int numberOfSelectedComponent = 0;
+    private ElectricComponent firstComponent;
+
 
     private void Start()
     {
@@ -93,17 +100,29 @@ public class ElectricComponent : MonoBehaviour
 
     void Update()
     {
+
+            ;
         if (!ProjectManager.canInteract) return;
 
         if(Input.GetMouseButtonDown(0))
         {
             if (isSelected && hasReleasedSinceSelection && !isMouseOverGUI)
             {
-                if (Input.GetKey(KeyCode.LeftControl))
+                if (Input.GetKey(KeyCode.LeftControl) && ProjectManager.m_Instance.componentSelection.Count  != 0)
                     {
-                    tilesManager.HideTiles();
+                        if(ProjectManager.m_Instance.componentSelection.Count != 1)
+                    {
+                        tilesManager.HideTiles();
+                    }
+                     
+                        print("udapte : " + ProjectManager.m_Instance.componentSelection.Count);
+                    
+                  
+                
+                    
                    
-                }else if (!EventSystem.current.IsPointerOverGameObject())
+                }
+                else if (!EventSystem.current.IsPointerOverGameObject())
                 {
                     UnselectAfterEndOfFrame();
                    
@@ -161,6 +180,8 @@ public class ElectricComponent : MonoBehaviour
                 else if (Input.GetKeyDown(unselectKey))
                 {
                     tilesManager.HideTiles();
+                    print("in unselected" );
+
                     _Unselect();
                 }
             }
@@ -265,16 +286,38 @@ public class ElectricComponent : MonoBehaviour
             connectionManager.SetColor(newColor);
     }
 
+
     public void _Select(bool executeInheritedCode = true)
     {
+    
         isSelected = true;
-        if (executeInheritedCode && !Input.GetKey(KeyCode.LeftControl))// && ProjectManager.m_Instance.componentSelection.Count <= 1)
+        if (executeInheritedCode)
         {
-            Select();
+            if (Input.GetKey(KeyCode.LeftControl) && ProjectManager.m_Instance.componentSelection.Count == 0)
+            {
+                Select();
+                print("in select");
+                firstComponentSelected = 1;
+                
+            }else 
+            {
+                Select();
+                tilesManager.HideTiles();
+            }
+            if (!Input.GetKey(KeyCode.LeftControl))
+            {
+                print("Select");
+                Select();
+            }
+            
+            
         }
         outline.color = Color.white;
         _SetColor(color * new Color(1f, 1f, 1f, 0.5f), true);
+        print("select : "+ ProjectManager.m_Instance.componentSelection.Count);
         ProjectManager.AddComponentToSelection(this);
+        print("selecta after : " + ProjectManager.m_Instance.componentSelection.Count);
+      
     }
 
     public void _Unselect()
