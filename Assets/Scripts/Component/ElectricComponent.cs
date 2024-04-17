@@ -50,7 +50,6 @@ public class ElectricComponent : MonoBehaviour
     [HideInInspector] public SpriteRenderer sprite;
     public static float DefaltGUIDivider = 3f;
     protected float GUIHeightDivider = 3f;
-    private int firstComponentSelected = 0;
 
     [Header("Inputs")]
     private static KeyCode rotateKey = KeyCode.R;
@@ -68,7 +67,7 @@ public class ElectricComponent : MonoBehaviour
     [HideInInspector] public float resistance { get; protected set; } = 0f;
 
     private int numberOfSelectedComponent = 0;
-    private ElectricComponent firstComponent;
+
 
 
     private void Start()
@@ -114,13 +113,7 @@ public class ElectricComponent : MonoBehaviour
                     {
                         tilesManager.HideTiles();
                     }
-                     
-                        print("udapte : " + ProjectManager.m_Instance.componentSelection.Count);
-                    
-                  
-                
-                    
-                   
+
                 }
                 else if (!EventSystem.current.IsPointerOverGameObject())
                 {
@@ -180,7 +173,6 @@ public class ElectricComponent : MonoBehaviour
                 else if (Input.GetKeyDown(unselectKey))
                 {
                     tilesManager.HideTiles();
-                    print("in unselected" );
 
                     _Unselect();
                 }
@@ -296,7 +288,6 @@ public class ElectricComponent : MonoBehaviour
             if (Input.GetKey(KeyCode.LeftControl) && ProjectManager.m_Instance.componentSelection.Count == 0)
             {
                 Select();
-                print("in select");
                 firstComponentSelected = 1;
                 
             }else 
@@ -306,7 +297,6 @@ public class ElectricComponent : MonoBehaviour
             }
             if (!Input.GetKey(KeyCode.LeftControl))
             {
-                print("Select");
                 Select();
             }
             
@@ -314,9 +304,7 @@ public class ElectricComponent : MonoBehaviour
         }
         outline.color = Color.white;
         _SetColor(color * new Color(1f, 1f, 1f, 0.5f), true);
-        print("select : "+ ProjectManager.m_Instance.componentSelection.Count);
         ProjectManager.AddComponentToSelection(this);
-        print("selecta after : " + ProjectManager.m_Instance.componentSelection.Count);
       
     }
 
