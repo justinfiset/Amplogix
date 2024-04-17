@@ -516,6 +516,11 @@ public class ProjectManager : MonoBehaviour
         return connectedComponents;
     }
 
+    public static List<ElectricComponent> GetAllElectricComponentsOfType(ElectricComponentType type)
+    {
+        return GetAllElectricComponentsOfType(m_Instance.componentList.Keys.ToList(), type);
+    }
+
     public static List<ElectricComponent> GetAllElectricComponentsOfType(List<ElectricComponent> components, ElectricComponentType type)
     {
         List<ElectricComponent> componentsOfType = new List<ElectricComponent> ();

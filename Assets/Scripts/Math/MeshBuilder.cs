@@ -7,6 +7,7 @@ using System.Collections;
 
 // simplification des listes
 using ElectricMeshList = System.Collections.Generic.Dictionary<int, System.Collections.Generic.List<ElectricComponent>>;
+using UnityEngine.Rendering.VirtualTexturing;
 
 public class MeshBuilder : MonoBehaviour
 {
@@ -49,6 +50,50 @@ public class MeshBuilder : MonoBehaviour
     }
     */
 
+    public static void ExecuteAllVoltmeters()
+    {
+        List<ElectricComponent> voltMeters = ProjectManager.GetAllElectricComponentsOfType(ElectricComponentType.Voltmeter);
+        foreach(ElectricComponent voltmeter in voltMeters)
+        {
+            List<ElectricComponent> connectedComponents = new List<ElectricComponent>(); // Les deux composants qu'on mesure
+            ElectricComponent[] connections = voltmeter.connectionManager.connections.connections; // Tous les composants auquel le voltmètre est connecté
+            for (int i = 0; i < connections.Length; i++)
+            {
+                if (connections[i] != null)
+                {
+                    connectedComponents[i] = FindNextRevelantComponent(connections[i], voltmeter);
+                }
+            }
+            print(connectedComponents.Count); // TODO ENELVER
+            float potentialDiff = connectedComponents[0].componentPotential - connectedComponents[1].componentPotential;
+            voltmeter.SetCalculatedPotential(potentialDiff);
+        }
+    }
+
+    public static ElectricComponent FindNextRevelantComponent(ElectricComponent current, ElectricComponent previous)
+    {
+        // Si on a plus de 2 connections ou que ce n'est pas un fil
+        if (current.type != ElectricComponentType.Voltmeter)
+        {
+            if (current.connectionManager.ConnectionCount() > 2 || current.type != ElectricComponentType.Wire)
+            {
+                return current;
+            }
+            else
+            {
+                List<ElectricComponent> connections = current.connectionManager.connections.connections.ToList(); ;
+                foreach (ElectricComponent connection in connections)
+                {
+                    if (connection != previous && connection != null)
+                    {
+                        return FindNextRevelantComponent(connection, current);
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
     #region Mesh Creation
     public static MatrixEquationSystem CreateAndCalculateMeshes()
     {
@@ -62,45 +107,8 @@ public class MeshBuilder : MonoBehaviour
             Matrix<float> resistanceMatrix = GetResistanceMatrix(meshList);
             MatrixEquationSystem system = new MatrixEquationSystem(resistanceMatrix, voltageMatrix);
 
-            // todo séparer dans une autre méthode
-            List<ElectricComponent> calledComponents = new List<ElectricComponent>();
-            for(int i = 0; i < system.meshCount; i++)
-            {
-                float meshCurrent = system.meshCurrent[i];
-                float secondMeshCurrent = 0f;
-                foreach(ElectricComponent component in meshList[i])
-                {
-                    if(!calledComponents.Contains(component)) // Si pas déja appelé
-                    {
-                        // On vérifie si un composant est contenu dans plusieurs mailles
-                        for (int j = 0; j < system.meshCount; j++)
-                        {
-                            if (j != i)
-                            {
-                                bool wasFound = false;
-                                foreach (ElectricComponent temp in meshList[j])
-                                {
-                                    if (component == temp)
-                                    {
-                                        wasFound = true;
-                                        break;
-                                    }
-                                }
-
-                                if(wasFound)
-                                {
-                                    secondMeshCurrent = system.meshCurrent[j];
-                                    break;
-                                }
-                            }
-                        }
-
-                        float current = Math.Abs(Math.Abs(meshCurrent) - Math.Abs(secondMeshCurrent));
-                        component.SetCalculatedIntensity(current);
-                        calledComponents.Add(component);
-                    }
-                }
-            }
+            SetAllComponentCurrent(system, meshList);
+            ExecuteAllVoltmeters();
 
             return system;
         } catch (IncorrectCircuitException e)
@@ -109,6 +117,50 @@ public class MeshBuilder : MonoBehaviour
         }
 
         return null;
+    }
+
+    // TODO optimiser en cas de problèmes
+    public static void SetAllComponentCurrent(MatrixEquationSystem system, ElectricMeshList meshList)
+    {
+        List<ElectricComponent> calledComponents = new List<ElectricComponent>();
+
+        for (int i = 0; i < system.meshCount; i++)
+        {
+            float meshCurrent = system.meshCurrent[i];
+            float secondMeshCurrent = 0f;
+            foreach (ElectricComponent component in meshList[i])
+            {
+                if (!calledComponents.Contains(component)) // Si pas déja appelé
+                {
+                    // On vérifie si un composant est contenu dans plusieurs mailles
+                    for (int j = 0; j < system.meshCount; j++)
+                    {
+                        if (j != i)
+                        {
+                            bool wasFound = false;
+                            foreach (ElectricComponent temp in meshList[j])
+                            {
+                                if (component == temp)
+                                {
+                                    wasFound = true;
+                                    break;
+                                }
+                            }
+
+                            if (wasFound)
+                            {
+                                secondMeshCurrent = system.meshCurrent[j];
+                                break;
+                            }
+                        }
+                    }
+
+                    float current = Math.Abs(Math.Abs(meshCurrent) - Math.Abs(secondMeshCurrent));
+                    component.SetCalculatedIntensity(current);
+                    calledComponents.Add(component);
+                }
+            }
+        }
     }
 
     public static ElectricMeshList CreateMeshes()
@@ -147,7 +199,20 @@ public class MeshBuilder : MonoBehaviour
         {
             if(mesh.Count >= 4) // Doit avoir plus de 4 composants
             {
-                correctMeshes.Add(mesh);
+                bool isValid = true;
+                foreach(ElectricComponent component in mesh)
+                {
+                    // On Invalide les mailles qui contiennent des voltmètres
+                    if(component.type == ElectricComponentType.Voltmeter)
+                    {
+                        isValid = false;
+                    }
+                }
+
+                if(isValid)
+                {
+                    correctMeshes.Add(mesh);
+                }
             }
             else
             {
