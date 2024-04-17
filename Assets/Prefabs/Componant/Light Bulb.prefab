@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 7210757780453098940}
   - component: {fileID: 7274095291378919601}
   - component: {fileID: 5941780666261531923}
+  - component: {fileID: -5986255356367553933}
   m_Layer: 6
   m_Name: Light Bulb
   m_TagString: Untagged
@@ -181,6 +182,7 @@ MonoBehaviour:
   canStack: 0
   snapToGrid: 1
   respectOrientation: 0
+  canGenerateMeshes: 1
   isMouseOverGUI: 0
   initialComponentData: 
   initialConnectionData: 
@@ -206,6 +208,18 @@ MonoBehaviour:
   opacityMultiplier: 0.5
   lightColor: {r: 1, g: 0.94509804, b: 0.46666667, a: 1}
   doLighting: 1
+--- !u!114 &-5986255356367553933
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3364640599128778684}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1017275c93913d6459e11c0b45d72bc3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1411770068393735217
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -39,6 +39,11 @@ public class PowerSource : ElectricComponent
         UpdateSprite();
     }
 
+    public ElectricComponent GetPositiveSideConnection()
+    {
+        return null; //TODO
+    }
+
     public override void UnpackCustomComponentData(string customDataString)
     {
         PowerSourceData data = UnserializeCustomComponentData<PowerSourceData>(customDataString);

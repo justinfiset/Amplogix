@@ -23,6 +23,7 @@ public class Ampoule : ElectricComponent
         {
             GetComponent<LightSource>().SetIntensity(currentIntensity);
         }
+        base.OnCurrentChange(calculatedIntensity);
     }
 
     public override void UnpackCustomComponentData(string customDataString)

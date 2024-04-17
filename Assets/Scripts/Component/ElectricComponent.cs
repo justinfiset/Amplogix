@@ -61,7 +61,7 @@ public class ElectricComponent : MonoBehaviour
 
     [Header("Current")]
     public bool isLightSource;
-
+    public bool showsCurrent = true;
     [HideInInspector] public float currentIntensity { get; private set; } = 0;
     [HideInInspector] public float componentPotential { get; private set; } = 0;
     [HideInInspector] public float resistance { get; protected set; } = 0f;
@@ -224,13 +224,20 @@ public class ElectricComponent : MonoBehaviour
     public void SetCalculatedIntensity(float calculatedIntensity) {
         if (calculatedIntensity != currentIntensity)
         {
-            currentIntensity = Math.Abs(calculatedIntensity);
+            currentIntensity = (calculatedIntensity); //TODO: REMETTRE LE MATH.ABS()
             SetCalculatedPotential(CalculatePotential(currentIntensity));
             OnCurrentChange(currentIntensity);
         }
     }
 
-    public virtual void OnCurrentChange(float newCurrent) { }
+    public virtual void OnCurrentChange(float newCurrent) { 
+    
+        if (showsCurrent)
+        {
+            CurrentVisualisation currentVisualisation = GetComponent<CurrentVisualisation>();
+            // currentVisualisation.OnCurrentUpdate(newCurrent); //TODO see if important
+        }
+    }
 
     public void SetCalculatedPotential(float potential)
     {

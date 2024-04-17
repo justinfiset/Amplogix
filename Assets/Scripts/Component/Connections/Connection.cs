@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using Unity.VisualScripting;
 using UnityEngine;
 using static UnityEditor.PlayerSettings;
@@ -53,6 +54,47 @@ public class Connection : MonoBehaviour
         return connections.connections.Contains(electricComponent);
     }
 
+    public bool IsFlatConnection()
+    {
+        if (connections.connections.Length != 2) return false;
+
+        for (int i = 0; i <= connections.connections.Length; i++)
+        {
+            if (GetOppositeComponent(connections.connections[i]) != null)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public ElectricComponent GetOppositeComponent(ElectricComponent input)
+    {
+        for (int i = 0; i <= connections.connections.Length; i++)
+        {
+            ElectricComponent c = connections.connections[i];
+            if (c == input)
+            {
+                return connections.connections[(int)GetOppositeConnection((Position)i)];
+            }
+        }
+        return null;
+    }
+
+    public ElectricComponent[] GetAllOtherConnections(ElectricComponent source)
+    {
+        ElectricComponent[] components = new ElectricComponent[4];
+        for (int i = 0; i < connections.connections.Length; i++)
+        {
+            if (connections.connections[i] != source)
+            {
+                components[i] = connections.connections[i];
+            }
+        }
+        return components;
+    }
+
     public int ConnectionCount()
     {
         return connections.ConnectionCount();
@@ -73,6 +115,18 @@ public class Connection : MonoBehaviour
             case 3: return 1;
             default: throw new System.Exception("Position index must be between 0 and 3 = " + index);
         }
+    }
+
+    public static int GetMultiplierFromConnection(int connection)
+    {
+        switch (connection)
+        {
+            case 0: return 0;
+            case 2: return 1;
+            case 3: return 2;
+            case 1: return 3;
+            default: throw new System.Exception("Position index must be between 0 and 3 = " + connection);
+        } //TODO: revise
     }
 
     public static int GetIndexFromPosition(Position connectionPosition)

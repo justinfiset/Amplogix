@@ -56,7 +56,7 @@ public class MeshBuilder : MonoBehaviour
         foreach(ElectricComponent voltmeter in voltMeters)
         {
             List<ElectricComponent> connectedComponents = new List<ElectricComponent>(); // Les deux composants qu'on mesure
-            ElectricComponent[] connections = voltmeter.connectionManager.connections.connections; // Tous les composants auquel le voltmètre est connecté
+            ElectricComponent[] connections = voltmeter.connectionManager.connections.connections; // Tous les composants auquel le voltmï¿½tre est connectï¿½
             for (int i = 0; i < connections.Length; i++)
             {
                 if (connections[i] != null)
@@ -119,7 +119,7 @@ public class MeshBuilder : MonoBehaviour
         return null;
     }
 
-    // TODO optimiser en cas de problèmes
+    // TODO optimiser en cas de problï¿½mes
     public static void SetAllComponentCurrent(MatrixEquationSystem system, ElectricMeshList meshList)
     {
         List<ElectricComponent> calledComponents = new List<ElectricComponent>();
@@ -130,9 +130,9 @@ public class MeshBuilder : MonoBehaviour
             float secondMeshCurrent = 0f;
             foreach (ElectricComponent component in meshList[i])
             {
-                if (!calledComponents.Contains(component)) // Si pas déja appelé
+                if (!calledComponents.Contains(component)) // Si pas dï¿½ja appelï¿½
                 {
-                    // On vérifie si un composant est contenu dans plusieurs mailles
+                    // On vï¿½rifie si un composant est contenu dans plusieurs mailles
                     for (int j = 0; j < system.meshCount; j++)
                     {
                         if (j != i)
@@ -160,7 +160,19 @@ public class MeshBuilder : MonoBehaviour
                     calledComponents.Add(component);
                 }
             }
+
+            HandleVisualCurrent(meshList, voltageMatrix);
+
+            return system;
+        } catch (IncorrectCircuitException e)
+        {
+            print(e.Message);
         }
+    }
+
+    private static void HandleVisualCurrent(ElectricMeshList meshList, Vector<float> voltageMatrix)
+    {
+        CurrentVisualisationManager.StartParticleEmissions(meshList, voltageMatrix);
     }
 
     public static ElectricMeshList CreateMeshes()
@@ -202,7 +214,7 @@ public class MeshBuilder : MonoBehaviour
                 bool isValid = true;
                 foreach(ElectricComponent component in mesh)
                 {
-                    // On Invalide les mailles qui contiennent des voltmètres
+                    // On Invalide les mailles qui contiennent des voltmï¿½tres
                     if(component.type == ElectricComponentType.Voltmeter)
                     {
                         isValid = false;
@@ -233,29 +245,29 @@ public class MeshBuilder : MonoBehaviour
         }
     }
 
-    // retourne vrai si on a trouvé une maille, faux si on doit continuer la recherche
+    // retourne vrai si on a trouvï¿½ une maille, faux si on doit continuer la recherche
     public static bool AnalyseConnections(ElectricComponent node, ElectricComponent parent, ElectricComponent root, HashSet<ElectricComponent> ancestors, List<List<ElectricComponent>> list)
     {
-        ancestors.Remove(root); // Par mesure de sécurité, on veut séparer les ancetres de la racine
+        ancestors.Remove(root); // Par mesure de sï¿½curitï¿½, on veut sï¿½parer les ancetres de la racine
         if(node != null) // Empeche de lancer une exception
         {
-            // Les conditions d'arrêts
+            // Les conditions d'arrï¿½ts
             if (!IsMeshComponentValid(node)) // Si un composant n'est pas valide ex interrupteur ouvert
             {
                 return false;
             }
             else if (parent != null)
-            { // Si on est pas à la première itération (1 de base)
-                if (root != null && node == root) // On a trouvé une maille
+            { // Si on est pas ï¿½ la premiï¿½re itï¿½ration (1 de base)
+                if (root != null && node == root) // On a trouvï¿½ une maille
                 {
                     List<ElectricComponent> mesh = new List<ElectricComponent>() { root, parent };
                     mesh.AddRange(ancestors);
                     list.Add(mesh);
                     return true;
                 }
-                else if (ancestors.Contains(node)) // Par sécurité
+                else if (ancestors.Contains(node)) // Par sï¿½curitï¿½
                 {
-                    return false; // Ca ne sert à rien d'explorer cette branche
+                    return false; // Ca ne sert ï¿½ rien d'explorer cette branche
                 }
             }
 
@@ -286,7 +298,7 @@ public class MeshBuilder : MonoBehaviour
     // TODO prendre en compte la fem pour une source
     public static void DetectShortCircuit(List<List<ElectricComponent>> setList)
     {
-        // Les composants qui n'ont aucune résistance
+        // Les composants qui n'ont aucune rï¿½sistance
         List<ElectricComponentType> unsafeTypes = new() { 
             ElectricComponentType.Wire, 
             ElectricComponentType.PowerSource, // IMPLEMENTER LA FEM 
@@ -434,8 +446,8 @@ public class MeshBuilder : MonoBehaviour
 
     #endregion
 
-    #region Matrice de résistance
-    // TODO : prendre en compte la FEM et la résistivité des fils
+    #region Matrice de rï¿½sistance
+    // TODO : prendre en compte la FEM et la rï¿½sistivitï¿½ des fils
     public static Matrix<float> GetResistanceMatrix(ElectricMeshList meshList)
     {
         // Matrice [Count, Count]
@@ -447,7 +459,7 @@ public class MeshBuilder : MonoBehaviour
             foreach (KeyValuePair<int, List<ElectricComponent>> secondary in meshList)
             {
                 float resistance = 0f;
-                // Si on passe pas sur la diagonale et que l'on n'a pas déjà géré les résistances
+                // Si on passe pas sur la diagonale et que l'on n'a pas dï¿½jï¿½ gï¿½rï¿½ les rï¿½sistances
                 if (main.Key != secondary.Key && !managedKeys.Contains(secondary.Key))
                 {
                     if (!managedKeys.Contains(secondary.Key))
@@ -460,7 +472,7 @@ public class MeshBuilder : MonoBehaviour
                             }
                         }
 
-                        // c'est égale de chaque coté, Ex: R12, R21, etc...
+                        // c'est ï¿½gale de chaque cotï¿½, Ex: R12, R21, etc...
                         resistanceMatrix[secondary.Key, main.Key] = resistance;
                         resistanceMatrix[main.Key, secondary.Key] = resistance;
                     }
