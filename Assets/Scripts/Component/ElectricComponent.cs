@@ -161,7 +161,6 @@ public class ElectricComponent : MonoBehaviour
                 else if (Input.GetKeyDown(unselectKey))
                 {
                     tilesManager.HideTiles();
-                    print("in unselected");
                     _Unselect();
                 }
             }
@@ -220,7 +219,7 @@ public class ElectricComponent : MonoBehaviour
 
     public virtual void OnCurrentChange(float newCurrent) { }
 
-    public virtual void SetCalculatedPotential(float potential)
+    public void SetCalculatedPotential(float potential)
     {
         componentPotential = Math.Abs(potential);
     }

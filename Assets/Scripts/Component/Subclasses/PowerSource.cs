@@ -42,7 +42,6 @@ public class PowerSource : ElectricComponent
     public override void UnpackCustomComponentData(string customDataString)
     {
         PowerSourceData data = UnserializeCustomComponentData<PowerSourceData>(customDataString);
-        print(data.voltage);
         this.voltage = data.voltage;
     }
 
