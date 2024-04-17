@@ -103,4 +103,9 @@ public class MainMenuButtons : MonoBehaviour
 
         FindRecentProject();
     }
+
+    public void OpenHelpScene()
+    {
+        SceneManager.LoadScene("HelpMenu", LoadSceneMode.Single);
+    }
 }
