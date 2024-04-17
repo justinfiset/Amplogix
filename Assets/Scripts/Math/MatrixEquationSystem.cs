@@ -7,8 +7,9 @@ public class MatrixEquationSystem
     public Matrix<float> resistanceMatrix   { get; private set; }
     public Vector<float> meshVoltage        { get; private set; }
     public Vector<float> meshCurrent        { get; private set; }
+    
     /*
-    private static void Test()
+    public static void Test()
     {
         float[,] resistances = {
             { 18, -12 },
@@ -26,6 +27,7 @@ public class MatrixEquationSystem
         Debug.Log(system.GetCalculatedCurrents().ToString());
     }
     */
+    
 
     public MatrixEquationSystem(Matrix<float> resistanceMatrix, Vector<float> meshVoltage)
     {

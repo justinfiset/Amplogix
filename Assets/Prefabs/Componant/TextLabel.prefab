@@ -219,10 +219,15 @@ MonoBehaviour:
   canStack: 1
   snapToGrid: 0
   respectOrientation: 0
+  canGenerateMeshes: 0
+  isMouseOverGUI: 0
   initialComponentData: 
+  initialConnectionData: 
+  connectionManager: {fileID: 0}
   hasReleasedSinceSelection: 1
   outline: {fileID: 1047390179120490554}
-  fontSizeText: {fileID: 0}
+  sprite: {fileID: 0}
+  isLightSource: 0
   text: {fileID: 0}
   rect: {fileID: 0}
   col: {fileID: 0}

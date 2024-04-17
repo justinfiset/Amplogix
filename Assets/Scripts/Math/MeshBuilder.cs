@@ -99,7 +99,7 @@ public class MeshBuilder : MonoBehaviour
             }
         } else
         {
-            throw new IncorrectCircuitException("Un circuit doit avoir au moin un composant!");
+            throw new IncorrectCircuitException("Un circuit doit avoir au moins un composant!");
         }
 
         unsafeMeshList = RemoveIncorrectMeshes(unsafeMeshList);
