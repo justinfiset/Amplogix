@@ -287,9 +287,7 @@ public class ElectricComponent : MonoBehaviour
         {
             if (Input.GetKey(KeyCode.LeftControl) && ProjectManager.m_Instance.componentSelection.Count == 0)
             {
-                Select();
-                firstComponentSelected = 1;
-                
+                Select();            
             }else 
             {
                 Select();
