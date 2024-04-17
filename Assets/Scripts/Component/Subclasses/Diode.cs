@@ -12,7 +12,7 @@ public class Diode : ElectricComponent
     {
         GUIHeightDivider = 2.5f;
 
-        resistance = 0.1f;
+        SetBaseResistance(0.1f);
 
         resistanceText = resistance.ToString();
     }

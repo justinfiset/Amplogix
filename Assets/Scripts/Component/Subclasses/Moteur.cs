@@ -12,7 +12,7 @@ public class Moteur : ElectricComponent
     {
         GUIHeightDivider = 2.5f;
 
-        resistance = 5f;
+        SetBaseResistance(5f);
 
         resistanceText = resistance.ToString();
     }

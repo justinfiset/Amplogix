@@ -12,7 +12,7 @@ public class Resistor : ElectricComponent
     {
         GUIHeightDivider = 2.5f;
 
-        resistance = 25f;
+        SetBaseResistance(25f);
 
         resistanceText = resistance.ToString();
     }

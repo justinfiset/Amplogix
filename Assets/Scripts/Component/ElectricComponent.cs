@@ -351,6 +351,14 @@ public class ElectricComponent : MonoBehaviour
     // Called after loading the data
     public virtual void Setup() { }
 
+    public virtual void SetBaseResistance(float newValue)
+    {
+        if(resistance == 0)
+        {
+            resistance = newValue;
+        }
+    }
+
     public virtual void OnUpdate() { }
 
     public virtual void DestroyComponent() { }

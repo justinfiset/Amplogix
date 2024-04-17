@@ -12,7 +12,8 @@ public class Condensateur  : ElectricComponent
     {
         GUIHeightDivider = 2.5f;
 
-        resistance = 10f;
+        SetBaseResistance(10f);
+
         resistanceText = resistance.ToString();
     }
 
