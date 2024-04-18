@@ -52,21 +52,43 @@ public class MeshBuilder : MonoBehaviour
 
     public static void ExecuteAllVoltmeters()
     {
-        List<ElectricComponent> voltMeters = ProjectManager.GetAllElectricComponentsOfType(ElectricComponentType.Voltmeter);
-        foreach(ElectricComponent voltmeter in voltMeters)
+        foreach(ElectricComponent component in ProjectManager.m_Instance.componentList.Keys.ToList())
         {
-            List<ElectricComponent> connectedComponents = new List<ElectricComponent>(); // Les deux composants qu'on mesure
-            ElectricComponent[] connections = voltmeter.connectionManager.connections.connections; // Tous les composants auquel le voltm�tre est connect�
-            for (int i = 0; i < connections.Length; i++)
+            if(component.type == ElectricComponentType.Voltmeter)
             {
-                if (connections[i] != null)
+                List<ElectricComponent> connectedComponents = new List<ElectricComponent>(); // Les deux composants qu'on mesure
+                ElectricComponent[] connections = component.connectionManager.connections.connections; // Tous les composants auquel le voltm�tre est connect�
+                for (int i = 0; i < connections.Length; i++)
                 {
-                    connectedComponents[i] = FindNextRevelantComponent(connections[i], voltmeter);
+                    if (connections[i] != null)
+                    {
+                        connectedComponents.Add(FindNextRevelantComponent(connections[i], component));
+                    }
+                }
+                // TODO simplifier
+                if(connectedComponents.Count == 2)
+                {
+                    int count = 0;
+                    float potential = 0f;
+                    foreach (ElectricComponent revelant in connectedComponents)
+                    {
+                        if(revelant == null)
+                        {
+                            component.SetCalculatedPotential(float.NegativeInfinity);
+                            break;
+                        } else
+                        {
+                            if (count == 0) potential += revelant.componentPotential;
+                            else potential -= revelant.componentPotential;
+                        }
+                    }
+                    component.SetCalculatedPotential(potential);
+                }
+                else
+                {
+                    component.SetCalculatedPotential(float.NegativeInfinity);
                 }
             }
-            print(connectedComponents.Count); // TODO ENELVER
-            float potentialDiff = connectedComponents[0].componentPotential - connectedComponents[1].componentPotential;
-            voltmeter.SetCalculatedPotential(potentialDiff);
         }
     }
 
@@ -109,6 +131,7 @@ public class MeshBuilder : MonoBehaviour
 
             SetAllComponentCurrent(system, meshList);
             ExecuteAllVoltmeters();
+            HandleVisualCurrent(meshList, system.meshVoltage);
 
             return system;
         } catch (IncorrectCircuitException e)
@@ -160,13 +183,6 @@ public class MeshBuilder : MonoBehaviour
                     calledComponents.Add(component);
                 }
             }
-
-            HandleVisualCurrent(meshList, voltageMatrix);
-
-            return system;
-        } catch (IncorrectCircuitException e)
-        {
-            print(e.Message);
         }
     }
 

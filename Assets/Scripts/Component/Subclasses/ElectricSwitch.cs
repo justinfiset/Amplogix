@@ -20,7 +20,6 @@ public class ElectricSwitch : ElectricComponent
 
     override public void Setup()
     {
-        SetBaseResistance(1f);
         UpdateSprite();
     }
 
