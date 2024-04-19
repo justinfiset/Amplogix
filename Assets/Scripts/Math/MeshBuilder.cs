@@ -78,6 +78,7 @@ public class MeshBuilder : MonoBehaviour
                             break;
                         } else
                         {
+                            print(revelant.componentPotential);
                             if (count == 0) potential += revelant.componentPotential;
                             else potential -= revelant.componentPotential;
                         }

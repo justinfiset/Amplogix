@@ -9,6 +9,8 @@ using static UnityEditor.PlayerSettings;
 
 public class Connection : MonoBehaviour
 {
+    public int maxConnectionCount = 2;
+
     public enum Position { Left = 0, Right = 1, Top = 2, Bottom = 3 }
 
     public ConnectionsValue connections { get; private set; }
@@ -16,6 +18,11 @@ public class Connection : MonoBehaviour
     private VisualConnection[] visualConnections = new VisualConnection[4];
     public GameObject visualConnectionPrefab;
     public bool ConnectsAutomaticallyToNeighbors;
+
+    public bool CanAddConnections()
+    {
+        return ConnectionCount() < maxConnectionCount;
+    }
 
     public void CreateInitialConnections(ConnectionValueData data)
     {
@@ -168,7 +175,15 @@ public class Connection : MonoBehaviour
 
             foreach (KeyValuePair<Vector2, ElectricComponent> k in surroundingComps)
             {
-                ProjectManager.m_Instance.ConnectComponents(electricComponent, k.Value);
+                if (CanAddConnections() && electricComponent.connectionManager.CanAddConnections())
+                {
+                    ProjectManager.m_Instance.ConnectComponents(electricComponent, k.Value);
+                }
+                else
+                {
+                    Debug.Log(name + " {" + GetInstanceID() + "}: Une connection n'a pas été faite car il y a trop de connection.");
+                    return;
+                }
             }
         }
     }
@@ -333,9 +348,13 @@ public class Connection : MonoBehaviour
 
     private void ConnectTo(int connectionPosition, ElectricComponent component)
     {
-        connections.SetValue(connectionPosition, component);
-        UpdateVisualConnections();
-        ProjectManager.OnModifyProject(ProjectModificationType.CircuitModification);
+        if (CanAddConnections() && component.connectionManager.CanAddConnections())
+        {
+            connections.SetValue(connectionPosition, component);
+            UpdateVisualConnections();
+            ProjectManager.OnModifyProject(ProjectModificationType.CircuitModification);
+        }
+        //else throw new Exception("On Excede le maximum de connection il y a un cas non géré. : " + ConnectionCount());
     }
     #endregion
 

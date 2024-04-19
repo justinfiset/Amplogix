@@ -184,25 +184,29 @@ public class TilesManager : MonoBehaviour
     #region Showing Wire Tiles
     public void ShowWireTiles()
     {
-        spacing = GridSettings.m_Instance.gridIncrement;
-        rot = Mathf.Abs(transform.localEulerAngles.z);
-        surroundingComponents = ProjectManager.m_Instance.GetSurroundingComponentsPos(transform.position);
-
-        if (gameObject.GetComponent<ElectricComponent>().respectOrientation)
+        ElectricComponent component = GetComponent<ElectricComponent>();
+        if(component.connectionManager.CanAddConnections())
         {
-            if (rot % 180 == 0) // Si horizontal,
+            spacing = GridSettings.m_Instance.gridIncrement;
+            rot = Mathf.Abs(transform.localEulerAngles.z);
+            surroundingComponents = ProjectManager.m_Instance.GetSurroundingComponentsPos(transform.position);
+
+            if (component.respectOrientation)
+            {
+                if (rot % 180 == 0) // Si horizontal,
+                {
+                    SpawnHorizontalWireTiles();
+                }
+                else // Si vertical,
+                {
+                    SpawnVerticalWireTiles();
+                }
+            }
+            else
             {
                 SpawnHorizontalWireTiles();
-            }
-            else // Si vertical,
-            {
                 SpawnVerticalWireTiles();
             }
-        }
-        else
-        {
-            SpawnHorizontalWireTiles();
-            SpawnVerticalWireTiles();
         }
     }
 
