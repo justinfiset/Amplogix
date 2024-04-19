@@ -69,18 +69,20 @@ public class TilesManager : MonoBehaviour
     #region Spawning Connection Tiles
     public void SpawnVerticalConnectionTiles(ElectricComponent source)
     {
+        if (!source.connectionManager.CanAddConnections()) return;
+
         Vector3 topPos = transform.position + (Vector3.up * spacing);
         Vector3 bottomPos = transform.position + (Vector3.down * spacing);
         Connection connectionComponent = GetComponent<Connection>();
 
-        ElectricComponent topPosTarget = ProjectManager.m_Instance.GetComponent(topPos);
+        ElectricComponent topPosTarget = ProjectManager.GetComponent(topPos);
         if (ConnectionTileCheck(topPos, topPosTarget))
         {
             Instantiate(connectionTilePrefab, topPos, Quaternion.identity, parent.transform)
                 .GetComponent<ConnectionTile>().Setup(this, TilePosition.Top, false, source);
         }
 
-        ElectricComponent bottomPosTarget = ProjectManager.m_Instance.GetComponent(bottomPos);
+        ElectricComponent bottomPosTarget = ProjectManager.GetComponent(bottomPos);
         if (ConnectionTileCheck(bottomPos, bottomPosTarget))
         {
             Instantiate(connectionTilePrefab, bottomPos, Quaternion.identity, parent.transform)
@@ -90,18 +92,20 @@ public class TilesManager : MonoBehaviour
 
     public void SpawnHorizontalConnectionTiles(ElectricComponent source)
     {
+        if (!source.connectionManager.CanAddConnections()) return;
+
         Vector3 leftPos = transform.position + (Vector3.left * spacing);
         Vector3 rightPos = transform.position + (Vector3.right * spacing);
         Connection connectionComponent = GetComponent<Connection>();
 
-        ElectricComponent leftPosTarget = ProjectManager.m_Instance.GetComponent(leftPos);
+        ElectricComponent leftPosTarget = ProjectManager.GetComponent(leftPos);
         if (ConnectionTileCheck(leftPos, leftPosTarget))
         {
             Instantiate(connectionTilePrefab, leftPos, Quaternion.identity, parent.transform)
                 .GetComponent<ConnectionTile>().Setup(this, TilePosition.Left, true, source);
         }
 
-        ElectricComponent rightPosTarget = ProjectManager.m_Instance.GetComponent(rightPos);
+        ElectricComponent rightPosTarget = ProjectManager.GetComponent(rightPos);
         if (ConnectionTileCheck(rightPos, rightPosTarget))
         {
             Instantiate(connectionTilePrefab, rightPos, Quaternion.identity, parent.transform)
@@ -112,7 +116,8 @@ public class TilesManager : MonoBehaviour
     private bool ConnectionTileCheck(Vector3 pos, ElectricComponent target)
     {
         bool isNear = surroundingComponents.Contains(pos);
-        bool isConnected = isNear && GetComponent<Connection>().IsConnectedTo(target);
+        Connection connection = GetComponent<Connection>();
+        bool isConnected = isNear && connection.IsConnectedTo(target);
         if (isConnected)
         {
             return false;
@@ -120,7 +125,7 @@ public class TilesManager : MonoBehaviour
 
         bool canBeConnected = (target != null) && 
             ProjectManager.m_Instance.ComponentsPointToEachOther(currentComponent, target);
-        return isNear && canBeConnected;
+        return isNear && canBeConnected && target.connectionManager.CanAddConnections();
     }
     #endregion
 
@@ -131,14 +136,14 @@ public class TilesManager : MonoBehaviour
         Vector3 bottomPos = transform.position + (Vector3.down * spacing);
         Connection connectionComponent = GetComponent<Connection>();
 
-        ElectricComponent topPosTarget = ProjectManager.m_Instance.GetComponent(topPos);
+        ElectricComponent topPosTarget = ProjectManager.GetComponent(topPos);
         if (DisconnectionTileCheck(topPos, topPosTarget))
         {
             Instantiate(disconnectionTilePrefab, topPos, Quaternion.identity, parent.transform)
                 .GetComponent<DisconnectionTile>().Setup(this, TilePosition.Top, source, topPosTarget);
         }
 
-        ElectricComponent bottomPosTarget = ProjectManager.m_Instance.GetComponent(bottomPos);
+        ElectricComponent bottomPosTarget = ProjectManager.GetComponent(bottomPos);
         if (DisconnectionTileCheck(bottomPos, bottomPosTarget))
         {
             Instantiate(disconnectionTilePrefab, bottomPos, Quaternion.identity, parent.transform)
@@ -152,14 +157,14 @@ public class TilesManager : MonoBehaviour
         Vector3 rightPos = transform.position + (Vector3.right * spacing);
         Connection connectionComponent = GetComponent<Connection>();
 
-        ElectricComponent leftPosTarget = ProjectManager.m_Instance.GetComponent(leftPos);
+        ElectricComponent leftPosTarget = ProjectManager.GetComponent(leftPos);
         if (DisconnectionTileCheck(leftPos, leftPosTarget))
         {
             Instantiate(disconnectionTilePrefab, leftPos, Quaternion.identity, parent.transform)
                 .GetComponent<DisconnectionTile>().Setup(this, TilePosition.Left, source, leftPosTarget);
         }
 
-        ElectricComponent rightPosTarget = ProjectManager.m_Instance.GetComponent(rightPos);
+        ElectricComponent rightPosTarget = ProjectManager.GetComponent(rightPos);
         if (DisconnectionTileCheck(rightPos, rightPosTarget))
         {
             Instantiate(disconnectionTilePrefab, rightPos, Quaternion.identity, parent.transform)

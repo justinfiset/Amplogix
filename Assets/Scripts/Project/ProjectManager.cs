@@ -206,9 +206,9 @@ public class ProjectManager : MonoBehaviour
         return componentList.ContainsKey(component);
     }
 
-    public ElectricComponent GetComponent(Vector2 position)
+    public static ElectricComponent GetComponent(Vector2 position)
     {
-        foreach(KeyValuePair<ElectricComponent, Vector2> pair in componentList)
+        foreach(KeyValuePair<ElectricComponent, Vector2> pair in m_Instance.componentList)
         {
             if(pair.Value.Equals(position))
             {
@@ -316,19 +316,23 @@ public class ProjectManager : MonoBehaviour
 
     public void ConnectComponents(ElectricComponent first, ElectricComponent second)
     {
-        if (ComponentsPointToEachOther(first, second))
+        if(first.connectionManager.CanAddConnections() && second.connectionManager.CanAddConnections())
         {
-            int positionIndex;
-            if (AreComponentsAlignedOnPlane(first, second, true)) //si les composants sont al. horizontalement
+            if (ComponentsPointToEachOther(first, second))
             {
-                positionIndex = GetPositionIndex(first, second, true);
-                first.connectionManager.ConnectTo(positionIndex);
-                second.connectionManager.ConnectTo(GetOtherValue(positionIndex, 0, 1));
-            } else
-            {
-                positionIndex = GetPositionIndex(first, second, false);
-                first.connectionManager.ConnectTo(GetOtherValue(positionIndex, 2, 3));
-                second.connectionManager.ConnectTo(positionIndex);
+                int positionIndex;
+                if (AreComponentsAlignedOnPlane(first, second, true)) //si les composants sont al. horizontalement
+                {
+                    positionIndex = GetPositionIndex(first, second, true);
+                    first.connectionManager.ConnectTo(positionIndex);
+                    second.connectionManager.ConnectTo(GetOtherValue(positionIndex, 0, 1));
+                }
+                else
+                {
+                    positionIndex = GetPositionIndex(first, second, false);
+                    first.connectionManager.ConnectTo(GetOtherValue(positionIndex, 2, 3));
+                    second.connectionManager.ConnectTo(positionIndex);
+                }
             }
         }
     }

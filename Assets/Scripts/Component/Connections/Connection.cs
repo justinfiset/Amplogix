@@ -21,7 +21,11 @@ public class Connection : MonoBehaviour
 
     public bool CanAddConnections()
     {
-        return ConnectionCount() < maxConnectionCount;
+        // Un fil n'a pas de limite de connection (pas de limite fixe / limité par les cases autours)
+        if (GetComponent<ElectricComponent>().type == ElectricComponentType.Wire)
+            return true;
+        else
+            return ConnectionCount() < maxConnectionCount;
     }
 
     public void CreateInitialConnections(ConnectionValueData data)
@@ -175,15 +179,7 @@ public class Connection : MonoBehaviour
 
             foreach (KeyValuePair<Vector2, ElectricComponent> k in surroundingComps)
             {
-                if (CanAddConnections() && electricComponent.connectionManager.CanAddConnections())
-                {
-                    ProjectManager.m_Instance.ConnectComponents(electricComponent, k.Value);
-                }
-                else
-                {
-                    Debug.Log(name + " {" + GetInstanceID() + "}: Une connection n'a pas été faite car il y a trop de connection.");
-                    return;
-                }
+                ProjectManager.m_Instance.ConnectComponents(electricComponent, k.Value);
             }
         }
     }
@@ -348,7 +344,7 @@ public class Connection : MonoBehaviour
 
     private void ConnectTo(int connectionPosition, ElectricComponent component)
     {
-        if (CanAddConnections() && component.connectionManager.CanAddConnections())
+        if (CanAddConnections())
         {
             connections.SetValue(connectionPosition, component);
             UpdateVisualConnections();

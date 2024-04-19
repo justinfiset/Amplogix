@@ -15,7 +15,7 @@ public class ConnectionTile : Tile
             if (Input.GetMouseButtonDown(0))
             {
                 ElectricComponent second;
-                second = ProjectManager.m_Instance.GetComponent(gameObject.transform.localPosition);
+                second = ProjectManager.GetComponent(gameObject.transform.localPosition);
                 ProjectManager.m_Instance.ConnectComponents(source, second);
             }
         }
