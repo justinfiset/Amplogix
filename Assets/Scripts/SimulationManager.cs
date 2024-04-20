@@ -19,6 +19,7 @@ public class SimulationManager : MonoBehaviour
     public float startTime; // temps en seconde
     public bool isSimulating = false;
     public bool isPaused = false;
+    public bool calculAreLaunched = false;
 
     private void Start()
     {
@@ -41,13 +42,18 @@ public class SimulationManager : MonoBehaviour
     
     public IEnumerator HandleCircuitOnNextFrame()
     {
-        yield return new WaitForFrames(1);
-        HandleCircuit();
+        if(!calculAreLaunched) // On lance les calculs une seule fois par frame
+        {
+            calculAreLaunched = true;
+            yield return new WaitForFrames(2);
+            HandleCircuit();
+        }
     }
 
-    public static void HandleCircuit()
+    public void HandleCircuit()
     {
         MatrixEquationSystem circuitData = MeshBuilder.CreateAndCalculateMeshes();
+        calculAreLaunched = false;
     }
 
     private void Update()

@@ -11,8 +11,6 @@ public class Amperemetre : ElectricComponent
         GUIHeightDivider = 2.5f;
 
         currentText = resistance.ToString();
-
-        print(resistance);
     }
 
     public override void RenderGUI()

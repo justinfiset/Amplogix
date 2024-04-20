@@ -8,6 +8,7 @@ using System.Collections;
 // simplification des listes
 using ElectricMeshList = System.Collections.Generic.Dictionary<int, System.Collections.Generic.List<ElectricComponent>>;
 using UnityEngine.Rendering.VirtualTexturing;
+using UnityEditor.SceneTemplate;
 
 public class MeshBuilder : MonoBehaviour
 {
@@ -130,6 +131,10 @@ public class MeshBuilder : MonoBehaviour
             Matrix<float> resistanceMatrix = GetResistanceMatrix(meshList);
             MatrixEquationSystem system = new MatrixEquationSystem(resistanceMatrix, voltageMatrix);
 
+            print(system.resistanceMatrix.ToString());
+            print(system.meshVoltage.ToString());
+            print(system.meshCurrent.ToString());
+
             SetAllComponentCurrent(system, meshList);
             ExecuteAllVoltmeters();
             HandleVisualCurrent(meshList, system.meshVoltage);
@@ -147,7 +152,6 @@ public class MeshBuilder : MonoBehaviour
     public static void SetAllComponentCurrent(MatrixEquationSystem system, ElectricMeshList meshList)
     {
         List<ElectricComponent> calledComponents = new List<ElectricComponent>();
-
         for (int i = 0; i < system.meshCount; i++)
         {
             float meshCurrent = system.meshCurrent[i];
@@ -156,32 +160,40 @@ public class MeshBuilder : MonoBehaviour
             {
                 if (!calledComponents.Contains(component)) // Si pas d�ja appel�
                 {
+                    component._SetColor(Color.black); // TODO remove debug
                     // On v�rifie si un composant est contenu dans plusieurs mailles
-                    for (int j = 0; j < system.meshCount; j++)
+                    for (int j = i + 1; j < system.meshCount; j++)
                     {
-                        if (j != i)
+                        bool wasFound = false;
+                        foreach (ElectricComponent temp in meshList[j])
                         {
-                            bool wasFound = false;
-                            foreach (ElectricComponent temp in meshList[j])
+                            if (component.GetInstanceID() == temp.GetInstanceID())
                             {
-                                if (component == temp)
+                                if(component.type==ElectricComponentType.Ammeter)
                                 {
-                                    wasFound = true;
-                                    break;
+                                    print(component.GetHashCode() + " ; " + temp.GetHashCode());
                                 }
-                            }
-
-                            if (wasFound)
-                            {
-                                secondMeshCurrent = system.meshCurrent[j];
+                                wasFound = true;
                                 break;
                             }
+                        }
+
+                        if (wasFound)
+                        {
+                            secondMeshCurrent = system.meshCurrent[j];
+                            component._SetColor(Color.green, true); // TODO REMOVE DEBUG
+                            break;
                         }
                     }
 
                     float current = Math.Abs(Math.Abs(meshCurrent) - Math.Abs(secondMeshCurrent));
+                    //if (component.type == electriccomponenttype.ammeter)
+                    //{
+                    //    print(current + " first : " + meshcurrent + " ; second: " + secondmeshcurrent);
+                    //}
                     component.SetCalculatedIntensity(current);
                     calledComponents.Add(component);
+                    secondMeshCurrent = 0f; // On reset le courrant secondaire
                 }
             }
         }
