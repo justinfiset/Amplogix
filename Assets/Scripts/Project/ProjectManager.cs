@@ -533,4 +533,23 @@ public class ProjectManager : MonoBehaviour
                 componentsOfType.Add(component);
         return componentsOfType;
     }
+
+    public static bool ComponentCountIsValid(List<ElectricComponent> list)
+    {
+        // On veut assez de composants et au moin une source
+        bool countIsValid = list.Count > 0;
+
+        if(countIsValid)
+        {
+            foreach (ElectricComponent comp in list)
+            {
+                if (comp.type == ElectricComponentType.PowerSource)
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
 }

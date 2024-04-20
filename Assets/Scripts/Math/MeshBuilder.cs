@@ -131,10 +131,6 @@ public class MeshBuilder : MonoBehaviour
             Matrix<float> resistanceMatrix = GetResistanceMatrix(meshList);
             MatrixEquationSystem system = new MatrixEquationSystem(resistanceMatrix, voltageMatrix);
 
-            print(system.resistanceMatrix.ToString());
-            print(system.meshVoltage.ToString());
-            print(system.meshCurrent.ToString());
-
             SetAllComponentCurrent(system, meshList);
             ExecuteAllVoltmeters();
             HandleVisualCurrent(meshList, system.meshVoltage);
@@ -211,7 +207,7 @@ public class MeshBuilder : MonoBehaviour
         List<ElectricComponent> componentList = ProjectManager.GetAllConnectedComponents();
 
         List<List<ElectricComponent>> unsafeMeshList = new();
-        if (componentList.Count > 0)
+        if (ProjectManager.ComponentCountIsValid(componentList))
         {
             foreach (ElectricComponent root in componentList)
             {
@@ -223,7 +219,7 @@ public class MeshBuilder : MonoBehaviour
             }
         } else
         {
-            throw new IncorrectCircuitException("Un circuit doit avoir au moins un composant!");
+            throw new IncorrectCircuitException("Un circuit doit avoir au moins un composant ou une source de courant!");
         }
 
         unsafeMeshList = RemoveIncorrectMeshes(unsafeMeshList);
