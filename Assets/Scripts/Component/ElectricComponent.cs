@@ -338,6 +338,7 @@ public class ElectricComponent : MonoBehaviour
         if(connectionManager != null)
             connectionManager.DeleteAllConnections();
         ComponentSpawner.DestroyComponent(gameObject);
+        if(isHover) { ProjectManager.componentUnderPointerCount--; };
     }
     #endregion
 
@@ -423,11 +424,13 @@ public class ElectricComponent : MonoBehaviour
     private void OnMouseEnter()
     {
         isHover = true;
+        ProjectManager.componentUnderPointerCount++;
     }
 
     private void OnMouseExit()
     {
         isHover = false;
+        ProjectManager.componentUnderPointerCount--;
     }
     #endregion
 

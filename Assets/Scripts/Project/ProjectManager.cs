@@ -18,6 +18,8 @@ public class ProjectManager : MonoBehaviour
 
     public Project project;
 
+    public static int componentUnderPointerCount = 0;
+
     [Header("UI")]
     public TMP_InputField nameText;
     public QuitWithoutSavingPopup quitWithoutSavingPopup;

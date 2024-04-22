@@ -27,6 +27,7 @@ public class ComponentSpawner : MonoBehaviour
     [SerializeField] private Transform parent;
 
     public GameObject previewPrefab;
+    private SpriteRenderer previewRenderer;
     private GameObject componentPreview;
 
     [Header("Inputs")]
@@ -47,6 +48,15 @@ public class ComponentSpawner : MonoBehaviour
 
     void Update()
     {
+        if(previewRenderer != null)
+        {
+            if (ProjectManager.componentUnderPointerCount > 0)
+            {
+                previewRenderer.color = Color.clear;
+            }
+            else previewRenderer.color = new Color(0, 0, 0, 0.25f);
+        }
+
         if(canSpawn && ProjectManager.IsSelectionEmpty())
         {
             if (Input.GetMouseButtonDown(0))
@@ -111,13 +121,14 @@ public class ComponentSpawner : MonoBehaviour
             m_Instance.canSpawn = true;
 
             m_Instance.componentPreview = Instantiate(m_Instance.previewPrefab, m_Instance.parent);
+            m_Instance.componentPreview.SetActive(true); // Par sécurité
             FollowSnappedPos previewBehaviour = m_Instance.componentPreview.GetComponent<FollowSnappedPos>();
             previewBehaviour.snapToGrid = m_Instance.snapToGrid;
             m_Instance.spawnAngle = m_Instance.componentPreview.transform.eulerAngles.z;
 
-            SpriteRenderer sprite = m_Instance.componentPreview.GetComponent<SpriteRenderer>();
-            sprite.sprite = selection.sprite;
-            sprite.color = new Color(0, 0, 0, 0.25f);
+            m_Instance.previewRenderer = m_Instance.componentPreview.GetComponent<SpriteRenderer>();
+            m_Instance.previewRenderer.sprite = selection.sprite;
+            m_Instance.previewRenderer.color = new Color(0, 0, 0, 0.25f);
 
             m_Instance.boxSelection.enabled = false;
             
