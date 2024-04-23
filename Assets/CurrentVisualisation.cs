@@ -8,16 +8,14 @@ public class CurrentVisualisation : MonoBehaviour
 {
     private bool isEmitting = false;
     private bool realCurrent;
-    private Connection.Position currentDirection;
     private GameObject ballParent;
     private Vector2 targetPosition;
 
     public GameObject particlePrefab;
 
-    public void SetupTarget(Vector2 targetPosition, Connection.Position direction)
+    public void SetupTarget(Vector2 targetPosition)
     {
         this.targetPosition = targetPosition;
-        currentDirection = direction;
     }
 
     public void UpdateCurrent(float current)
@@ -98,7 +96,7 @@ public class CurrentVisualisation : MonoBehaviour
         CurrentParticle currentParticle = Instantiate(particlePrefab, ballParent.transform)
             .GetComponent<CurrentParticle>();
 
-        currentParticle.Create(realCurrent, targetPosition, currentDirection);
+        currentParticle.Create(realCurrent, targetPosition);
     }
 
     private void KillExistingParticles()

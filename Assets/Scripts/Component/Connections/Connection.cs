@@ -93,6 +93,24 @@ public class Connection : MonoBehaviour
         return null;
     }
 
+    public ElectricComponent GetNextComponent(ElectricComponent source)
+    {
+        if (connections.connections.Length != 2)
+        {
+            throw new Exception("component needs to have only 2 connections");
+        }
+
+        foreach (ElectricComponent component in connections.connections)
+        {
+            if (component != null && component != source)
+            {
+                return component;
+            }
+        }
+
+        throw new Exception("component not found");
+    }
+
     public ElectricComponent[] GetAllOtherConnections(ElectricComponent source)
     {
         ElectricComponent[] components = new ElectricComponent[4];
