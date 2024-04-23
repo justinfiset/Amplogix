@@ -6,7 +6,7 @@ using System.Reflection;
 using Unity.VisualScripting;
 using UnityEngine;
 using static UnityEditor.PlayerSettings;
-
+//change
 public class Connection : MonoBehaviour
 {
     public int maxConnectionCount = 2;
@@ -26,6 +26,17 @@ public class Connection : MonoBehaviour
             return true;
         else
             return ConnectionCount() < maxConnectionCount;
+    }
+    public int WhereIsConnected(ElectricComponent component)
+    {
+        for (int i = 0; i < connections.connections.Length; i++)
+        {
+            if (connections.connections[i] == component)
+            {
+                return i;
+            }
+        }
+        throw new Exception("not connected to " + component);
     }
 
     public void CreateInitialConnections(ConnectionValueData data)

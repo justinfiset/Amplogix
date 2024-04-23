@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 760119220587353369}
   - component: {fileID: -4437862546455625529}
   - component: {fileID: 5812285750717448332}
+  - component: {fileID: 4484162633960121040}
   m_Layer: 6
   m_Name: Ammeter
   m_TagString: Untagged
@@ -143,6 +144,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e2325cd889c2ba14387064f30e27afed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  maxConnectionCount: 2
   HasVisibleConnections: 1
   visualConnectionPrefab: {fileID: 3084868918825537089, guid: 6ee0dd37866e2f7458e0f5b3da0f9ea6, type: 3}
   ConnectsAutomaticallyToNeighbors: 0
@@ -180,6 +182,7 @@ MonoBehaviour:
   canStack: 0
   snapToGrid: 1
   respectOrientation: 0
+  canGenerateMeshes: 1
   isMouseOverGUI: 0
   initialComponentData: 
   initialConnectionData: 
@@ -187,6 +190,21 @@ MonoBehaviour:
   hasReleasedSinceSelection: 1
   outline: {fileID: 6615008245507285433}
   sprite: {fileID: 0}
+  isLightSource: 0
+  showsCurrent: 1
+--- !u!114 &4484162633960121040
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5529895704449371456}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1017275c93913d6459e11c0b45d72bc3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  particlePrefab: {fileID: 4462108619749537757, guid: 5350ceb032553a443aa2aad7e5304ebf, type: 3}
 --- !u!1001 &5568465028874377502
 PrefabInstance:
   m_ObjectHideFlags: 0
