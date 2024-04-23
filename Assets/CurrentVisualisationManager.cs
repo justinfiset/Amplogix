@@ -8,7 +8,7 @@ using ElectricMeshList = System.Collections.Generic.Dictionary<int, System.Colle
 public class CurrentVisualisationManager : MonoBehaviour 
 {
     private static HashSet<ElectricComponent> handledComponents;
-    public static void StartParticleEmissions(ElectricMeshList meshList, Vector<float> voltageMatrix)
+    public static void StartParticleEmissions(ElectricMeshList meshList, Vector<float> meshCurrent)
     {
         /*
         HashSet<ElectricComponent> handledCorners = new();
@@ -30,8 +30,9 @@ public class CurrentVisualisationManager : MonoBehaviour
         }
         */
 
+        //commencer dans le sens inverse des meshlist?
         handledComponents = new();
-
+        
 
 
 

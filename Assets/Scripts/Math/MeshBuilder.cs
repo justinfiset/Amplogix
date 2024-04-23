@@ -213,7 +213,7 @@ public class MeshBuilder : MonoBehaviour
 
             SetAllComponentCurrent(system, meshList);
             ExecuteAllVoltmeters();
-            HandleVisualCurrent(meshList, system.meshVoltage);
+            HandleVisualCurrent(meshList, system.meshCurrent);
 
             return system;
         } catch (IncorrectCircuitException e)
@@ -275,9 +275,9 @@ public class MeshBuilder : MonoBehaviour
         }
     }
 
-    private static void HandleVisualCurrent(ElectricMeshList meshList, Vector<float> voltageMatrix)
+    private static void HandleVisualCurrent(ElectricMeshList meshList, Vector<float> meshCurrent)
     {
-        CurrentVisualisationManager.StartParticleEmissions(meshList, voltageMatrix);
+        CurrentVisualisationManager.StartParticleEmissions(meshList, meshCurrent);
     }
 
     public static ElectricMeshList CreateMeshes()
@@ -587,6 +587,62 @@ public class MeshBuilder : MonoBehaviour
                     foreach (ElectricComponent resistor in main.Value)
                     {
                         resistance += resistor.resistance;
+                    }
+                    resistanceMatrix[main.Key, main.Key] = resistance;
+                }
+            }
+        }
+
+        return resistanceMatrix;
+    }
+
+    public static Matrix<float> GetHypotheticalResistanceMatrix(ElectricMeshList meshList)
+    {
+        // Matrice [Count, Count]
+        Matrix<float> resistanceMatrix = Matrix<float>.Build.Dense(meshList.Count, meshList.Count);
+
+        List<int> managedKeys = new List<int>();
+        foreach (KeyValuePair<int, List<ElectricComponent>> main in meshList)
+        {
+            foreach (KeyValuePair<int, List<ElectricComponent>> secondary in meshList)
+            {
+                float resistance = 0f;
+                // Si on passe pas sur la diagonale et que l'on n'a pas d�j� g�r� les r�sistances
+                if (main.Key != secondary.Key && !managedKeys.Contains(secondary.Key))
+                {
+                    if (!managedKeys.Contains(secondary.Key))
+                    {
+                        foreach (ElectricComponent component in main.Value)
+                        {
+                            if (secondary.Value.Contains(component))
+                            {
+                                if (component.resistance == 0)
+                                {
+                                    resistance += component.hypotheticalResistance;
+                                } else
+                                {
+                                    resistance += component.resistance;
+                                }
+                            }
+                        }
+
+                        // c'est �gale de chaque cot�, Ex: R12, R21, etc...
+                        resistanceMatrix[secondary.Key, main.Key] = resistance;
+                        resistanceMatrix[main.Key, secondary.Key] = resistance;
+                    }
+                }
+                else // La diagonale ex : R11, R22, R33
+                {
+                    foreach (ElectricComponent resistor in main.Value)
+                    {
+                        if (resistor.resistance == 0)
+                        {
+                            resistance += resistor.hypotheticalResistance;
+                        }
+                        else
+                        {
+                            resistance += resistor.resistance;
+                        }
                     }
                     resistanceMatrix[main.Key, main.Key] = resistance;
                 }
