@@ -225,7 +225,6 @@ public class ElectricComponent : MonoBehaviour
                         }
                         MoveComponent(newPos);
                     }
-                    MoveComponent(newPos);
                     if (isMove)
                     {
                         connectionManager.DeleteAllConnections();
