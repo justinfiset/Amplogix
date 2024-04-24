@@ -10,7 +10,7 @@
             "scaleY": 1.0,
             "customComponentData": "{\"voltage\":5.0}",
             "r": 0.0,
-            "g": 1.0,
+            "g": 0.0,
             "b": 0.0,
             "connectionData": "{\"connections\":[true,true,false,false]}"
         },
@@ -22,7 +22,7 @@
             "scaleX": 1.0,
             "scaleY": 1.0,
             "customComponentData": "{\"voltage\":5.0}",
-            "r": 1.0,
+            "r": 0.0,
             "g": 0.0,
             "b": 0.0,
             "connectionData": "{\"connections\":[true,true,false,false]}"
@@ -36,7 +36,7 @@
             "scaleY": 1.0,
             "customComponentData": "{\"voltage\":5.0}",
             "r": 0.0,
-            "g": 1.0,
+            "g": 0.0,
             "b": 0.0,
             "connectionData": "{\"connections\":[false,false,true,true]}"
         },
@@ -49,7 +49,7 @@
             "scaleY": 1.0,
             "customComponentData": "{\"voltage\":5.0}",
             "r": 0.0,
-            "g": 1.0,
+            "g": 0.0,
             "b": 0.0,
             "connectionData": "{\"connections\":[false,false,true,true]}"
         },
@@ -61,7 +61,7 @@
             "scaleX": 1.0,
             "scaleY": 1.0,
             "customComponentData": "{\"voltage\":5.0}",
-            "r": 1.0,
+            "r": 0.0,
             "g": 0.0,
             "b": 0.0,
             "connectionData": "{\"connections\":[true,true,false,false]}"
@@ -74,7 +74,7 @@
             "scaleX": 1.0,
             "scaleY": 1.0,
             "customComponentData": "{\"voltage\":5.0}",
-            "r": 1.0,
+            "r": 0.0,
             "g": 0.0,
             "b": 0.0,
             "connectionData": "{\"connections\":[true,true,false,false]}"
@@ -87,7 +87,7 @@
             "scaleX": 1.0,
             "scaleY": 1.0,
             "customComponentData": "{\"voltage\":5.0}",
-            "r": 1.0,
+            "r": 0.0,
             "g": 0.0,
             "b": 0.0,
             "connectionData": "{\"connections\":[false,false,true,true]}"
@@ -314,19 +314,6 @@
             "connectionData": "{\"connections\":[false,false,true,true]}"
         },
         {
-            "type": 1,
-            "x": -2.0,
-            "y": 0.0,
-            "rot": 90.0,
-            "scaleX": 1.0,
-            "scaleY": 1.0,
-            "customComponentData": "{\"resistance\":25.0}",
-            "r": 0.0,
-            "g": 0.0,
-            "b": 0.0,
-            "connectionData": "{\"connections\":[false,false,false,false]}"
-        },
-        {
             "type": 2,
             "x": 8.0,
             "y": 2.0,
@@ -434,7 +421,7 @@
             "type": 11,
             "x": 8.0,
             "y": -1.0,
-            "rot": 180.0,
+            "rot": 0.0,
             "scaleX": 1.0,
             "scaleY": 1.0,
             "customComponentData": "",
