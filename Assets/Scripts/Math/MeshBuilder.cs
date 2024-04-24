@@ -146,7 +146,6 @@ public class MeshBuilder : MonoBehaviour
                             }
                         }
                         potential = current * bestMeshResistance;
-                        print(potential + " = " + current + " * " + bestMeshResistance);
                         /*
                                             int count = 0;
                                 if (count == 0) potential += revelant.componentPotential;
@@ -246,10 +245,6 @@ public class MeshBuilder : MonoBehaviour
                         {
                             if (component.GetInstanceID() == temp.GetInstanceID())
                             {
-                                if(component.type==ElectricComponentType.Ammeter)
-                                {
-                                    print(component.GetHashCode() + " ; " + temp.GetHashCode());
-                                }
                                 wasFound = true;
                                 break;
                             }
@@ -515,10 +510,12 @@ public class MeshBuilder : MonoBehaviour
                     {
                         first = connection;
                         next = root;
+                        break;
                     } else if(connection.transform.position.x > root.transform.position.x)
                     {
                         first = root;
                         next = connection;
+                        break;
                     }
                 }
             }

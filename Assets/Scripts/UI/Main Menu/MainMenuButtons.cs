@@ -23,10 +23,20 @@ public class MainMenuButtons : MonoBehaviour
     }
 
     public static void OpenFile()
-    {    
-        string[] paths = StandaloneFileBrowser.OpenFilePanel("Ouvrir un projet", "", "amp", false);
-        OpenFile(paths[0]);    
+    {
+        StandaloneFileBrowser.OpenFilePanelAsync("Ouvrir un projet", "", "amp", false, delegate (string[] paths)
+        {
+            if(paths.Length > 0)
+            {
+                string path = paths[0];
+                if (File.Exists(path))
+                {
+                    OpenFile(paths[0]);
+                }
+            }
+        });    
     }
+
     public static void OpenFile(string path)
     {
         string data = FileUtility.ReadString(path);

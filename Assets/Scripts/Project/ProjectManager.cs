@@ -110,13 +110,13 @@ public class ProjectManager : MonoBehaviour
             SaveProjectAs();
         } else
         {
-            print("Saving project...");
             SerializeComponents();
             string data = JsonUtility.ToJson(project, true);
             FileUtility.WriteString(project.savePath, data);
 
             OnSaveProject();
             MainMenuButtons.AddRecentProject(project.savePath);
+            print($"<color=#00FF00>Project saved...</color>");
         }
     }
 
@@ -133,9 +133,12 @@ public class ProjectManager : MonoBehaviour
     public void SaveProjectAs()
     {
         print("Opening file option window...");
-        string path = StandaloneFileBrowser.SaveFilePanel("Sauvegarder le projet", "", nameText.text, "amp");
-        project.savePath = path;
-        SaveProject();
+        StandaloneFileBrowser.SaveFilePanelAsync("Sauvegarder le projet", "", nameText.text, "amp", delegate (string path)
+        {
+            project.savePath = path;
+            SaveProject();
+            print($"<color=#00FF00>Project saved...</color>");
+        });
     }
 
     public void ReturnToMenu(bool bypassSaveProtection = false)

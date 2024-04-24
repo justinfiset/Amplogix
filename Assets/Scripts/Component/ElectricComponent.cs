@@ -6,8 +6,6 @@ using System.Linq;
 using UnityEngine.EventSystems;
 using System.ComponentModel;
 using System.Reflection;
-using UnityEngine.UIElements;
-using System.Threading;
 
 //[RequireComponent(typeof(SpriteRenderer))]
 //[RequireComponent(typeof(ResizeWinglets))]
@@ -69,10 +67,6 @@ public class ElectricComponent : MonoBehaviour
     [HideInInspector] public float currentIntensity { get; private set; } = 0;
     [HideInInspector] public float componentPotential { get; private set; } = 0;
     [HideInInspector] public float resistance { get; protected set; } = 0f;
-
-    private int numberOfSelectedComponent = 0;
-
-
 
     private void Start()
     {
