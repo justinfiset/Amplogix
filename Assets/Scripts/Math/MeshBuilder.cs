@@ -560,14 +560,14 @@ public class MeshBuilder : MonoBehaviour
             }
 
             /////////////////////
-            if (multiplier == 1)
-            {
-                powerSource.SetColor(Color.green); // TODO REMOVE (FOR DEBUG)
-            }
-            else
-            {
-                powerSource.SetColor(Color.red); // TODO REMOVE (FOR DEBUG)
-            }
+            //if (multiplier == 1)
+            //{
+            //    powerSource.SetColor(Color.green); // TODO REMOVE (FOR DEBUG)
+            //}
+            //else
+            //{
+            //    powerSource.SetColor(Color.red); // TODO REMOVE (FOR DEBUG)
+            //}
             ////////////////////
             voltage = powerSource.voltage * multiplier;
         }
