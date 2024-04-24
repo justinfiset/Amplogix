@@ -202,11 +202,9 @@ public class MeshBuilder : MonoBehaviour
             Matrix<float> resistanceMatrix = GetResistanceMatrix(meshList);
             MatrixEquationSystem system = new MatrixEquationSystem(resistanceMatrix, voltageMatrix);
 
-            /*
             print(system.resistanceMatrix.ToString());
             print(system.meshVoltage.ToString());
             print(system.meshCurrent.ToString());
-            */
 
             SetAllComponentCurrent(system, meshList);
             ExecuteAllVoltmeters();
