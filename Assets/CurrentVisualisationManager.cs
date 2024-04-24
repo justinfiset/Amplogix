@@ -280,8 +280,7 @@ public class CurrentVisualisationManager : MonoBehaviour
         builtVector.x = target.transform.position.x;
         builtVector.y = target.transform.position.y;
 
-        emitter.SetupTarget(builtVector);
-        emitter.StartParticleEmission();
+        emitter.StartParticleEmission(builtVector);
 
         handledComponents.Add(source);
         handledComponents.Add(target);

@@ -11,7 +11,6 @@ public class CurrentVisualisation : MonoBehaviour
     private bool realCurrent = false;
     private GameObject originalParent;
     private GameObject ballParent;
-    private Vector2 targetPosition;
 
     public GameObject particlePrefab;
 
@@ -24,11 +23,6 @@ public class CurrentVisualisation : MonoBehaviour
 
     }
 
-    public void SetupTarget(Vector2 targetPosition)
-    {
-        this.targetPosition = targetPosition;
-    }
-
     public void UpdateCurrent(float current)
     {
         ElectricComponent electricComponent = GetComponent<ElectricComponent>();
@@ -37,15 +31,16 @@ public class CurrentVisualisation : MonoBehaviour
     }
 
     #region Starting and killing emission
-    public void StartParticleEmission()
+    public void StartParticleEmission(Vector2 targetPosition)
     {
         isEmitting = true;
 
-        StartCoroutine(BallShootingCoroutine());
+        StartCoroutine(BallShootingCoroutine(targetPosition));
     }
 
     public void KillParticleEmission()
     {
+        print("killing particle emission for " + gameObject);
         isEmitting= false;
         KillExistingParticles();
     }
@@ -90,19 +85,19 @@ public class CurrentVisualisation : MonoBehaviour
         KillExistingParticles();
     }
 
-    private IEnumerator BallShootingCoroutine()
+    private IEnumerator BallShootingCoroutine(Vector2 targetPosition)
     {
         yield return new WaitForSeconds(0.5f);
 
-        ShootBall();
+        ShootBall(targetPosition);
 
         if (isEmitting)
         {
-            StartCoroutine(BallShootingCoroutine());
+            StartCoroutine(BallShootingCoroutine(targetPosition));
         }
     }
 
-    private void ShootBall()
+    private void ShootBall(Vector2 targetPosition)
     {
         CurrentParticle currentParticle = Instantiate(particlePrefab, ballParent.transform).GetComponent<CurrentParticle>();
 
@@ -114,7 +109,7 @@ public class CurrentVisualisation : MonoBehaviour
         if (ballParent != null)
         {
             Destroy(ballParent);
-            ballParent = Instantiate(originalParent, Vector3.zero, Quaternion.identity, transform);
+            ballParent = Instantiate(originalParent, transform);
         }
     }
 

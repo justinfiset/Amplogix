@@ -54,7 +54,7 @@ public class CurrentParticle : MonoBehaviour
         this.targetPosition = targetPosition;
         targetDistance = CalculateExpectedDistance();
 
-        WaitToSetColor(realCurrent);
+        StartSetColorCoroutine(realCurrent);
         StartMovement();
     }
 
@@ -94,7 +94,7 @@ public class CurrentParticle : MonoBehaviour
         return Mathf.Abs(targetDistance / targetSpeed);
     }
 
-    private IEnumerator WaitToSetColor(bool realCurrent)
+    private IEnumerator StartSetColorCoroutine(bool realCurrent)
     {
         yield return new WaitForEndOfFrame();
 
