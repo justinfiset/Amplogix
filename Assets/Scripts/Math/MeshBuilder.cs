@@ -233,6 +233,7 @@ public class MeshBuilder : MonoBehaviour
             print(system.resistanceMatrix.ToString());
             print(system.meshVoltage.ToString());
             print(system.meshCurrent.ToString());
+            */
 
             SetAllComponentCurrent(system, meshList);
             ExecuteAllVoltmeters();
