@@ -104,7 +104,6 @@ public class CurrentVisualisation : MonoBehaviour
 
     private void ShootBall()
     {
-        print("ballparent : " + ballParent);
         CurrentParticle currentParticle = Instantiate(particlePrefab, ballParent.transform).GetComponent<CurrentParticle>();
 
         currentParticle.Create(realCurrent, targetPosition);

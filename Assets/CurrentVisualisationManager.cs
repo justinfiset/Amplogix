@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using MathNet.Numerics.LinearAlgebra;
 using UnityEngine;
 
@@ -48,9 +49,10 @@ public class CurrentVisualisationManager : MonoBehaviour
 
         for (int i = 0; i < meshList.Count; i++)
         {
+            /*
             print("starting iteration");
             print("meshList : ");
-            /*
+            
             foreach (ElectricComponent c in meshList[i])
             {
                 print(c);
@@ -62,11 +64,13 @@ public class CurrentVisualisationManager : MonoBehaviour
             }
             */
             List<ElectricComponent> clockwise = GetClockWiseOrder(meshList[i]);
+            /*
             print("clockwise order : ");
             foreach (ElectricComponent component in clockwise)
             {
                 print(component);
             }
+            */
             IterateAndStartEmitting(clockwise[0], null, 0, meshCurrents, meshList, i, handledComponents, clockwise);
         }
     }
@@ -140,7 +144,7 @@ public class CurrentVisualisationManager : MonoBehaviour
             }
         } else if (component == leftMostMaximum)
         {
-            print("back at leftMostMax");
+            //print("back at leftMostMax");
             return;
         } else
         {
@@ -163,11 +167,11 @@ public class CurrentVisualisationManager : MonoBehaviour
     private static void IterateAndStartEmitting(ElectricComponent component, ElectricComponent lastCorner, int componentIndex, Vector<float> meshCurrents, 
         ElectricMeshList meshList, int meshIndex, HashSet<ElectricComponent> handledComponents, List<ElectricComponent> clockwise)
     {
-        print("componentIndex = " + componentIndex);
+        //print("componentIndex = " + componentIndex);
 
         if (componentIndex == meshList[meshIndex].Count)
         {
-            print("back at first component");
+            //print("back at first component");
             handledComponents.Add(component);
             StartEmission(lastCorner, component);
             return; // si on retombe sur le premier component on sort
@@ -178,8 +182,8 @@ public class CurrentVisualisationManager : MonoBehaviour
 
         if (componentIndex == 0 && lastCorner == null)
         {
-            print("detected root");
-            print(component);
+            //print("detected root");
+            //print(component);
 
             handledComponents.Add(component);
             IterateAndStartEmitting(GetNextComponent(clockwise, 0), null, ++componentIndex, meshCurrents, 
@@ -188,8 +192,8 @@ public class CurrentVisualisationManager : MonoBehaviour
         }
         if (connection.IsFlatConnection())
         {
-            print("detected flat connection");
-            print(component);
+            //print("detected flat connection");
+            //print(component);
             handledComponents.Add(component);
             IterateAndStartEmitting(GetNextComponent(clockwise, componentIndex), lastCorner, ++componentIndex, 
                 meshCurrents, meshList, meshIndex, handledComponents, clockwise);
@@ -200,13 +204,13 @@ public class CurrentVisualisationManager : MonoBehaviour
         {
             if (lastCorner == null)
             {
-                print("detected first corner");
-                print(component);
+                //print("detected first corner");
+                //print(component);
                 StartEmission(clockwise[0], component);
             } else if (handledComponents.Contains(component))
             {
-                print("detected handled component");
-                print(component);
+                //print("detected handled component");
+                //print(component);
             }
             handledComponents.Add(component);
             IterateAndStartEmitting(GetNextComponent(clockwise, componentIndex), component, ++componentIndex, 
@@ -221,17 +225,16 @@ public class CurrentVisualisationManager : MonoBehaviour
             IterateAndStartEmitting(GetNextComponent(componentList, i), handledComponents, meshCurrent, firstHandledInMesh, componentList, lastCorner, i++);
             return; // si on est deja handled ailleurs, on itere en gardant le meme lastCorner
         }
-        */
+        
         print("handling component");
         print(component);
+        */
 
         if (GetSignInMesh(component, meshList, componentIndex, meshIndex, meshCurrents) == 1)
         {
-            emittingComponents.Add(lastCorner);
             StartEmission(lastCorner, component); // si on a le meme signe que le courant on emet les particules depuis le dernier coin (horaire)
         } else
         {
-            emittingComponents.Add(component);
             StartEmission(component, lastCorner); // sinon, on emet jusqu'au dernier coin (antihoraire) (si c'est zero on pleure)
         }
         // on itere en se settant comme lastCorner
@@ -282,6 +285,7 @@ public class CurrentVisualisationManager : MonoBehaviour
 
         handledComponents.Add(source);
         handledComponents.Add(target);
+        emittingComponents.Add(source);
     }
 
     private static ElectricComponent GetNextComponent(List<ElectricComponent> componentList, int i)
