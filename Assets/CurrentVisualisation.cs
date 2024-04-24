@@ -42,6 +42,7 @@ public class CurrentVisualisation : MonoBehaviour
     {
         print("killing particle emission for " + gameObject);
         isEmitting= false;
+        StopAllCoroutines();
         KillExistingParticles();
     }
     #endregion
