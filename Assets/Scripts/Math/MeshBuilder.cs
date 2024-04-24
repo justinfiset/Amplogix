@@ -7,10 +7,6 @@ using System.Collections;
 
 // simplification des listes
 using ElectricMeshList = System.Collections.Generic.Dictionary<int, System.Collections.Generic.List<ElectricComponent>>;
-using UnityEngine.Rendering.VirtualTexturing;
-using UnityEditor.SceneTemplate;
-using Unity.VisualScripting;
-using System.ComponentModel;
 
 public class MeshBuilder : MonoBehaviour
 {
