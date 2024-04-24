@@ -9,6 +9,8 @@ using System.Collections;
 using ElectricMeshList = System.Collections.Generic.Dictionary<int, System.Collections.Generic.List<ElectricComponent>>;
 using UnityEngine.Rendering.VirtualTexturing;
 using UnityEditor.SceneTemplate;
+using Unity.VisualScripting;
+using System.ComponentModel;
 
 public class MeshBuilder : MonoBehaviour
 {
@@ -236,7 +238,6 @@ public class MeshBuilder : MonoBehaviour
             {
                 if (!calledComponents.Contains(component)) // Si pas d�ja appel�
                 {
-                    component._SetColor(Color.black); // TODO remove debug
                     // On v�rifie si un composant est contenu dans plusieurs mailles
                     for (int j = i + 1; j < system.meshCount; j++)
                     {
@@ -257,7 +258,6 @@ public class MeshBuilder : MonoBehaviour
                         if (wasFound)
                         {
                             secondMeshCurrent = system.meshCurrent[j];
-                            component._SetColor(Color.green, true); // TODO REMOVE DEBUG
                             break;
                         }
                     }
@@ -456,9 +456,9 @@ public class MeshBuilder : MonoBehaviour
                 Connection.Position orientation = (Connection.Position)i;
                 switch (orientation)
                 {
-                    case Connection.Position.Left:
-                        expectedAngle = 0f; break;
                     case Connection.Position.Right:
+                        expectedAngle = 0f; break;
+                    case Connection.Position.Left:
                         expectedAngle = 180f; break;
                     case Connection.Position.Top:
                         expectedAngle = 90f; break;
@@ -466,7 +466,7 @@ public class MeshBuilder : MonoBehaviour
                         expectedAngle = 270f; break;
                 }
 
-                multiplier = (expectedAngle == angle) ? 1 : -1;
+                multiplier = (expectedAngle == angle) ? -1 : 1;
                 break;
             }
         }
@@ -478,40 +478,115 @@ public class MeshBuilder : MonoBehaviour
     // On analyse les sources en sens horaire selon les lois de kirchoff
     public static float GetMeshVoltage(List<ElectricComponent> mesh)
     {
-        float meshVoltage = 0f;
-
-        ElectricComponent head = mesh.First();
-        ElectricComponent previous = null;
-        foreach (ElectricComponent component in mesh)
+        ElectricComponent first = null;
+        ElectricComponent next = null;
+        float max = 0f; // La position en y max;
+        bool isFirstIteraiton = true;
+        ElectricComponent root = new();
+        foreach(ElectricComponent component in mesh)
         {
-            float prevAngle = (previous == null) ? 0 : previous.transform.localEulerAngles.z;
-            float angle = component.transform.localEulerAngles.z % 360; // permet d'avoir des valeurs parmit 0, 90, 180, 
-
-            if (component.type == ElectricComponentType.PowerSource)
+            float pos = component.transform.position.y;
+            if(isFirstIteraiton)
             {
-                PowerSource powerSource = (PowerSource)component;
-
-                /*
-                ////////////////////////////////////////////////////////////
-                powerSource.SetColor(Color.green); // TODO REMOVE (FOR DEBUG)
-                ////////////////////////////////////////////////////////////
-                */
-
-                    int multiplier = 1;
-                // TODO aller cherche le previous manuellement?
-                if (previous != null && previous.type == ElectricComponentType.Wire)
-                    multiplier = GetPowerSourceMultiplier(previous.connectionManager, component);
-                else // si on a pas un fil avant
-                    multiplier = (prevAngle == angle) ? -1 : 1;
-
-                multiplier = multiplier * -1; // TODO bug fix
-                meshVoltage += powerSource.voltage * multiplier;
+                max = pos;
+                root = component;
+                isFirstIteraiton = false;
             }
 
-            previous = component;
+            if(pos > max)
+            {
+                max = pos;
+                root = component;
+            }
+            else if(pos == max)
+            {
+                root = component;
+            }
         }
-        // TODO FIX DOIT DONNER LE BON SIGNE
-        return meshVoltage;
+
+        if (root != null)
+        {
+            List<ElectricComponent> connections = root.connectionManager.GetConnectedComponents().ToList();
+            foreach(ElectricComponent connection in connections)
+            {
+                if(connection != null)
+                {
+                    if(connection.transform.position.x < root.transform.position.x)
+                    {
+                        first = connection;
+                        next = root;
+                    } else if(connection.transform.position.x > root.transform.position.x)
+                    {
+                        first = root;
+                        next = connection;
+                    }
+                }
+            }
+        }
+        // TODO PRISE NE CHARGE DU FIRST;
+        return AnalyseMeshVoltage(first, first, next); 
+    }
+
+    public static float AnalyseMeshVoltage(ElectricComponent root, ElectricComponent previous, ElectricComponent current)
+    {
+        if (root == null) root = current; // Si on vient de lancer le tout
+        // Sinon on continue : 
+        float voltage = 0;
+
+        // On trouve le voltage et le sens
+        float prevAngle = (previous == null) ? 0 : previous.transform.localEulerAngles.z % 360;
+        float angle = current.transform.localEulerAngles.z % 360; // permet d'avoir des valeurs parmit 0, 90, 180, 270 ,360, 
+
+        if (current.type == ElectricComponentType.PowerSource)
+        {
+            PowerSource powerSource = (PowerSource) current;
+
+            int multiplier = 1;
+            if (previous != null && previous.type == ElectricComponentType.Wire)
+            {
+                multiplier = GetPowerSourceMultiplier(previous.connectionManager, current);
+            }
+            else // si on a pas un fil avant
+            {
+                if(angle == 0f && previous.transform.localPosition.x < current.transform.localPosition.x)
+                        multiplier = -1;
+                else if (angle == 270f && previous.transform.localPosition.y > current.transform.localPosition.y)
+                    multiplier = -1;
+                else if (angle == 180f && previous.transform.localPosition.x > current.transform.localPosition.x)
+                    multiplier = -1;
+                else if (angle == 90f && previous.transform.localPosition.y < current.transform.localPosition.y)
+                    multiplier = -1;
+            }
+
+            /////////////////////
+            if (multiplier == 1)
+            {
+                powerSource.SetColor(Color.green); // TODO REMOVE (FOR DEBUG)
+            }
+            else
+            {
+                powerSource.SetColor(Color.red); // TODO REMOVE (FOR DEBUG)
+            }
+            ////////////////////
+            voltage += powerSource.voltage * multiplier;
+        }
+
+        // Gestion de la récursivité
+        ElectricComponent[] connections = current.connectionManager.GetConnectedComponents();
+        ElectricComponent next = null;
+        foreach(ElectricComponent connection in connections)
+        {
+            if(connection != null && connection !=  previous)
+            {
+                next = connection;
+            }
+        }
+        if(next != null && current != root)
+        {
+            voltage += AnalyseMeshVoltage(root, current, next);
+        }
+
+        return voltage;
     }
 
     public static Vector<float> GetVoltageMatrix(ElectricMeshList meshList)

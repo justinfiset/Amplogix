@@ -203,6 +203,5 @@ public class ComponentSpawner : MonoBehaviour
         ElectricComponent electricComponent = gO.GetComponent<ElectricComponent>();
         m_Instance.projectManager.RemoveComponent(electricComponent);
         Destroy(gO);
-        //ProjectManager.OnModifyProject(ProjectModificationType.CircuitModification);
     }
 }

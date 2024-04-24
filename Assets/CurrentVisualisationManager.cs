@@ -49,7 +49,7 @@ public class CurrentVisualisationManager : MonoBehaviour
         Connection connection = component.GetComponent<Connection>();
         if (lastCorner == null || connection.IsFlatConnection())
         {
-            IterateAndStartEmitting(GetNextComponent(componentList, i), handledComponents, voltageMatrix, firstHandledInMesh, componentList, lastCorner, i++;
+            IterateAndStartEmitting(GetNextComponent(componentList, i), handledComponents, voltageMatrix, firstHandledInMesh, componentList, lastCorner, i++);
             return;
         } 
 
@@ -67,7 +67,7 @@ public class CurrentVisualisationManager : MonoBehaviour
             StartEmission(component, lastCorner);
         }
 
-        IterateAndStartEmitting(GetNextComponent(componentList, i), handledComponents, voltageMatrix, firstHandledInMesh, componentList, component, i++)
+        IterateAndStartEmitting(GetNextComponent(componentList, i), handledComponents, voltageMatrix, firstHandledInMesh, componentList, component, i++);
     }
 
     private static void StartEmission(ElectricComponent source, ElectricComponent target)
