@@ -60,10 +60,6 @@ public class ElectricComponent : MonoBehaviour
     [Header("Current")]
     public bool isLightSource;
     public bool showsCurrent = true;
-    [HideInInspector] public float hypotheticalIntensity = 0;
-    [HideInInspector] public float hypotheticalCurrentSign = 0;
-    [HideInInspector] public float hypotheticalVoltage = 0;
-    [HideInInspector] public float hypotheticalResistance { get; private set; } = 0.2f;
     [HideInInspector] public float currentIntensity { get; private set; } = 0;
     [HideInInspector] public float componentPotential { get; private set; } = 0;
     [HideInInspector] public float resistance { get; protected set; } = 0f;
@@ -215,12 +211,6 @@ public class ElectricComponent : MonoBehaviour
         }
 
         OnUpdate(); // pour les sous composants
-    }
-
-    public void SetHypotheticalIntensity(float calculatedIntensity)
-    {
-        hypotheticalIntensity = calculatedIntensity;
-        hypotheticalVoltage = calculatedIntensity * hypotheticalResistance;
     }
 
     public void SetCalculatedIntensity(float calculatedIntensity) {

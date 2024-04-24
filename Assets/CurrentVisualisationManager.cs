@@ -169,6 +169,7 @@ public class CurrentVisualisationManager : MonoBehaviour
         {
             print("back at first component");
             handledComponents.Add(component);
+            StartEmission(lastCorner, component);
             return; // si on retombe sur le premier component on sort
         }
 

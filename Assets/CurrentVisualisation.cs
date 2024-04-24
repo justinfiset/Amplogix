@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static Unity.VisualScripting.Member;
 using static UnityEngine.ParticleSystem;
 
 [RequireComponent(typeof(ElectricComponent))]
@@ -8,6 +9,7 @@ public class CurrentVisualisation : MonoBehaviour
 {
     private bool isEmitting = false;
     private bool realCurrent = false;
+    private GameObject originalParent;
     private GameObject ballParent;
     private Vector2 targetPosition;
 
@@ -15,7 +17,11 @@ public class CurrentVisualisation : MonoBehaviour
 
     private void Start()
     {
-        ballParent = new GameObject("Ball Parent");
+        originalParent = new GameObject("ball parent");
+
+        
+        ballParent = Instantiate(originalParent, transform);
+
     }
 
     public void SetupTarget(Vector2 targetPosition)
@@ -98,8 +104,8 @@ public class CurrentVisualisation : MonoBehaviour
 
     private void ShootBall()
     {
-        CurrentParticle currentParticle = Instantiate(particlePrefab, ballParent.transform)
-            .GetComponent<CurrentParticle>();
+        print("ballparent : " + ballParent);
+        CurrentParticle currentParticle = Instantiate(particlePrefab, ballParent.transform).GetComponent<CurrentParticle>();
 
         currentParticle.Create(realCurrent, targetPosition);
     }
@@ -109,6 +115,7 @@ public class CurrentVisualisation : MonoBehaviour
         if (ballParent != null)
         {
             Destroy(ballParent);
+            ballParent = Instantiate(originalParent, Vector3.zero, Quaternion.identity, transform);
         }
     }
 
