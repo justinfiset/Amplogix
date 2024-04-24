@@ -78,7 +78,6 @@ public class ProjectManager : MonoBehaviour
     IEnumerator InitializeAllConnections()
     {
         yield return new WaitForNextFrameUnit();
-        //yield return new WaitForFixedUpdate();
         foreach (ElectricComponent component in componentList.Keys)
         {
             component.InitConnections();

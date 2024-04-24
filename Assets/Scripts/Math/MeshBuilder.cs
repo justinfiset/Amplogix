@@ -509,22 +509,22 @@ public class MeshBuilder : MonoBehaviour
             {
                 if(connection != null)
                 {
-                    if(connection.transform.position.x < root.transform.position.x)
+                    if (connection.transform.position.x < root.transform.position.x)
                     {
                         first = connection;
                         next = root;
-                        break;
                     } else if(connection.transform.position.x > root.transform.position.x)
                     {
                         first = root;
                         next = connection;
-                        break;
                     }
+                    break;
                 }
             }
         }
-        // TODO PRISE NE CHARGE DU FIRST;
-        return AnalyseMeshVoltage(first, first, next, mesh); 
+
+        float meshVoltage = AnalyseMeshVoltage(first, first, next, mesh);
+        return meshVoltage;
     }
 
     public static float AnalyseMeshVoltage(ElectricComponent root, ElectricComponent previous, ElectricComponent current, List<ElectricComponent> mesh)
@@ -539,6 +539,7 @@ public class MeshBuilder : MonoBehaviour
 
         if (current.type == ElectricComponentType.PowerSource)
         {
+            print("Source");
             PowerSource powerSource = (PowerSource) current;
 
             int multiplier = 1;
@@ -559,16 +560,16 @@ public class MeshBuilder : MonoBehaviour
             }
 
             /////////////////////
-            //if (multiplier == 1)
-            //{
-            //    powerSource.SetColor(Color.green); // TODO REMOVE (FOR DEBUG)
-            //}
-            //else
-            //{
-            //    powerSource.SetColor(Color.red); // TODO REMOVE (FOR DEBUG)
-            //}
+            if (multiplier == 1)
+            {
+                powerSource.SetColor(Color.green); // TODO REMOVE (FOR DEBUG)
+            }
+            else
+            {
+                powerSource.SetColor(Color.red); // TODO REMOVE (FOR DEBUG)
+            }
             ////////////////////
-            voltage += powerSource.voltage * multiplier;
+            voltage = powerSource.voltage * multiplier;
         }
 
         // Gestion de la récursivité
@@ -579,6 +580,7 @@ public class MeshBuilder : MonoBehaviour
             if(connection != null && connection !=  previous)
             {
                 next = connection;
+                break;
             }
         }
         if(next != null && current != root && mesh.Contains(next))
