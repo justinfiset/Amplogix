@@ -272,7 +272,10 @@ public class MeshBuilder : MonoBehaviour
 
     private static void HandleVisualCurrent(ElectricMeshList meshList, Vector<float> meshCurrent)
     {
-        CurrentVisualisationManager.StartParticleEmissions(meshList, meshCurrent);
+        if (!CurrentVisualisationManager.isSetup && CurrentVisualisationManager.doVisualCurrent)
+        {
+            CurrentVisualisationManager.StartParticleEmissions(meshList, meshCurrent);
+        }
     }
 
     public static ElectricMeshList CreateMeshes()

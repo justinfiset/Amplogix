@@ -5,10 +5,13 @@ using MathNet.Numerics.LinearAlgebra;
 using UnityEngine;
 
 using ElectricMeshList = System.Collections.Generic.Dictionary<int, System.Collections.Generic.List<ElectricComponent>>;
-public class CurrentVisualisationManager : MonoBehaviour 
+public class CurrentVisualisationManager : MonoBehaviour
 {
     private static HashSet<ElectricComponent> handledComponents;
-    public static void StartParticleEmissions(ElectricMeshList meshList, Vector<float> meshCurrent)
+    private static HashSet<ElectricComponent> emittingComponents;
+    public static bool isSetup { get; private set; } = false;
+    public static bool doVisualCurrent = false;
+    public static void StartParticleEmissions(ElectricMeshList meshList, Vector<float> meshCurrents)
     {
         /*
         HashSet<ElectricComponent> handledCorners = new();
@@ -32,42 +35,91 @@ public class CurrentVisualisationManager : MonoBehaviour
 
         //commencer dans le sens inverse des meshlist?
         handledComponents = new();
-        
+        emittingComponents = new();
 
+        isSetup = true;
 
-
+        for (int i = 0; i < meshList.Count; i++)
+        {
+            IterateAndStartEmitting(meshList[i][0], null, 0, meshCurrents, meshList, i, handledComponents);
+        }
     }
 
-    private static void IterateAndStartEmitting(ElectricComponent component, HashSet<ElectricComponent> handledComponents, Vector<float> voltageMatrix,
-        ElectricComponent firstHandledInMesh, System.Collections.Generic.List<ElectricComponent> componentList, ElectricComponent lastCorner, int i)
+    private static void IterateAndStartEmitting(ElectricComponent component, ElectricComponent lastCorner, int componentIndex, Vector<float> meshCurrents, 
+        ElectricMeshList meshList, int meshIndex, HashSet<ElectricComponent> handledComponents)
     {
-        if (component == firstHandledInMesh)
+        if (lastCorner == null && component == meshList[meshIndex][0])
         {
-            return;
+            handledComponents.Add(component);
+            return; // si on retombe sur le premier component on sort
         }
 
         Connection connection = component.GetComponent<Connection>();
-        if (lastCorner == null || connection.IsFlatConnection())
+        List<ElectricComponent> compList = meshList[meshIndex];
+        if (connection.IsFlatConnection())
         {
-            IterateAndStartEmitting(GetNextComponent(componentList, i), handledComponents, voltageMatrix, firstHandledInMesh, componentList, lastCorner, i++);
-            return;
+            handledComponents.Add(component);
+            IterateAndStartEmitting(GetNextComponent(compList, componentIndex), lastCorner, componentIndex++, meshCurrents, meshList, meshIndex, handledComponents);
+            return; // si on est pas encore tombe sur un coin ou si 
         } 
 
+        if (lastCorner == null || handledComponents.Contains(component))
+        {
+            handledComponents.Add(component);
+            IterateAndStartEmitting(GetNextComponent(compList, componentIndex), component, componentIndex++, meshCurrents, meshList, meshIndex, handledComponents);
+            return; // si on est un coin et qu'il n'y a pas de coin precedant, on itere en se settant comme lastCorner
+            // même chose si on est déjà handled
+        }
+
+        /*
         if (handledComponents.Contains(component))
         {
-            IterateAndStartEmitting(GetNextComponent(componentList, i), handledComponents, voltageMatrix, firstHandledInMesh, componentList, lastCorner, i++);
-            return;
+            IterateAndStartEmitting(GetNextComponent(componentList, i), handledComponents, meshCurrent, firstHandledInMesh, componentList, lastCorner, i++);
+            return; // si on est deja handled ailleurs, on itere en gardant le meme lastCorner
         }
+        */
 
-        if (Math.Sign(voltageMatrix[i]) == component.hypotheticalCurrentSign)
+        if (GetSignInMesh(component, meshList, componentIndex, meshIndex, meshCurrents) == 1)
         {
-            StartEmission(lastCorner, component);
+            emittingComponents.Add(lastCorner);
+            StartEmission(lastCorner, component); // si on a le meme signe que le courant on emet les particules depuis le dernier coin (horaire)
         } else
         {
-            StartEmission(component, lastCorner);
+            emittingComponents.Add(component);
+            StartEmission(component, lastCorner); // sinon, on emet jusqu'au dernier coin (antihoraire) (si c'est zero on pleure)
         }
 
-        IterateAndStartEmitting(GetNextComponent(componentList, i), handledComponents, voltageMatrix, firstHandledInMesh, componentList, component, i++);
+        handledComponents.Add(component);
+        // on itere en se settant comme lastCorner
+        IterateAndStartEmitting(GetNextComponent(compList, componentIndex), component, componentIndex++, meshCurrents, meshList, meshIndex, handledComponents);
+    }
+
+    private static int GetSignInMesh(ElectricComponent component, ElectricMeshList meshList, int componentIndex, int thisMeshIndex, Vector<float> meshCurrents)
+    {
+        for (int i = 0; i < meshList.Count; i++) // through each mesh in the list
+        {
+            if (i != thisMeshIndex) // if not the mesh we're in originally
+            {
+                //if it contains both the current component and the previous (common branch)
+                 if (meshList[i].Contains(component) && meshList[i].Contains(meshList[thisMeshIndex][componentIndex - 1])) 
+                 {
+                     if (meshCurrents[thisMeshIndex] > meshCurrents[i])
+                     {
+                         return 1;
+                     }
+                     else if (meshCurrents[thisMeshIndex] < meshCurrents[i])
+                     {
+                         return -1;
+                     }
+                     else
+                     {
+                         return 0; // panic
+                     }
+                    }
+            }
+        }
+
+        return 1;
     }
 
     private static void StartEmission(ElectricComponent source, ElectricComponent target)
@@ -85,6 +137,18 @@ public class CurrentVisualisationManager : MonoBehaviour
     private static ElectricComponent GetNextComponent(System.Collections.Generic.List<ElectricComponent> componentList, int i)
     {
         return componentList[(i + 1) % componentList.Count];
+    }
+
+    public static void ResetParticleEmissions()
+    {
+        isSetup = false;
+
+        foreach (ElectricComponent component in emittingComponents)
+        {
+            CurrentVisualisation currentVisualisation = component.GetComponent<CurrentVisualisation>();
+
+            currentVisualisation.KillParticleEmission();
+        }
     }
 
     /*
@@ -107,7 +171,7 @@ public class CurrentVisualisationManager : MonoBehaviour
 
 
     }
-    */
+    
 
     private static bool IsHighestValue(float value, float[] others)
     {
@@ -135,4 +199,5 @@ public class CurrentVisualisationManager : MonoBehaviour
 
         return currentHighest;
     }
+    */
 }
