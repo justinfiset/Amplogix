@@ -7,7 +7,7 @@ using static UnityEngine.ParticleSystem;
 public class CurrentVisualisation : MonoBehaviour
 {
     private bool isEmitting = false;
-    private bool realCurrent;
+    private bool realCurrent = false;
     private GameObject ballParent;
     private Vector2 targetPosition;
 

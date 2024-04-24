@@ -67,17 +67,54 @@ public class Connection : MonoBehaviour
 
     public bool IsFlatConnection()
     {
-        if (connections.connections.Length != 2) return false;
-
-        for (int i = 0; i <= connections.connections.Length; i++)
+        if (GetNumberOfConnections() != 2)
         {
-            if (GetOppositeComponent(connections.connections[i]) != null)
+            //print("component doesnt have 2 connections");
+            return false;
+        }
+
+        //print("connections from " + gameObject);
+        foreach (ElectricComponent c in connections.connections)
+        {
+            //print(c);
+        }
+
+        for (int i = 0; i < 4; i++)
+        {
+            /*
+            print("for " + connections.connections[i] + " at i = " + i);
+            print((Position)i);
+            print("opposite: " + GetOppositeConnection((Position)i));
+            print("opposite is " + GetOppositeComponent(connections.connections[i]));
+            
+            if (connections.connections[i] == null) {
+                print("checked connection is null");
+            }
+            */
+            
+            //print(GetOppositeComponent(connections.connections[i]) == null);
+            
+            if (connections.connections[i] != null && GetOppositeComponent(connections.connections[i]) != null)
             {
+                //print("connection is flat");
                 return true;
             }
         }
-
+        //print("no parallel connections found");
         return false;
+    }
+
+    public int GetNumberOfConnections()
+    {
+        int count = 0;
+        foreach (ElectricComponent c in connections.connections)
+        {
+            if (c != null)
+            {
+                count++;
+            }
+        }
+        return count;
     }
 
     public ElectricComponent GetOppositeComponent(ElectricComponent input)

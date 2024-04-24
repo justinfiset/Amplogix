@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 1080553818296123673}
   - component: {fileID: 70188032193863161}
   - component: {fileID: -1860325715245102916}
+  - component: {fileID: 423131176079200463}
   m_Layer: 6
   m_Name: Source
   m_TagString: Untagged
@@ -29,7 +30,6 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3204017523397130290}
-  serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -1, y: -2, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -37,6 +37,7 @@ Transform:
   m_Children:
   - {fileID: 2855287972518318849}
   m_Father: {fileID: 0}
+  m_RootOrder: -2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &3204017523397130292
 SpriteRenderer:
@@ -100,25 +101,6 @@ BoxCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
@@ -162,6 +144,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e2325cd889c2ba14387064f30e27afed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  maxConnectionCount: 2
   HasVisibleConnections: 0
   visualConnectionPrefab: {fileID: 0}
   ConnectsAutomaticallyToNeighbors: 1
@@ -199,20 +182,40 @@ MonoBehaviour:
   canStack: 0
   snapToGrid: 1
   respectOrientation: 1
+  canGenerateMeshes: 1
   isMouseOverGUI: 0
   initialComponentData: 
+  initialConnectionData: 
   connectionManager: {fileID: 0}
   hasReleasedSinceSelection: 1
   outline: {fileID: 155018022359230697}
   sprite: {fileID: 0}
+  isLightSource: 0
+  showsCurrent: 1
+  hypotheticalIntensity: 0
+  hypotheticalCurrentSign: 0
+  hypotheticalVoltage: 0
   verticalSprite: {fileID: -609352295, guid: c6b6966af1811ea4bbd2fbab940b39d5, type: 3}
   horizontalSprite: {fileID: -1799907246, guid: c6b6966af1811ea4bbd2fbab940b39d5, type: 3}
+--- !u!114 &423131176079200463
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3204017523397130290}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1017275c93913d6459e11c0b45d72bc3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  particlePrefab: {fileID: 0}
 --- !u!1001 &1489758621188395086
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    serializedVersion: 3
+    serializedVersion: 2
     m_TransformParent: {fileID: 3204017523397130291}
     m_Modifications:
     - target: {fileID: 475578015003214662, guid: b5baa3d1b1169d148b97771d5d633605, type: 3}
@@ -268,9 +271,7 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b5baa3d1b1169d148b97771d5d633605, type: 3}
 --- !u!212 &155018022359230697 stripped
 SpriteRenderer:

@@ -170,6 +170,8 @@ public class ProjectManager : MonoBehaviour
         m_Instance.savedIndicator.SetActive(false);
         m_Instance.isNotSavedIndicator.SetActive(true);
 
+        CurrentVisualisationManager.ResetParticleEmissions();
+
         if(type == ProjectModificationType.CircuitModification || type == ProjectModificationType.CircuitDataModification)
             SimulationManager.ProjectModificationCallback(); // TODO appeler dans un fonction moin appelé
     }
@@ -321,6 +323,7 @@ public class ProjectManager : MonoBehaviour
 
     public void ConnectComponents(ElectricComponent first, ElectricComponent second)
     {
+        //print("CONNECTING " + first + " AND " + second);
         if(first.connectionManager.CanAddConnections() && second.connectionManager.CanAddConnections())
         {
             if (ComponentsPointToEachOther(first, second))

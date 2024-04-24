@@ -480,7 +480,7 @@ public class MeshBuilder : MonoBehaviour
         ElectricComponent next = null;
         float max = 0f; // La position en y max;
         bool isFirstIteraiton = true;
-        ElectricComponent root = new();
+        ElectricComponent root = null; //= new();
         foreach(ElectricComponent component in mesh)
         {
             float pos = component.transform.position.y;

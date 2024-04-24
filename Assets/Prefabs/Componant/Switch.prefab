@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 5643372875791426776}
   - component: {fileID: 6143013532739442378}
   - component: {fileID: -6394662027084178350}
+  - component: {fileID: -8268714587466837508}
   m_Layer: 6
   m_Name: Switch
   m_TagString: Untagged
@@ -29,7 +30,6 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5643372875791426778}
-  serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: -2, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -37,6 +37,7 @@ Transform:
   m_Children:
   - {fileID: 1758802311599814102}
   m_Father: {fileID: 0}
+  m_RootOrder: -2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &5643372875791426724
 SpriteRenderer:
@@ -100,25 +101,6 @@ BoxCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
@@ -153,12 +135,19 @@ MonoBehaviour:
   canStack: 0
   snapToGrid: 1
   respectOrientation: 1
+  canGenerateMeshes: 1
   isMouseOverGUI: 0
   initialComponentData: 
+  initialConnectionData: 
   connectionManager: {fileID: 0}
   hasReleasedSinceSelection: 1
   outline: {fileID: 1624132070148405415, guid: b5baa3d1b1169d148b97771d5d633605, type: 3}
   sprite: {fileID: 0}
+  isLightSource: 0
+  showsCurrent: 1
+  hypotheticalIntensity: 0
+  hypotheticalCurrentSign: 0
+  hypotheticalVoltage: 0
   closedSprite: {fileID: -1757465333, guid: c6b6966af1811ea4bbd2fbab940b39d5, type: 3}
   openSprite: {fileID: -79407870, guid: c6b6966af1811ea4bbd2fbab940b39d5, type: 3}
   isOpen: 1
@@ -189,6 +178,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e2325cd889c2ba14387064f30e27afed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  maxConnectionCount: 2
   HasVisibleConnections: 0
   visualConnectionPrefab: {fileID: 0}
   ConnectsAutomaticallyToNeighbors: 1
@@ -208,12 +198,25 @@ MonoBehaviour:
   wireTilePrefab: {fileID: 729730110476256346, guid: b7b1b57ceb44fc9489faac4c0c4be09f, type: 3}
   connectionTilePrefab: {fileID: 729730110476256346, guid: b27489a6dc4be2e468f6e233bd1e49f5, type: 3}
   disconnectionTilePrefab: {fileID: 729730110476256346, guid: 570d34a7276d2c740a07511f01010b96, type: 3}
+--- !u!114 &-8268714587466837508
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5643372875791426778}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1017275c93913d6459e11c0b45d72bc3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  particlePrefab: {fileID: 0}
 --- !u!1001 &3126676511196591769
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    serializedVersion: 3
+    serializedVersion: 2
     m_TransformParent: {fileID: 5643372875791426779}
     m_Modifications:
     - target: {fileID: 475578015003214662, guid: b5baa3d1b1169d148b97771d5d633605, type: 3}
@@ -265,9 +268,7 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b5baa3d1b1169d148b97771d5d633605, type: 3}
 --- !u!4 &1758802311599814102 stripped
 Transform:
