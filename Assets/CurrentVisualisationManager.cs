@@ -251,6 +251,9 @@ public class CurrentVisualisationManager : MonoBehaviour
                 //if it contains both the current component and the previous (common branch)
                  if (meshList[i].Contains(component) && meshList[i].Contains(meshList[thisMeshIndex][componentIndex - 1])) 
                  {
+                     print("component found in common");
+                    print("in this mesh i = " + meshCurrents[thisMeshIndex]);
+                    print("in other mesh i = " + meshCurrents[i]);
                      if (meshCurrents[thisMeshIndex] > meshCurrents[i])
                      {
                          return 1;
@@ -297,6 +300,7 @@ public class CurrentVisualisationManager : MonoBehaviour
         isSetup = false;
         if (emittingComponents == null)
         {
+            emittingComponents = new();
             return;
         }
 
@@ -307,8 +311,9 @@ public class CurrentVisualisationManager : MonoBehaviour
                 CurrentVisualisation currentVisualisation = component.GetComponent<CurrentVisualisation>();
                 currentVisualisation.KillParticleEmission();
             }
-
         }
+
+        emittingComponents = new();
     }
 
     /*

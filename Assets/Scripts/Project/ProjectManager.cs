@@ -167,10 +167,12 @@ public class ProjectManager : MonoBehaviour
         m_Instance.savedIndicator.SetActive(false);
         m_Instance.isNotSavedIndicator.SetActive(true);
 
-        CurrentVisualisationManager.ResetParticleEmissions();
+        if (type == ProjectModificationType.CircuitModification || type == ProjectModificationType.CircuitDataModification)
+        {
 
-        if(type == ProjectModificationType.CircuitModification || type == ProjectModificationType.CircuitDataModification)
             SimulationManager.ProjectModificationCallback(); // TODO appeler dans un fonction moin appelé
+            CurrentVisualisationManager.ResetParticleEmissions();
+        }
     }
 
     public static bool IsSelectionEmpty()
