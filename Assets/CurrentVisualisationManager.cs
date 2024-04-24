@@ -42,8 +42,6 @@ public class CurrentVisualisationManager : MonoBehaviour
             return;
         }
 
-        print("started particle emission");
-
         handledComponents = new();
         emittingComponents = new();
 
