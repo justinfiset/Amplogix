@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using MathNet.Numerics.LinearAlgebra;
+using Unity.VisualScripting.Antlr3.Runtime.Collections;
 using UnityEngine;
 
 using ElectricMeshList = System.Collections.Generic.Dictionary<int, System.Collections.Generic.List<ElectricComponent>>;
@@ -42,36 +43,22 @@ public class CurrentVisualisationManager : MonoBehaviour
             return;
         }
 
-        print("started particle emission");
-
         handledComponents = new();
         emittingComponents = new();
 
         for (int i = 0; i < meshList.Count; i++)
         {
-            /*
-            print("starting iteration");
-            print("meshList : ");
-            
-            foreach (ElectricComponent c in meshList[i])
-            {
-                print(c);
-                print("connections : ");
-                foreach (ElectricComponent comp in c.GetComponent<Connection>().connections.connections)
-                {
-                    print(comp);
-                }
-            }
-            */
             List<ElectricComponent> clockwise = GetClockWiseOrder(meshList[i]);
-            /*
-            print("clockwise order : ");
-            foreach (ElectricComponent component in clockwise)
+
+            if (meshCurrents[i] > 0)
             {
-                print(component);
+                IterateAndStartEmitting(clockwise[0], null, 0, meshCurrents, meshList, i, handledComponents, clockwise);
+            } else if (meshCurrents[i] < 0)
+            {
+                //clockwise.Reverse();
+                IterateAndStartEmitting(clockwise[0], null, 0, meshCurrents, meshList, i, handledComponents, clockwise);
             }
-            */
-            IterateAndStartEmitting(clockwise[0], null, 0, meshCurrents, meshList, i, handledComponents, clockwise);
+            
         }
     }
 
@@ -219,17 +206,6 @@ public class CurrentVisualisationManager : MonoBehaviour
             // même chose si on est déjà handled
         }
 
-        /*
-        if (handledComponents.Contains(component))
-        {
-            IterateAndStartEmitting(GetNextComponent(componentList, i), handledComponents, meshCurrent, firstHandledInMesh, componentList, lastCorner, i++);
-            return; // si on est deja handled ailleurs, on itere en gardant le meme lastCorner
-        }
-        
-        print("handling component");
-        print(component);
-        */
-
         if (GetSignInMesh(component, meshList, componentIndex, meshIndex, meshCurrents) == 1)
         {
             StartEmission(lastCorner, component); // si on a le meme signe que le courant on emet les particules depuis le dernier coin (horaire)
@@ -240,6 +216,78 @@ public class CurrentVisualisationManager : MonoBehaviour
         // on itere en se settant comme lastCorner
         IterateAndStartEmitting(GetNextComponent(clockwise, componentIndex), component, ++componentIndex, 
             meshCurrents, meshList, meshIndex, handledComponents, clockwise);
+    }
+
+    private static void AlternateIterateAndStartEmitting(ElectricComponent component, ElectricComponent lastCorner, 
+        ElectricComponent firstCorner,  int componentIndex,  Vector<float> meshCurrents, ElectricMeshList meshList,
+        int meshIndex, List<ElectricComponent> clockwise, BranchStorage branches)
+    {
+        if (lastCorner == null) // doesn't have previous corner
+        {
+            if (component.GetComponent<Connection>().IsFlatConnection()) // is not a corner
+            {
+                AlternateIterateAndStartEmitting(GetNextComponent(clockwise, componentIndex), component,
+                    component, ++componentIndex, meshCurrents, meshList, meshIndex, clockwise, branches);
+            } else // is a corner
+            {
+                AlternateIterateAndStartEmitting(GetNextComponent(clockwise, componentIndex), null,
+                    null, ++componentIndex, meshCurrents, meshList, meshIndex, clockwise, branches);
+            }
+
+            return;
+        }
+
+        if (component == firstCorner) // if iteration is over
+        {
+            return;
+        }
+
+        
+
+    }
+
+    private static void CornerBasedEmission(ElectricMeshList meshList, Vector<float> meshCurrents)
+    {
+        List<ElectricComponent> cornerList = new();
+
+        Dictionary<int, (List<ElectricComponent>, BranchStorage)> meshCornerLists = BuildMeshCorners(meshList);
+
+
+    }
+
+    private static Dictionary<int, (List<ElectricComponent>, BranchStorage)> BuildMeshCorners(ElectricMeshList meshList)
+    {
+        List<ElectricComponent> cornerList = new();
+        Dictionary<int, (List<ElectricComponent>, BranchStorage)> meshCornerLists = new();
+
+        for (int i = 0; i < meshList.Count; i++) // build meshCornerLists
+        {
+            foreach (ElectricComponent component in GetClockWiseOrder(meshList[i])) // build corner list for mesh
+            {
+                if (!component.connectionManager.IsFlatConnection())
+                {
+                    cornerList.Add(component);
+                }
+            }
+            meshCornerLists.Add(i, (cornerList, new BranchStorage()));
+
+
+            for (int j = 1; j < cornerList.Count; j++) // build branch list for mesh
+            {
+                meshCornerLists[i].Item2.AddBranch((cornerList[j - 1], cornerList[j]));
+            }
+            meshCornerLists[i].Item2.AddBranch((cornerList[cornerList.Count], cornerList[0]));
+
+            cornerList = new();
+        }
+
+        return meshCornerLists;
+    }
+
+    private static int GetBranchSignInMesh((ElectricComponent, ElectricComponent) branch, 
+        Dictionary<int, (List<ElectricComponent>, BranchStorage)> meshCornerLists, Vector<float> meshCurrents)
+    {
+        return 0;
     }
 
     private static int GetSignInMesh(ElectricComponent component, ElectricMeshList meshList, int componentIndex, int thisMeshIndex, Vector<float> meshCurrents)
@@ -254,11 +302,11 @@ public class CurrentVisualisationManager : MonoBehaviour
                      print("component found in common");
                     print("in this mesh i = " + meshCurrents[thisMeshIndex]);
                     print("in other mesh i = " + meshCurrents[i]);
-                     if (meshCurrents[thisMeshIndex] > meshCurrents[i])
+                     if (Math.Abs(meshCurrents[thisMeshIndex]) > Math.Abs(meshCurrents[i]))
                      {
                          return 1;
                      }
-                     else if (meshCurrents[thisMeshIndex] < meshCurrents[i])
+                     else if (Math.Abs(meshCurrents[thisMeshIndex]) < Math.Abs(meshCurrents[i]))
                      {
                          return -1;
                      }
@@ -315,6 +363,61 @@ public class CurrentVisualisationManager : MonoBehaviour
 
         emittingComponents = new();
     }
+
+    private class BranchStorage
+    {
+        readonly public HashSet<(ElectricComponent, ElectricComponent)> branches;
+
+        public BranchStorage()
+        {
+            branches = new();
+        }
+
+        public void Reset()
+        {
+            branches.Clear();
+        }
+
+        public bool AddBranch((ElectricComponent, ElectricComponent) branch)
+        {
+            foreach ((ElectricComponent, ElectricComponent) componentPair in  branches)
+            {
+                if (AreBranchesEqual(componentPair, branch))
+                {
+                    return false;
+                }
+            }
+
+            branches.Add(branch);
+            return true;
+        }
+
+        public bool AreBranchesEqual((ElectricComponent, ElectricComponent) branch1, (ElectricComponent, ElectricComponent) branch2)
+        {
+            List<ElectricComponent> branch1Items = new List<ElectricComponent>(2)
+            {
+                [0] = branch1.Item1,
+                [1] = branch1.Item2
+            };
+
+            List<ElectricComponent> branch2Items = new List<ElectricComponent>(2)
+            {
+                [0] = branch2.Item1,
+                [1] = branch2.Item2
+            };
+
+            foreach (ElectricComponent component1 in branch1Items)
+            {
+                if (!branch2Items.Contains(component1))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+    }
+
 
     /*
     private static void IterateAndStartEmitting(HashSet<ElectricComponent> handledCorners, ElectricComponent source)

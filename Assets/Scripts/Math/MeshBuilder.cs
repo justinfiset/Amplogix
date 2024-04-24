@@ -21,11 +21,22 @@ public class MeshBuilder : MonoBehaviour
             {
                 if(unsafeMesh.Count == uniqueMesh.Count)
                 {
-                    if(uniqueMesh.All(unsafeMesh.Contains))
-                    {
-                        wasFound = true;
-                        break;
+                    wasFound = true;
+                    foreach(ElectricComponent component in unsafeMesh) 
+                    { 
+                        if(!uniqueMesh.Contains(component))
+                        {
+                            wasFound = false;
+                            break;
+                        }
                     }
+
+                    if (wasFound) break;
+                    //if(uniqueMesh.All(unsafeMesh.Contains))
+                    //{
+                    //    wasFound = true;
+                    //    break;
+                    //}
                 }
             }
 
@@ -34,8 +45,6 @@ public class MeshBuilder : MonoBehaviour
                 uniqueMeshes.Add(unsafeMesh);
             }
         }
-
-        print("Unique mesh detected: " + uniqueMeshes.Count);
         return uniqueMeshes;
     }
 
@@ -202,6 +211,25 @@ public class MeshBuilder : MonoBehaviour
             Matrix<float> resistanceMatrix = GetResistanceMatrix(meshList);
             MatrixEquationSystem system = new MatrixEquationSystem(resistanceMatrix, voltageMatrix);
 
+            //////////////////////////////////////
+            List<ElectricComponent> prefered = null;
+            foreach (List<ElectricComponent> list in meshList.Values)
+            {
+                if (prefered == null || list.Count < prefered.Count)
+                {
+                    prefered = list;
+                }
+            }
+            foreach (ElectricComponent component in prefered)
+            {
+                //component._SetColor(Color.blue);
+                if(component.type == ElectricComponentType.PowerSource)
+                {
+
+                }
+            }
+            //////////////////////////////////////
+            /*
             print(system.resistanceMatrix.ToString());
             print(system.meshVoltage.ToString());
             print(system.meshCurrent.ToString());
@@ -294,8 +322,8 @@ public class MeshBuilder : MonoBehaviour
             throw new IncorrectCircuitException("Un circuit doit avoir au moins un composant ou une source de courant!");
         }
 
-        unsafeMeshList = RemoveIncorrectMeshes(unsafeMeshList);
         unsafeMeshList = RemoveDuplicatedMeshes(unsafeMeshList);
+        unsafeMeshList = RemoveIncorrectMeshes(unsafeMeshList);
         DetectShortCircuit(unsafeMeshList);
         PopulateMeshMap(unsafeMeshList, meshList);
         return meshList;
@@ -323,10 +351,6 @@ public class MeshBuilder : MonoBehaviour
                     correctMeshes.Add(mesh);
                 }
             }
-            else
-            {
-                throw new IncorrectCircuitException("A mesh needs to have more than four components");
-            }
         }
         return correctMeshes;
     }
@@ -345,6 +369,7 @@ public class MeshBuilder : MonoBehaviour
     // retourne vrai si on a trouv� une maille, faux si on doit continuer la recherche
     public static bool AnalyseConnections(ElectricComponent node, ElectricComponent parent, ElectricComponent root, HashSet<ElectricComponent> ancestors, List<List<ElectricComponent>> list)
     {
+
         ancestors.Remove(root); // Par mesure de s�curit�, on veut s�parer les ancetres de la racine
         if(node != null) // Empeche de lancer une exception
         {
@@ -369,11 +394,12 @@ public class MeshBuilder : MonoBehaviour
             }
 
 
-            List<ElectricComponent> childrens = node.connectionManager.connections.connections.ToList();
-            //childrens.RemoveAll(component => component == null);
+            List<ElectricComponent> childrens = node.connectionManager.GetConnectedComponents().ToList();
+            bool foundMesh = false;
             foreach (ElectricComponent edge in childrens)
             {
-                if (edge != null && edge != parent && !ancestors.Contains(edge))
+                // pas null est pas égal au parent
+                if (edge != null && edge != parent /*&& !ancestors.Contains(edge)*/)
                 {
                     HashSet<ElectricComponent> childrenAncestors = new();
                     childrenAncestors.UnionWith(ancestors);
@@ -382,10 +408,11 @@ public class MeshBuilder : MonoBehaviour
 
                     if (AnalyseConnections(edge, node, root, childrenAncestors, list))
                     {
-                        return true;
+                        foundMesh = true;
                     }
                 }
             }
+            return foundMesh;
         }
 
         return false;
@@ -533,7 +560,6 @@ public class MeshBuilder : MonoBehaviour
 
         if (current.type == ElectricComponentType.PowerSource)
         {
-            print("Source");
             PowerSource powerSource = (PowerSource) current;
 
             int multiplier = 1;
@@ -554,14 +580,14 @@ public class MeshBuilder : MonoBehaviour
             }
 
             /////////////////////
-            //if (multiplier == 1)
-            //{
-            //    powerSource.SetColor(Color.green); // TODO REMOVE (FOR DEBUG)
-            //}
-            //else
-            //{
-            //    powerSource.SetColor(Color.red); // TODO REMOVE (FOR DEBUG)
-            //}
+            if (multiplier == 1)
+            {
+                powerSource.SetColor(Color.green); // TODO REMOVE (FOR DEBUG)
+            }
+            else
+            {
+                powerSource.SetColor(Color.red); // TODO REMOVE (FOR DEBUG)
+            }
             ////////////////////
             voltage = powerSource.voltage * multiplier;
         }
