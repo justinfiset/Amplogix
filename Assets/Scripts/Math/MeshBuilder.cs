@@ -524,10 +524,10 @@ public class MeshBuilder : MonoBehaviour
             }
         }
         // TODO PRISE NE CHARGE DU FIRST;
-        return AnalyseMeshVoltage(first, first, next); 
+        return AnalyseMeshVoltage(first, first, next, mesh); 
     }
 
-    public static float AnalyseMeshVoltage(ElectricComponent root, ElectricComponent previous, ElectricComponent current)
+    public static float AnalyseMeshVoltage(ElectricComponent root, ElectricComponent previous, ElectricComponent current, List<ElectricComponent> mesh)
     {
         if (root == null) root = current; // Si on vient de lancer le tout
         // Sinon on continue : 
@@ -559,14 +559,14 @@ public class MeshBuilder : MonoBehaviour
             }
 
             /////////////////////
-            if (multiplier == 1)
-            {
-                powerSource.SetColor(Color.green); // TODO REMOVE (FOR DEBUG)
-            }
-            else
-            {
-                powerSource.SetColor(Color.red); // TODO REMOVE (FOR DEBUG)
-            }
+            //if (multiplier == 1)
+            //{
+            //    powerSource.SetColor(Color.green); // TODO REMOVE (FOR DEBUG)
+            //}
+            //else
+            //{
+            //    powerSource.SetColor(Color.red); // TODO REMOVE (FOR DEBUG)
+            //}
             ////////////////////
             voltage += powerSource.voltage * multiplier;
         }
@@ -581,9 +581,9 @@ public class MeshBuilder : MonoBehaviour
                 next = connection;
             }
         }
-        if(next != null && current != root)
+        if(next != null && current != root && mesh.Contains(next))
         {
-            voltage += AnalyseMeshVoltage(root, current, next);
+            voltage += AnalyseMeshVoltage(root, current, next, mesh);
         }
 
         return voltage;
