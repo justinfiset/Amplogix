@@ -5,7 +5,6 @@ using UnityEngine.UI;
 using System;
 using System.Collections;
 using SFB;
-using UnityEngine.WSA;
 
 public class SaveScreenShotPopup : MonoBehaviour
 {
@@ -40,7 +39,7 @@ public class SaveScreenShotPopup : MonoBehaviour
 
     public void SelectDirectory()
     {
-        StandaloneFileBrowser.SaveFilePanelAsync("Enregistrer le schéma", "", "Circuit", "png", delegate (string path)
+        StandaloneFileBrowser.SaveFilePanelAsync("Enregistrer le schéma", Application.dataPath, "Circuit", "png", delegate (string path)
         {
             if(Path.IsPathRooted(path))
             {

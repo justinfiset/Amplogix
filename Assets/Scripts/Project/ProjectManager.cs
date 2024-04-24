@@ -1,10 +1,8 @@
-using MathNet.Numerics.RootFinding;
 using SFB;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Forms;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -133,7 +131,7 @@ public class ProjectManager : MonoBehaviour
     public void SaveProjectAs()
     {
         print("Opening file option window...");
-        StandaloneFileBrowser.SaveFilePanelAsync("Sauvegarder le projet", "", nameText.text, "amp", delegate (string path)
+        StandaloneFileBrowser.SaveFilePanelAsync("Sauvegarder le projet", Application.dataPath, nameText.text, "amp", delegate (string path)
         {
             project.savePath = path;
             SaveProject();
