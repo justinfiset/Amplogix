@@ -13,6 +13,11 @@ public class CurrentVisualisation : MonoBehaviour
 
     public GameObject particlePrefab;
 
+    private void Start()
+    {
+        ballParent = new GameObject("Ball Parent");
+    }
+
     public void SetupTarget(Vector2 targetPosition)
     {
         this.targetPosition = targetPosition;

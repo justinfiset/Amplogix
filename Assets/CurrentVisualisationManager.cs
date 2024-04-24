@@ -61,11 +61,17 @@ public class CurrentVisualisationManager : MonoBehaviour
                 }
             }
             */
-            IterateAndStartEmitting(meshList[i][0], null, 0, meshCurrents, meshList, i, handledComponents);
+            List<ElectricComponent> clockwise = GetClockWiseOrder(meshList[i]);
+            print("clockwise order : ");
+            foreach (ElectricComponent component in clockwise)
+            {
+                print(component);
+            }
+            IterateAndStartEmitting(clockwise[0], null, 0, meshCurrents, meshList, i, handledComponents, clockwise);
         }
     }
 
-    private static void GetClockWiseOrder(List<ElectricComponent> originalList)
+    private static List<ElectricComponent> GetClockWiseOrder(List<ElectricComponent> originalList)
     {
         float maxY = 0;
         List<ElectricComponent> builtList = new();
@@ -108,8 +114,10 @@ public class CurrentVisualisationManager : MonoBehaviour
         ElectricComponent iterated = secondLeftMost;
         HashSet<ElectricComponent> handled = new();
         ElectricComponent previous = leftMostMaximum;
-        //while (iterated.GetComponent<Connection>().GetAllOtherConnections(previous))
 
+        IterateClockWiseAndAdd(secondLeftMost, leftMostMaximum, leftMostMaximum, builtList, originalList);
+        //while (iterated.GetComponent<Connection>().GetAllOtherConnections(previous))
+        return builtList;
 
     }
 
@@ -119,44 +127,71 @@ public class CurrentVisualisationManager : MonoBehaviour
         if (previous == leftMostMaximum)
         {
             builtList.Add(component);
-            foreach (ElectricComponent comp in component.GetComponent<Connection>().GetAllOtherConnections(previous))
+            foreach (ElectricComponent comp in component.GetComponent<Connection>().connections.connections)
             {
-                if (originalList.Contains(comp))
+                if (comp != null && comp != leftMostMaximum)
                 {
-                    IterateClockWiseAndAdd(comp, component, leftMostMaximum, builtList, originalList);
+                    if (originalList.Contains(comp))
+                    {
+                        IterateClockWiseAndAdd(comp, component, leftMostMaximum, builtList, originalList);
+                        return;
+                    }
+                }
+            }
+        } else if (component == leftMostMaximum)
+        {
+            print("back at leftMostMax");
+            return;
+        } else
+        {
+            builtList.Add(component);
+            foreach (ElectricComponent comp in component.GetComponent<Connection>().connections.connections)
+            {
+                if (comp != null && comp != previous)
+                {
+                    if (originalList.Contains(comp))
+                    {
+                        IterateClockWiseAndAdd(comp, component, leftMostMaximum, builtList, originalList);
+                        return;
+                    }
                 }
             }
         }
+        throw new Exception("next component not found");
     }
 
     private static void IterateAndStartEmitting(ElectricComponent component, ElectricComponent lastCorner, int componentIndex, Vector<float> meshCurrents, 
-        ElectricMeshList meshList, int meshIndex, HashSet<ElectricComponent> handledComponents)
+        ElectricMeshList meshList, int meshIndex, HashSet<ElectricComponent> handledComponents, List<ElectricComponent> clockwise)
     {
         print("componentIndex = " + componentIndex);
 
         if (componentIndex == meshList[meshIndex].Count)
         {
-            //print("back at first component");
+            print("back at first component");
             handledComponents.Add(component);
             return; // si on retombe sur le premier component on sort
         }
 
         Connection connection = component.GetComponent<Connection>();
-        List<ElectricComponent> compList = meshList[meshIndex];
+        //List<ElectricComponent> compList = GetClockWiseOrder(meshList[meshIndex]);
 
         if (componentIndex == 0 && lastCorner == null)
         {
-            //print("detected root");
+            print("detected root");
+            print(component);
 
             handledComponents.Add(component);
-            IterateAndStartEmitting(GetNextComponent(compList, 0), null, ++componentIndex, meshCurrents, meshList, meshIndex, handledComponents);
+            IterateAndStartEmitting(GetNextComponent(clockwise, 0), null, ++componentIndex, meshCurrents, 
+                meshList, meshIndex, handledComponents, clockwise);
             return;
         }
         if (connection.IsFlatConnection())
         {
-            //print("detected flat connection");
+            print("detected flat connection");
+            print(component);
             handledComponents.Add(component);
-            IterateAndStartEmitting(GetNextComponent(compList, componentIndex), lastCorner, ++componentIndex, meshCurrents, meshList, meshIndex, handledComponents);
+            IterateAndStartEmitting(GetNextComponent(clockwise, componentIndex), lastCorner, ++componentIndex, 
+                meshCurrents, meshList, meshIndex, handledComponents, clockwise);
             return; // si on est pas encore tombe sur un coin
         } 
 
@@ -164,13 +199,17 @@ public class CurrentVisualisationManager : MonoBehaviour
         {
             if (lastCorner == null)
             {
-                //print("detected first corner");
+                print("detected first corner");
+                print(component);
+                StartEmission(clockwise[0], component);
             } else if (handledComponents.Contains(component))
             {
-                ///print("detected handled component");
+                print("detected handled component");
+                print(component);
             }
             handledComponents.Add(component);
-            IterateAndStartEmitting(GetNextComponent(compList, componentIndex), component, ++componentIndex, meshCurrents, meshList, meshIndex, handledComponents);
+            IterateAndStartEmitting(GetNextComponent(clockwise, componentIndex), component, ++componentIndex, 
+                meshCurrents, meshList, meshIndex, handledComponents, clockwise);
             return; // si on est un coin et qu'il n'y a pas de coin precedant, on itere en se settant comme lastCorner
             // même chose si on est déjà handled
         }
@@ -182,7 +221,8 @@ public class CurrentVisualisationManager : MonoBehaviour
             return; // si on est deja handled ailleurs, on itere en gardant le meme lastCorner
         }
         */
-        //print("handling component");
+        print("handling component");
+        print(component);
 
         if (GetSignInMesh(component, meshList, componentIndex, meshIndex, meshCurrents) == 1)
         {
@@ -194,7 +234,8 @@ public class CurrentVisualisationManager : MonoBehaviour
             StartEmission(component, lastCorner); // sinon, on emet jusqu'au dernier coin (antihoraire) (si c'est zero on pleure)
         }
         // on itere en se settant comme lastCorner
-        IterateAndStartEmitting(GetNextComponent(compList, componentIndex), component, ++componentIndex, meshCurrents, meshList, meshIndex, handledComponents);
+        IterateAndStartEmitting(GetNextComponent(clockwise, componentIndex), component, ++componentIndex, 
+            meshCurrents, meshList, meshIndex, handledComponents, clockwise);
     }
 
     private static int GetSignInMesh(ElectricComponent component, ElectricMeshList meshList, int componentIndex, int thisMeshIndex, Vector<float> meshCurrents)
@@ -257,9 +298,12 @@ public class CurrentVisualisationManager : MonoBehaviour
 
         foreach (ElectricComponent component in emittingComponents)
         {
-            CurrentVisualisation currentVisualisation = component.GetComponent<CurrentVisualisation>();
+            if (component != null)
+            {
+                CurrentVisualisation currentVisualisation = component.GetComponent<CurrentVisualisation>();
+                currentVisualisation.KillParticleEmission();
+            }
 
-            currentVisualisation.KillParticleEmission();
         }
     }
 
