@@ -217,6 +217,7 @@ public class MeshBuilder : MonoBehaviour
 
             SetAllComponentCurrent(system, meshList);
             ExecuteAllVoltmeters();
+            //HandleVisualCurrent(meshList, system.meshCurrent);
 
             return system;
         } catch (IncorrectCircuitException e)

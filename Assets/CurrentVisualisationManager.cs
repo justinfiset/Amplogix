@@ -16,6 +16,7 @@ public class CurrentVisualisationManager : MonoBehaviour
 
     public static void StartEmission(MatrixEquationSystem circuitData)
     {
+        if (circuitData == null) print("circuit data is null");
         StartParticleEmissions(circuitData.meshList, circuitData.meshCurrent);
     }
 
@@ -67,12 +68,14 @@ public class CurrentVisualisationManager : MonoBehaviour
 
         if (meshList == null || meshList.Count == 0)
         {
+            print("meshlist is null or empty");
             return;
         }
 
         handledComponents = new();
         emittingComponents = new();
 
+        /*
         for (int i = 0; i < meshList.Count; i++)
         {
             List<ElectricComponent> clockwise = GetClockWiseOrder(meshList[i]);
@@ -87,6 +90,8 @@ public class CurrentVisualisationManager : MonoBehaviour
             }
             
         }
+        */
+        CornerBasedEmission(meshList, meshCurrents);
     }
 
     private static List<ElectricComponent> GetClockWiseOrder(List<ElectricComponent> originalList)
@@ -275,14 +280,19 @@ public class CurrentVisualisationManager : MonoBehaviour
 
     private static void CornerBasedEmission(ElectricMeshList meshList, Vector<float> meshCurrents)
     {
+        print("starting cornerbasedemissions");
+
         Dictionary<int, (List<ElectricComponent>, BranchStorage)> meshCornerLists = BuildMeshCorners(meshList);
 
         BranchStorage handledBranches = new();
 
         for (int i = 0; i < meshCornerLists.Count; i++) // pour chaque mesh dans le systeme
         {
+            print("mesh current = " + meshCurrents[i]);
             foreach ((ElectricComponent, ElectricComponent) branch in meshCornerLists[i].Item2.branches) // pour chaque branche du mesh
             {
+                print("handling branch : " + branch);
+
                 if (handledBranches.Contains(branch))
                 {
                     continue;
@@ -296,6 +306,7 @@ public class CurrentVisualisationManager : MonoBehaviour
                     continue;
                 }
 
+
                 if (sign == meshSign) // on emet du bon cote
                 {
                     StartEmission(branch.Item1, branch.Item2);
@@ -303,8 +314,25 @@ public class CurrentVisualisationManager : MonoBehaviour
                 {
                     StartEmission(branch.Item2, branch.Item1);
                 }
+                handledBranches.AddBranch(branch);
             }
         }
+    }
+
+    private static bool IsBranchInClockWiseDirection((ElectricComponent, ElectricComponent) branch, List<ElectricComponent> orderedComponents)
+    {
+        foreach (ElectricComponent component in orderedComponents)
+        {
+            if (branch.Item1 == component)
+            {
+                return true;
+            } else if (branch.Item2 == component)
+            {
+                return false;
+            }
+        }
+
+        throw new Exception("neither corners of branch could be found");
     }
 
     private static Dictionary<int, (List<ElectricComponent>, BranchStorage)> BuildMeshCorners(ElectricMeshList meshList)
@@ -328,7 +356,7 @@ public class CurrentVisualisationManager : MonoBehaviour
             {
                 meshCornerLists[i].Item2.AddBranch((cornerList[j - 1], cornerList[j]));
             }
-            meshCornerLists[i].Item2.AddBranch((cornerList[cornerList.Count], cornerList[0]));
+            meshCornerLists[i].Item2.AddBranch((cornerList[^1], cornerList[0]));
 
             cornerList = new();
         }
@@ -358,7 +386,17 @@ public class CurrentVisualisationManager : MonoBehaviour
             return Math.Sign(meshCurrents[meshIndex]);
         }
 
-        float currentInBranch = thisMeshCurrent - meshCurrents[otherMeshIndex];
+        int otherMeshMultiplier;
+
+        if (IsBranchInClockWiseDirection(branch, meshCornerLists[otherMeshIndex].Item1))
+        {
+            otherMeshMultiplier = 1;
+        } else
+        {
+            otherMeshMultiplier = -1;
+        }
+
+        float currentInBranch = thisMeshCurrent + (meshCurrents[otherMeshIndex] * otherMeshMultiplier);
 
         return Math.Sign(currentInBranch);
     }
@@ -396,7 +434,7 @@ public class CurrentVisualisationManager : MonoBehaviour
 
     private static void StartEmission(ElectricComponent source, ElectricComponent target)
     {
-        //print("starting emission from " + source + " to " + target);
+        print("starting emission from " + source + " to " + target);
 
         CurrentVisualisation emitter = source.GetComponent<CurrentVisualisation>();
 
@@ -486,14 +524,14 @@ public class CurrentVisualisationManager : MonoBehaviour
         {
             List<ElectricComponent> branch1Items = new List<ElectricComponent>(2)
             {
-                [0] = branch1.Item1,
-                [1] = branch1.Item2
+                branch1.Item1,
+                branch1.Item2
             };
 
             List<ElectricComponent> branch2Items = new List<ElectricComponent>(2)
             {
-                [0] = branch2.Item1,
-                [1] = branch2.Item2
+                branch2.Item1,
+                branch2.Item2
             };
 
             foreach (ElectricComponent component1 in branch1Items)
