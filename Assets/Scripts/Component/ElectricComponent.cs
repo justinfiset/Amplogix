@@ -74,7 +74,7 @@ public class ElectricComponent : MonoBehaviour
         connectionManager = GetComponent<Connection>();
 
         Init();
-        if(initialComponentData != "")
+        if (initialComponentData != "")
         {
             UnpackCustomComponentData(initialComponentData);
         }
@@ -97,27 +97,20 @@ public class ElectricComponent : MonoBehaviour
     {
         if (!ProjectManager.canInteract) return;
 
-        if(Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0))
         {
             if (isSelected && hasReleasedSinceSelection && !isMouseOverGUI)
             {
-                if (Input.GetKey(KeyCode.LeftControl) && ProjectManager.m_Instance.componentSelection.Count >= 1 )
-                    {
-                    if ( ProjectManager.m_Instance.componentSelection.Count != 1)
-                    {
-                        tilesManager.HideTiles();
-                    }
-                   
-
-                    }
-          
-              else if (!EventSystem.current.IsPointerOverGameObject())
-                    {
-                        UnselectAfterEndOfFrame();
-               
-                    }
-              
+                if (Input.GetKey(KeyCode.LeftControl) && ProjectManager.selectionCount > 1)
+                {
+                    tilesManager.HideTiles();
                 }
+
+                else if (!EventSystem.current.IsPointerOverGameObject())
+                {
+                    UnselectAfterEndOfFrame();
+                }
+            }
 
             if (isHover)
             {
@@ -125,7 +118,8 @@ public class ElectricComponent : MonoBehaviour
                 if (snapToGrid)
                 {
                     lastClickMousePos = GridSettings.GetCurrentSnapedPosition();
-                } else
+                }
+                else
                 {
                     lastClickMousePos = GridSettings.MouseInputToWorldPoint();
                 }
@@ -137,16 +131,16 @@ public class ElectricComponent : MonoBehaviour
                 }
             }
         }
-        else if(Input.GetMouseButtonUp(0))
+        else if (Input.GetMouseButtonUp(0))
         {
-            if (isSelected && hasReleasedSinceSelection && !isMouseOverGUI) {/* Unselect */} 
+            if (isSelected && hasReleasedSinceSelection && !isMouseOverGUI) {/* Unselect */}
             else
             {
                 hasReleasedSinceSelection = true;
             }
         }
 
-        if(isHover)
+        if (isHover)
         {
             if (Input.GetKeyDown(interactKey))
             {
@@ -156,7 +150,7 @@ public class ElectricComponent : MonoBehaviour
 
         if (isSelected)
         {
-            if(listenToInputs)
+            if (listenToInputs)
             {
                 if (canBeRotated && Input.GetKeyDown(rotateKey))
                 {
@@ -174,9 +168,8 @@ public class ElectricComponent : MonoBehaviour
                     _Unselect();
                 }
             }
-
             // On supprime quand même si on pèse sur la touche 'delete'
-            if(Input.GetKeyDown(systemDeleteKey))
+            if (Input.GetKeyDown(systemDeleteKey))
             {
                 _DestroyComponent();
             }
@@ -190,29 +183,29 @@ public class ElectricComponent : MonoBehaviour
 
                 if (isBeingMoved && canBeMoved)
                 {
-                   /* if (Input.GetKey(KeyCode.LeftControl) && Input.GetKey(KeyCode.Mouse0))
-                    {
-                        foreach (ElectricComponent electricComponent in ProjectManager.m_Instance.componentSelection)
-                        {
-                            Vector3 newPos;
-                            if (snapToGrid)
-                            {
-                                print("in snap");
-                                newPos = GridSettings.GetCurrentSnapedPosition();
+                    //if (Input.GetKey(KeyCode.LeftControl) && Input.GetKey(KeyCode.Mouse0))
+                    //{
+                    //    foreach (ElectricComponent electricComponent in ProjectManager.m_Instance.componentSelection)
+                    //    {
+                    //        Vector3 newPos;
+                    //        if (snapToGrid)
+                    //        {
+                    //            print("in snap");
+                    //            newPos = GridSettings.GetCurrentSnapedPosition();
 
-                                
-                            }
-                            else
-                            {
-                                Vector3 diffPos = lastClickMousePos - GridSettings.MouseInputToWorldPoint();
-                                newPos = lastClickPos - diffPos;
-                            }
-                            electricComponent.MoveComponentForMany(newPos,electricComponent);
-                      
-                        }
-                    }
-                    else*/
-                    {
+
+                    //        }
+                    //        else
+                    //        {
+                    //            Vector3 diffPos = lastClickMousePos - GridSettings.MouseInputToWorldPoint();
+                    //            newPos = lastClickPos - diffPos;
+                    //        }
+                    //        electricComponent.MoveComponentForMany(newPos, electricComponent);
+
+                    //    }
+                    //}
+                    //else
+                    //{
                         Vector3 newPos;
                         if (snapToGrid)
                         {
@@ -224,18 +217,18 @@ public class ElectricComponent : MonoBehaviour
                             newPos = lastClickPos - diffPos;
                         }
                         MoveComponent(newPos);
-                    }
+                    //}
                     if (isMove)
                     {
                         connectionManager.DeleteAllConnections();
                         isMove = false;
                     }
-                    
+
                 }
             }
             else // Si on relache le boutton
             {
-              if (!canStack && isBeingMoved)
+                if (!canStack && isBeingMoved)
                 {
                     if (ProjectManager.m_Instance.GetComponentCount(transform.position) > 1)
                     {
@@ -248,15 +241,16 @@ public class ElectricComponent : MonoBehaviour
         OnUpdate(); // pour les sous composants
     }
 
-    
 
-   /** public void SetHypotheticalIntensity(float calculatedIntensity)
+
+    /** public void SetHypotheticalIntensity(float calculatedIntensity)
+     {
+         hypotheticalIntensity = calculatedIntensity;
+         hypotheticalVoltage = calculatedIntensity * hypotheticalResistance;
+     }*/
+
+    public void SetCalculatedIntensity(float calculatedIntensity)
     {
-        hypotheticalIntensity = calculatedIntensity;
-        hypotheticalVoltage = calculatedIntensity * hypotheticalResistance;
-    }*/
-
-    public void SetCalculatedIntensity(float calculatedIntensity) {
         if (calculatedIntensity != currentIntensity)
         {
             currentIntensity = (calculatedIntensity); //TODO: REMETTRE LE MATH.ABS()
@@ -265,8 +259,9 @@ public class ElectricComponent : MonoBehaviour
         }
     }
 
-    public virtual void OnCurrentChange(float newCurrent) { 
-    
+    public virtual void OnCurrentChange(float newCurrent)
+    {
+
         if (showsCurrent)
         {
             CurrentVisualisation currentVisualisation = GetComponent<CurrentVisualisation>();
@@ -292,10 +287,10 @@ public class ElectricComponent : MonoBehaviour
             _Unselect();
             transform.position = newPos;
             ProjectManager.m_Instance.ChangeComponentPos(this, transform.position);
-            ProjectManager.OnModifyProject(ProjectModificationType.CircuitModification);    
+            ProjectManager.OnModifyProject(ProjectModificationType.CircuitModification);
             isMove = true;
             _Select();
-        }        
+        }
     }
 
     private void MoveComponentForMany(Vector3 newPos, ElectricComponent electricComponent)
@@ -308,7 +303,7 @@ public class ElectricComponent : MonoBehaviour
             ProjectManager.m_Instance.ChangeComponentPos(electricComponent, newPos);
             ProjectManager.OnModifyProject(ProjectModificationType.CircuitModification);
             electricComponent._Select();
-            
+
         }
     }
 
@@ -331,34 +326,33 @@ public class ElectricComponent : MonoBehaviour
         if (isSelected) newColor = newColor * 0.5f;
         SetColor(newColor);
 
-        if(connectionManager != null) 
+        if (connectionManager != null)
             connectionManager.SetColor(newColor);
     }
 
 
     public void _Select(bool executeInheritedCode = true)
     {
-    
+
         isSelected = true;
         if (executeInheritedCode)
         {
-            if (Input.GetKey(KeyCode.LeftControl) && ProjectManager.m_Instance.componentSelection.Count >= 0)
+            if (Input.GetKey(KeyCode.LeftControl) && ProjectManager.selectionCount >= 0)
             {
-                Select(); 
-               
-            }else 
+                Select();
+            }
+            else
             {
                 Select();
                 tilesManager.HideTiles();
-             
             }
             if (!Input.GetKey(KeyCode.LeftControl))
             {
                 Select();
-              
+
             }
-            
-            
+
+
         }
         outline.color = Color.white;
         _SetColor(color * new Color(1f, 1f, 1f, 0.5f), true);
@@ -389,10 +383,10 @@ public class ElectricComponent : MonoBehaviour
     {
         _Unselect();
         DestroyComponent();
-        if(connectionManager != null)
+        if (connectionManager != null)
             connectionManager.DeleteAllConnections();
         ComponentSpawner.DestroyComponent(gameObject);
-        if(isHover) { ProjectManager.componentUnderPointerCount--; };
+        if (isHover) { ProjectManager.componentUnderPointerCount--; };
     }
     #endregion
 
@@ -400,13 +394,13 @@ public class ElectricComponent : MonoBehaviour
     public virtual void Interact() { }
 
     // Called before loading the data
-    public virtual void Init() { } 
+    public virtual void Init() { }
     // Called after loading the data
     public virtual void Setup() { }
 
     public virtual void SetBaseResistance(float newValue)
     {
-        if(resistance == 0)
+        if (resistance == 0)
         {
             resistance = newValue;
         }
@@ -416,13 +410,14 @@ public class ElectricComponent : MonoBehaviour
 
     public virtual void DestroyComponent() { }
 
-    public virtual void RotateComponent() { 
+    public virtual void RotateComponent()
+    {
         transform.Rotate(Vector3.back * 90);
     }
 
     public virtual void SetColor(Color newColor)
     {
-        if(sprite != null)
+        if (sprite != null)
             sprite.color = newColor;
     }
 
@@ -492,7 +487,7 @@ public class ElectricComponent : MonoBehaviour
     {
         if (isSelected)
         {
-            bool isUnique = ProjectManager.m_Instance.componentSelection.Count < 2;
+            bool isUnique = ProjectManager.selectionCount < 2;
             string headerName = isUnique ? ElectricComponentTypeMethods.GetName(type) : "Sélection Multiple...";
 
             ComponentGUI.InitGUI(isUnique ? GUIHeightDivider : DefaltGUIDivider);
@@ -503,7 +498,7 @@ public class ElectricComponent : MonoBehaviour
             ComponentGUI.CreateColorPalette();
             ComponentGUI.CreateDeleteButton();
 
-            if(GUI.changed) // Si on a modifié quelque chose, on relance les calculs
+            if (GUI.changed) // Si on a modifié quelque chose, on relance les calculs
             {
                 ProjectManager.OnModifyProject(ProjectModificationType.CircuitDataModification);
             }
