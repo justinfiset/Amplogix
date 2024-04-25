@@ -209,7 +209,7 @@ public class MeshBuilder : MonoBehaviour
             ElectricMeshList meshList = CreateMeshes();
             Vector<float> voltageMatrix = GetVoltageMatrix(meshList);
             Matrix<float> resistanceMatrix = GetResistanceMatrix(meshList);
-            MatrixEquationSystem system = new MatrixEquationSystem(resistanceMatrix, voltageMatrix);
+            MatrixEquationSystem system = new MatrixEquationSystem(meshList, resistanceMatrix, voltageMatrix);
 
             print(system.resistanceMatrix.ToString());
             print(system.meshVoltage.ToString());
@@ -217,7 +217,6 @@ public class MeshBuilder : MonoBehaviour
 
             SetAllComponentCurrent(system, meshList);
             ExecuteAllVoltmeters();
-            HandleVisualCurrent(meshList, system.meshCurrent);
 
             return system;
         } catch (IncorrectCircuitException e)

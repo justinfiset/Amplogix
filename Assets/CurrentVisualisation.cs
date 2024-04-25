@@ -69,8 +69,9 @@ public class CurrentVisualisation : MonoBehaviour
         }
     }
 
-    private void ResumeParticleMovements()
+    public void ResumeParticleMovements()
     {
+        isEmitting = true;
         CurrentParticle particle;
         for (int i = 0; i < ballParent.transform.childCount; i++)
         {

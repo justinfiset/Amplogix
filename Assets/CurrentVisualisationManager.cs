@@ -13,6 +13,33 @@ public class CurrentVisualisationManager : MonoBehaviour
     private static HashSet<ElectricComponent> emittingComponents;
     public static bool isSetup { get; private set; } = false;
     public static bool doVisualCurrent = true;
+
+    public static void StartEmission(MatrixEquationSystem circuitData)
+    {
+        StartParticleEmissions(circuitData.meshList, circuitData.meshCurrent);
+    }
+
+    public static void ResumeEmission()
+    {
+        foreach(ElectricComponent component in emittingComponents)
+        {
+            component.GetComponent<CurrentVisualisation>().ResumeParticleMovements();
+        }
+    }
+
+    public static void PauseEmission()
+    {
+        foreach (ElectricComponent component in emittingComponents)
+        {
+            component.GetComponent<CurrentVisualisation>().PauseParticles();
+        }
+    }
+
+    public static void StopEmission()
+    {
+        ResetParticleEmissions();
+    }
+
     public static void StartParticleEmissions(ElectricMeshList meshList, Vector<float> meshCurrents)
     {
         /*
