@@ -286,22 +286,23 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Cam\xE9ra:\nPour d\xE9placer la cam\xE9ra maintenir le clic droit de la
-    souris\r\nPour recentrer la cam\xE9ra appuyer sur espace\r\nPour agrandir/r\xE9tr\xE9cir
-    tourner la molette de la souris\r\n\nComposant:\nPour ajouter un composant s\xE9lectionner
-    le composant voulu et appuyer \xE0 l\u2019endroit o\xF9 vous voulez l\u2019ajouter\r\nPour
-    d\xE9placer un composant maintenir le clic gauche de la souris sur le composant\r\nPour
-    ajouter des fils appuyer sur un composant et appuyer o\xF9 vous voulez ajouter
-    les fils\r\nPour supprimer un composant appuyer sur le la molette de la souris,
-    la touche supprimer ou sur la touche retour \r\nPour faire tourner un composant
-    appuyer sur la touche R\r\nPour interagir avec un interrupteur appuyer sur le
-    clic droit lorsque la souris est positionn\xE9e sur l\u2019interrupteur\r\nIl
-    est possible de modifier la couleur d\u2019un composant dans la boite en bas
-    \xE0 gauche de l\u2019\xE9cran lorsqu\u2019il est s\xE9lectionn\xE9\r\nIl est
-    possible de modifier le courant, la r\xE9sistance ou la diff\xE9rence de potentiel
-    de certains composants dans la boite en bas \xE0 gauche de l\u2019\xE9cran lorsqu\u2019il
-    est s\xE9lectionn\xE9\r\nAfin de visualiser le courant appuyer sur d\xE9marer
-    en haut \xE0 droite\n \n"
+  m_text: "Cam\xE9ra:\n - Pour d\xE9placer la cam\xE9ra, maintenir le clic droit
+    de la souris.\r\n - Pour recentrer la cam\xE9ra, appuyer sur espace.\r\n - Pour
+    agrandir/r\xE9tr\xE9cir, tourner la molette de la souris.\r\n\nComposant:\n -
+    Pour ajouter un composant, s\xE9lectionner le composant voulu et appuyer \xE0
+    l\u2019endroit o\xF9 vous voulez l\u2019ajouter.\r\n - Pour d\xE9placer un composant,
+    maintenir le clic gauche de la souris sur le composant.\r\n - Pour ajouter des
+    fils, appuyer sur un composant et appuyer o\xF9 vous voulez ajouter les fils.\r\n
+    - Pour supprimer un composant, appuyer sur le la molette de la souris, la touche
+    supprimer ou sur la touche retour.\n - Pour faire tourner un composant, appuyer
+    sur la touche R.\r\n - Pour interagir avec un interrupteur, appuyer sur le clic
+    droit lorsque la souris est positionn\xE9e sur l\u2019interrupteur.\r\n - Il
+    est possible de modifier la couleur d\u2019un composant dans la bo\xEEte en bas
+    \xE0 droite de l\u2019\xE9cran lorsqu\u2019il est s\xE9lectionn\xE9.\r\n - Il
+    est possible de modifier le courant, la r\xE9sistance ou la diff\xE9rence de
+    potentiel de certains composants dans la bo\xEEte en bas \xE0 droite de l\u2019\xE9cran
+    lorsqu\u2019il est s\xE9lectionn\xE9.\r\n - Afin de visualiser le courant, appuyer
+    sur d\xE9marrer en haut \xE0 droite.\n \n"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
