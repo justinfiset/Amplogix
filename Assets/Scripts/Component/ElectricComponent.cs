@@ -28,7 +28,6 @@ public class ElectricComponent : MonoBehaviour
     protected bool isSelected = false;
     protected bool listenToInputs = true;
     public bool isMouseOverGUI = false;
-    public bool isMove = false;
     [HideInInspector] public string initialComponentData = "";
     [HideInInspector] public string initialConnectionData = "";
     [HideInInspector] private Color color;
@@ -218,12 +217,6 @@ public class ElectricComponent : MonoBehaviour
                         }
                         MoveComponent(newPos);
                     //}
-                    if (isMove)
-                    {
-                        connectionManager.DeleteAllConnections();
-                        isMove = false;
-                    }
-
                 }
             }
             else // Si on relache le boutton
@@ -288,7 +281,9 @@ public class ElectricComponent : MonoBehaviour
             transform.position = newPos;
             ProjectManager.m_Instance.ChangeComponentPos(this, transform.position);
             ProjectManager.OnModifyProject(ProjectModificationType.CircuitModification);
-            isMove = true;
+
+            connectionManager.UpdateConnection();
+
             _Select();
         }
     }

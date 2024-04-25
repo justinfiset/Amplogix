@@ -248,6 +248,12 @@ public class Connection : MonoBehaviour
         }
     }
 
+    public void UpdateConnection()
+    {
+        DeleteAllConnections();
+        AutoConnect();
+    }
+
     #region Visual Connections
     public void UpdateVisualConnections()
     {
