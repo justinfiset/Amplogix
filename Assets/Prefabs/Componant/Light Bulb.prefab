@@ -16,7 +16,6 @@ GameObject:
   - component: {fileID: 7210757780453098940}
   - component: {fileID: 7274095291378919601}
   - component: {fileID: 5941780666261531923}
-  - component: {fileID: -5986255356367553933}
   - component: {fileID: -5781903620491370200}
   m_Layer: 6
   m_Name: Light Bulb
@@ -186,6 +185,7 @@ MonoBehaviour:
   respectOrientation: 0
   canGenerateMeshes: 1
   isMouseOverGUI: 0
+  isMove: 0
   initialComponentData: 
   initialConnectionData: 
   connectionManager: {fileID: 0}
@@ -194,9 +194,6 @@ MonoBehaviour:
   sprite: {fileID: 0}
   isLightSource: 1
   showsCurrent: 1
-  hypotheticalIntensity: 0
-  hypotheticalCurrentSign: 0
-  hypotheticalVoltage: 0
 --- !u!114 &5941780666261531923
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -214,19 +211,6 @@ MonoBehaviour:
   opacityMultiplier: 0.5
   lightColor: {r: 1, g: 0.94509804, b: 0.46666667, a: 1}
   doLighting: 1
---- !u!114 &-5986255356367553933
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3364640599128778684}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1017275c93913d6459e11c0b45d72bc3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  particlePrefab: {fileID: 0}
 --- !u!114 &-5781903620491370200
 MonoBehaviour:
   m_ObjectHideFlags: 0

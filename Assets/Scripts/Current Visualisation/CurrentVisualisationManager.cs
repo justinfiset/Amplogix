@@ -5,6 +5,7 @@ using MathNet.Numerics.LinearAlgebra;
 using UnityEngine;
 
 using ElectricMeshList = System.Collections.Generic.Dictionary<int, System.Collections.Generic.List<ElectricComponent>>;
+/*
 public class CurrentVisualisationManager : MonoBehaviour
 {
     public static void StartParticleEmissions(ElectricMeshList meshList, Vector<float> voltageMatrix)
@@ -76,3 +77,4 @@ public class CurrentVisualisationManager : MonoBehaviour
         return currentHighest;
     }
 }
+*/
