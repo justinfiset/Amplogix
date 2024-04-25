@@ -14,6 +14,9 @@ public class SimulationManager : MonoBehaviour
     public GameObject stopButton;
     public TextMeshProUGUI timeText;
 
+    // DATA
+    private MatrixEquationSystem circuitData;
+
     // STATE
     public bool timeShouldBeHandled = false;
     public float startTime; // temps en seconde
@@ -52,7 +55,7 @@ public class SimulationManager : MonoBehaviour
 
     public void HandleCircuit()
     {
-        MatrixEquationSystem circuitData = MeshBuilder.CreateAndCalculateMeshes();
+        circuitData = MeshBuilder.CreateAndCalculateMeshes();
         calculAreLaunched = false;
     }
 
@@ -102,29 +105,39 @@ public class SimulationManager : MonoBehaviour
 
         if (isPaused)
         {
-
+            Resume();
         }
         else
         {
             startTime = Time.time;
             HandleCircuit();
+            // CODE :
+            CurrentVisualisationManager.StartEmission(circuitData);
         }
 
         UpdateButtons();
     }
 
+    public void Resume()
+    {
+        // CODE :
+        CurrentVisualisationManager.ResumeEmission();
+    }
+
     public void Pause()
     {
         isPaused = true;
-
         UpdateButtons();
+        // CODE :
+        CurrentVisualisationManager.PauseEmission();
     }
 
     public void Stop()
     {
         isSimulating = false;
         isPaused = false;
-
         UpdateButtons();
+        // CODE :
+        CurrentVisualisationManager.StopEmission();
     }
 }

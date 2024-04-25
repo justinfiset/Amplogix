@@ -13,7 +13,34 @@ public class CurrentVisualisationManager : MonoBehaviour
     private static HashSet<ElectricComponent> emittingComponents;
     public static bool isSetup { get; private set; } = false;
     public static bool doVisualCurrent = true;
-    public static void StartParticleEmissions(ElectricMeshList meshList, Vector<float> meshCurrents) // flush at some point
+
+    public static void StartEmission(MatrixEquationSystem circuitData)
+    {
+        StartParticleEmissions(circuitData.meshList, circuitData.meshCurrent);
+    }
+
+    public static void ResumeEmission()
+    {
+        foreach(ElectricComponent component in emittingComponents)
+        {
+            component.GetComponent<CurrentVisualisation>().ResumeParticleMovements();
+        }
+    }
+
+    public static void PauseEmission()
+    {
+        foreach (ElectricComponent component in emittingComponents)
+        {
+            component.GetComponent<CurrentVisualisation>().PauseParticles();
+        }
+    }
+
+    public static void StopEmission()
+    {
+        ResetParticleEmissions();
+    }
+
+    public static void StartParticleEmissions(ElectricMeshList meshList, Vector<float> meshCurrents)
     {
         /*
         HashSet<ElectricComponent> handledCorners = new();
@@ -203,7 +230,7 @@ public class CurrentVisualisationManager : MonoBehaviour
             IterateAndStartEmitting(GetNextComponent(clockwise, componentIndex), component, ++componentIndex, 
                 meshCurrents, meshList, meshIndex, handledComponents, clockwise);
             return; // si on est un coin et qu'il n'y a pas de coin precedant, on itere en se settant comme lastCorner
-            // même chose si on est déjà handled
+            // mï¿½me chose si on est dï¿½jï¿½ handled
         }
 
         if (GetSignInMesh(component, meshList, componentIndex, meshIndex, meshCurrents) == 1)
@@ -345,9 +372,9 @@ public class CurrentVisualisationManager : MonoBehaviour
                 //if it contains both the current component and the previous (common branch)
                  if (meshList[i].Contains(component) && meshList[i].Contains(meshList[thisMeshIndex][componentIndex - 1])) 
                  {
-                     print("component found in common");
-                    print("in this mesh i = " + meshCurrents[thisMeshIndex]);
-                    print("in other mesh i = " + meshCurrents[i]);
+                     //print("component found in common");
+                     //print("in this mesh i = " + meshCurrents[thisMeshIndex]);
+                     //print("in other mesh i = " + meshCurrents[i]);
                      if (Math.Abs(meshCurrents[thisMeshIndex]) > Math.Abs(meshCurrents[i]))
                      {
                          return 1;
@@ -369,7 +396,7 @@ public class CurrentVisualisationManager : MonoBehaviour
 
     private static void StartEmission(ElectricComponent source, ElectricComponent target)
     {
-        print("starting emission from " + source + " to " + target);
+        //print("starting emission from " + source + " to " + target);
 
         CurrentVisualisation emitter = source.GetComponent<CurrentVisualisation>();
 

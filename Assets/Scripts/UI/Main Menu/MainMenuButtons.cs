@@ -21,10 +21,10 @@ public class MainMenuButtons : MonoBehaviour
     {
         SceneManager.LoadScene("CircuitCreator", LoadSceneMode.Single);
     }
-
+    
     public static void OpenFile()
     {
-        StandaloneFileBrowser.OpenFilePanelAsync("Ouvrir un projet", Application.dataPath, "amp", false, delegate (string[] paths)
+        StandaloneFileBrowser.OpenFilePanelAsync("Ouvrir un projet", "", "amp", false, delegate (string[] paths)
         {
             if(paths.Length > 0)
             {

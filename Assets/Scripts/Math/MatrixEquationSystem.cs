@@ -1,13 +1,15 @@
 using UnityEngine;
 using MathNet.Numerics.LinearAlgebra;
+using System.Collections.Generic;
 
 public class MatrixEquationSystem
 {
+    public Dictionary<int, List<ElectricComponent>> meshList { get; private set; }
     public int meshCount                    { get; private set; }
     public Matrix<float> resistanceMatrix   { get; private set; }
     public Vector<float> meshVoltage        { get; private set; }
     public Vector<float> meshCurrent        { get; private set; }
-    
+
     /*
     public static void Test()
     {
@@ -27,10 +29,11 @@ public class MatrixEquationSystem
         Debug.Log(system.GetCalculatedCurrents().ToString());
     }
     */
-    
 
-    public MatrixEquationSystem(Matrix<float> resistanceMatrix, Vector<float> meshVoltage)
+
+    public MatrixEquationSystem(Dictionary<int, List<ElectricComponent>> meshList, Matrix<float> resistanceMatrix, Vector<float> meshVoltage)
     {
+        this.meshList = meshList;
         this.resistanceMatrix = resistanceMatrix;
         this.meshVoltage = meshVoltage;
         meshCount = resistanceMatrix.RowCount;

@@ -56,6 +56,5 @@ public class SaveScreenShotPopup : MonoBehaviour
         manager.SaveCurrentView(path);        
         Hide();
         ProjectManager.canInteract = true;
-
     }
 }
