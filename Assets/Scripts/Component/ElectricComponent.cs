@@ -65,7 +65,7 @@ public class ElectricComponent : MonoBehaviour
     [HideInInspector] public float componentPotential { get; private set; } = 0;
     [HideInInspector] public float resistance { get; protected set; } = 0f;
 
-    private void Start()
+    protected void Start()
     {
         resizeWinglets = GetComponent<ResizeWinglets>();
         tilesManager = GetComponent<TilesManager>();

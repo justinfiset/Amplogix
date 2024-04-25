@@ -12,10 +12,17 @@ public class ElectricSwitch : ElectricComponent
     public Sprite openSprite;
 
     public bool isOpen = true;
+    private SimulationManager simulationManager;
 
     public override void Init()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
+    }
+
+    public new void Start()
+    {
+        simulationManager = SimulationManager.Instance;
+        base.Start();
     }
 
     override public void Setup()
@@ -32,7 +39,14 @@ public class ElectricSwitch : ElectricComponent
     {
         isOpen = !isOpen;
         UpdateSprite();
+        bool managerWasSimulating = simulationManager.isSimulating;
+
         ProjectManager.OnModifyProject(ProjectModificationType.CircuitDataModification);
+
+        if (managerWasSimulating)
+        {
+            simulationManager.Play();
+        }
     }
 
     public override void UnpackCustomComponentData(string customDataString)

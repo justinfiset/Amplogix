@@ -91,10 +91,9 @@ public class CurrentVisualisation : MonoBehaviour
     {
         yield return new WaitForSeconds(0.5f);
 
-        ShootBall(targetPosition);
-
         if (isEmitting)
         {
+            ShootBall(targetPosition);
             StartCoroutine(BallShootingCoroutine(targetPosition));
         }
     }
