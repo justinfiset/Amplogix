@@ -101,19 +101,22 @@ public class SimulationManager : MonoBehaviour
     public void Play()
     {
         isSimulating = true;
-        isPaused = false;
 
         if (isPaused)
         {
             Resume();
+            isPaused = false;
         }
         else
         {
+            isPaused = false;
             startTime = Time.time;
             HandleCircuit();
             // CODE :
             CurrentVisualisationManager.StartEmission(circuitData);
         }
+
+        
 
         UpdateButtons();
     }

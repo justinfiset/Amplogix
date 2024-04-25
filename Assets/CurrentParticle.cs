@@ -10,6 +10,7 @@ public class CurrentParticle : MonoBehaviour
     public Color negativeColor;
     public Color positiveColor;
     private float targetDistance;
+    private int tweenID;
 
     public float targetSpeed = 1;
 
@@ -60,12 +61,18 @@ public class CurrentParticle : MonoBehaviour
 
     public void StartMovement()
     {
-        LeanTween.move(gameObject, targetPosition, GetExpectedTravelTime()).setDestroyOnComplete(true);
+        tweenID = LeanTween.move(gameObject, targetPosition, GetExpectedTravelTime()).setDestroyOnComplete(true).id;
+    }
+
+    public void ResumeMovement()
+    {
+        print("resuming particle movement");
+        LeanTween.resume(tweenID);
     }
 
     public void StopMovement()
     {
-        LeanTween.cancel(gameObject);
+        LeanTween.pause(tweenID);
     }
 
     private float CalculateExpectedDistance()

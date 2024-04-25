@@ -11,6 +11,7 @@ public class CurrentVisualisationManager : MonoBehaviour
 {
     private static HashSet<ElectricComponent> handledComponents;
     private static HashSet<ElectricComponent> emittingComponents;
+    private static HashSet<(ElectricComponent, ElectricComponent)> emittingBranches;
     public static bool isSetup { get; private set; } = false;
     public static bool doVisualCurrent = true;
 
@@ -26,6 +27,7 @@ public class CurrentVisualisationManager : MonoBehaviour
         {
             component.GetComponent<CurrentVisualisation>().ResumeParticleMovements();
         }
+        MakeBranchesEmit(emittingBranches);
     }
 
     public static void PauseEmission()
@@ -74,6 +76,7 @@ public class CurrentVisualisationManager : MonoBehaviour
 
         handledComponents = new();
         emittingComponents = new();
+        emittingBranches = new();
 
         /*
         for (int i = 0; i < meshList.Count; i++)
@@ -183,6 +186,7 @@ public class CurrentVisualisationManager : MonoBehaviour
         throw new Exception("next component not found");
     }
 
+    [Obsolete("Method is obsolete, call CornerBasedEmission instead")]
     private static void IterateAndStartEmitting(ElectricComponent component, ElectricComponent lastCorner, int componentIndex, Vector<float> meshCurrents, 
         ElectricMeshList meshList, int meshIndex, HashSet<ElectricComponent> handledComponents, List<ElectricComponent> clockwise)
     {
@@ -250,6 +254,7 @@ public class CurrentVisualisationManager : MonoBehaviour
             meshCurrents, meshList, meshIndex, handledComponents, clockwise);
     }
 
+    [Obsolete("Method is obsolete, call CornerBasedEmission instead")]
     private static void AlternateIterateAndStartEmitting(ElectricComponent component, ElectricComponent lastCorner, 
         ElectricComponent firstCorner,  int componentIndex,  Vector<float> meshCurrents, ElectricMeshList meshList,
         int meshIndex, List<ElectricComponent> clockwise, BranchStorage branches)
@@ -309,14 +314,17 @@ public class CurrentVisualisationManager : MonoBehaviour
 
                 if (sign == meshSign) // on emet du bon cote
                 {
-                    StartEmission(branch.Item1, branch.Item2);
+                    emittingBranches.Add(branch);
+                    //StartEmission(branch.Item1, branch.Item2);
                 } else
                 {
-                    StartEmission(branch.Item2, branch.Item1);
+                    emittingBranches.Add((branch.Item2, branch.Item1));
+                    //StartEmission(branch.Item2, branch.Item1);
                 }
                 handledBranches.AddBranch(branch);
             }
         }
+        MakeBranchesEmit(emittingBranches);
     }
 
     private static bool IsBranchInClockWiseDirection((ElectricComponent, ElectricComponent) branch, List<ElectricComponent> orderedComponents)
@@ -430,6 +438,14 @@ public class CurrentVisualisationManager : MonoBehaviour
         }
 
         return 1;
+    }
+
+    private static void MakeBranchesEmit(HashSet<(ElectricComponent, ElectricComponent)> emittingBranches)
+    {
+        foreach ((ElectricComponent,ElectricComponent) branch in emittingBranches)
+        {
+            StartEmission(branch.Item1, branch.Item2);
+        }
     }
 
     private static void StartEmission(ElectricComponent source, ElectricComponent target)

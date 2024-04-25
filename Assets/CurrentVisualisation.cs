@@ -76,7 +76,7 @@ public class CurrentVisualisation : MonoBehaviour
         for (int i = 0; i < ballParent.transform.childCount; i++)
         {
             particle = ballParent.transform.GetChild(i).GetComponent<CurrentParticle>();
-            particle.StartMovement();
+            particle.ResumeMovement();
         }
     }
     #endregion
