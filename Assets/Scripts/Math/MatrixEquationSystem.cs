@@ -54,7 +54,7 @@ public class MatrixEquationSystem
         float det = resistanceMatrix.Determinant();
         if (det != 0)
         {
-            for(int col = 0; col < meshCount; col++)
+            for (int col = 0; col < meshCount; col++)
             {
                 Matrix<float> temp = Matrix<float>.Build.DenseOfMatrix(resistanceMatrix);
                 temp.SetColumn(col, meshVoltage);

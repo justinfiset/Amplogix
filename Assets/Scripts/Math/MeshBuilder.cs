@@ -570,7 +570,7 @@ public class MeshBuilder : MonoBehaviour
         float prevAngle = previous.transform.localEulerAngles.z % 360;
         float angle = current.transform.localEulerAngles.z % 360; // permet d'avoir des valeurs parmit 0, 90, 180, 270 ,360, 
 
-        print("Mesh: " + mesh.Count + " Comp: " + current.type);
+        //print("Mesh: " + mesh.Count + " Comp: " + current.type);
 
         if (current.type == ElectricComponentType.PowerSource)
         {
@@ -595,14 +595,14 @@ public class MeshBuilder : MonoBehaviour
             }
 
             /////////////////////
-            if (multiplier == 1)
-            {
-                source.SetColor(Color.green); // TODO REMOVE (FOR DEBUG)
-            }
-            else
-            {
-                source.SetColor(Color.red); // TODO REMOVE (FOR DEBUG)
-            }
+            //if (multiplier == 1)
+            //{
+            //    source.SetColor(Color.green); // TODO REMOVE (FOR DEBUG)
+            //}
+            //else
+            //{
+            //    source.SetColor(Color.red); // TODO REMOVE (FOR DEBUG)
+            //}
             ////////////////////
             voltage = source.voltage * multiplier;
         }
@@ -663,8 +663,8 @@ public class MeshBuilder : MonoBehaviour
                         }
 
                         // c'est �gale de chaque cot�, Ex: R12, R21, etc...
-                        resistanceMatrix[secondary.Key, main.Key] = resistance;
-                        resistanceMatrix[main.Key, secondary.Key] = resistance;
+                        resistanceMatrix[secondary.Key, main.Key] = -resistance;
+                        resistanceMatrix[main.Key, secondary.Key] = -resistance;
                     }
                 }
                 else // La diagonale ex : R11, R22, R33
