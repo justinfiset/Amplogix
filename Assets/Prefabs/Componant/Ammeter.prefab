@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 760119220587353369}
   - component: {fileID: -4437862546455625529}
   - component: {fileID: 5812285750717448332}
-  - component: {fileID: 4484162633960121040}
+  - component: {fileID: -570235743816443964}
   m_Layer: 6
   m_Name: Ammeter
   m_TagString: Untagged
@@ -192,7 +192,10 @@ MonoBehaviour:
   sprite: {fileID: 0}
   isLightSource: 0
   showsCurrent: 1
---- !u!114 &4484162633960121040
+  hypotheticalIntensity: 0
+  hypotheticalCurrentSign: 0
+  hypotheticalVoltage: 0
+--- !u!114 &-570235743816443964
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

@@ -2,11 +2,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using Unity.VisualScripting;
 using UnityEngine;
-using static UnityEditor.PlayerSettings;
-//change
+
 public class Connection : MonoBehaviour
 {
     public int maxConnectionCount = 2;
@@ -21,7 +19,7 @@ public class Connection : MonoBehaviour
 
     public bool CanAddConnections()
     {
-        // Un fil n'a pas de limite de connection (pas de limite fixe / limité par les cases autours)
+        // Un fil n'a pas de limite de connection (pas de limite fixe / limitï¿½ par les cases autours)
         if (GetComponent<ElectricComponent>().type == ElectricComponentType.Wire)
             return true;
         else
@@ -78,17 +76,54 @@ public class Connection : MonoBehaviour
 
     public bool IsFlatConnection()
     {
-        if (connections.connections.Length != 2) return false;
-
-        for (int i = 0; i <= connections.connections.Length; i++)
+        if (GetNumberOfConnections() != 2)
         {
-            if (GetOppositeComponent(connections.connections[i]) != null)
+            //print("component doesnt have 2 connections");
+            return false;
+        }
+
+        //print("connections from " + gameObject);
+        foreach (ElectricComponent c in connections.connections)
+        {
+            //print(c);
+        }
+
+        for (int i = 0; i < 4; i++)
+        {
+            /*
+            print("for " + connections.connections[i] + " at i = " + i);
+            print((Position)i);
+            print("opposite: " + GetOppositeConnection((Position)i));
+            print("opposite is " + GetOppositeComponent(connections.connections[i]));
+            
+            if (connections.connections[i] == null) {
+                print("checked connection is null");
+            }
+            */
+            
+            //print(GetOppositeComponent(connections.connections[i]) == null);
+            
+            if (connections.connections[i] != null && GetOppositeComponent(connections.connections[i]) != null)
             {
+                //print("connection is flat");
                 return true;
             }
         }
-
+        //print("no parallel connections found");
         return false;
+    }
+
+    public int GetNumberOfConnections()
+    {
+        int count = 0;
+        foreach (ElectricComponent c in connections.connections)
+        {
+            if (c != null)
+            {
+                count++;
+            }
+        }
+        return count;
     }
 
     public ElectricComponent GetOppositeComponent(ElectricComponent input)
@@ -102,6 +137,24 @@ public class Connection : MonoBehaviour
             }
         }
         return null;
+    }
+
+    public ElectricComponent GetNextComponent(ElectricComponent source)
+    {
+        if (connections.connections.Length != 2)
+        {
+            throw new Exception("component needs to have only 2 connections");
+        }
+
+        foreach (ElectricComponent component in connections.connections)
+        {
+            if (component != null && component != source)
+            {
+                return component;
+            }
+        }
+
+        throw new Exception("component not found");
     }
 
     public ElectricComponent[] GetAllOtherConnections(ElectricComponent source)
@@ -202,13 +255,13 @@ public class Connection : MonoBehaviour
         {
             for (int i = 0; i < 4; i++)
             {
-                if (connections.IsConnected(i)) // si connecté et pas de connection vis.
+                if (connections.IsConnected(i)) // si connectï¿½ et pas de connection vis.
                 {
                     if (visualConnections[i] == null)
                     {
                         CreateVisualConnection(i);
                     }
-                } else if (visualConnections[i] != null) // si déco. et il y a co. vis.
+                } else if (visualConnections[i] != null) // si dï¿½co. et il y a co. vis.
                 {
                     Destroy(visualConnections[i].gameObject);
                 }
@@ -361,15 +414,15 @@ public class Connection : MonoBehaviour
             UpdateVisualConnections();
             ProjectManager.OnModifyProject(ProjectModificationType.CircuitModification);
         }
-        //else throw new Exception("On Excede le maximum de connection il y a un cas non géré. : " + ConnectionCount());
+        //else throw new Exception("On Excede le maximum de connection il y a un cas non gï¿½rï¿½. : " + ConnectionCount());
     }
     #endregion
 
     #region Connection getters
     /*
      * Retourne un array de toutes les connection (Gauche, Droite, Haut, Bas)
-     * Sauf celle reçue en argument
-     * Null si il n'y a pas de connection à cet endroit
+     * Sauf celle reï¿½ue en argument
+     * Null si il n'y a pas de connection ï¿½ cet endroit
      */
     public List<ElectricComponent> GetConnectedToExcept(ElectricComponent entryPoint)
     {
@@ -377,7 +430,7 @@ public class Connection : MonoBehaviour
     }
     /*
      * Retourne un array de toutes les connection(Gauche, Droite, Haut, Bas)
-     * Null si il n'y a pas de connection à cet endroit
+     * Null si il n'y a pas de connection ï¿½ cet endroit
      */
     public List<ElectricComponent> GetAllConnectedTo()
     {

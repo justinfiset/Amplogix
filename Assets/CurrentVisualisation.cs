@@ -1,23 +1,26 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static Unity.VisualScripting.Member;
 using static UnityEngine.ParticleSystem;
 
 [RequireComponent(typeof(ElectricComponent))]
 public class CurrentVisualisation : MonoBehaviour
 {
     private bool isEmitting = false;
-    private bool realCurrent;
-    private Connection.Position currentDirection;
+    private bool realCurrent = false;
+    private GameObject originalParent;
     private GameObject ballParent;
-    private Vector2 targetPosition;
 
     public GameObject particlePrefab;
 
-    public void SetupTarget(Vector2 targetPosition, Connection.Position direction)
+    private void Start()
     {
-        this.targetPosition = targetPosition;
-        currentDirection = direction;
+        originalParent = new GameObject("ball parent");
+
+        
+        ballParent = Instantiate(originalParent, transform);
+
     }
 
     public void UpdateCurrent(float current)
@@ -28,16 +31,18 @@ public class CurrentVisualisation : MonoBehaviour
     }
 
     #region Starting and killing emission
-    public void StartParticleEmission()
+    public void StartParticleEmission(Vector2 targetPosition)
     {
         isEmitting = true;
 
-        StartCoroutine(BallShootingCoroutine());
+        StartCoroutine(BallShootingCoroutine(targetPosition));
     }
 
     public void KillParticleEmission()
     {
+        print("killing particle emission for " + gameObject);
         isEmitting= false;
+        StopAllCoroutines();
         KillExistingParticles();
     }
     #endregion
@@ -81,24 +86,23 @@ public class CurrentVisualisation : MonoBehaviour
         KillExistingParticles();
     }
 
-    private IEnumerator BallShootingCoroutine()
+    private IEnumerator BallShootingCoroutine(Vector2 targetPosition)
     {
         yield return new WaitForSeconds(0.5f);
 
-        ShootBall();
+        ShootBall(targetPosition);
 
         if (isEmitting)
         {
-            StartCoroutine(BallShootingCoroutine());
+            StartCoroutine(BallShootingCoroutine(targetPosition));
         }
     }
 
-    private void ShootBall()
+    private void ShootBall(Vector2 targetPosition)
     {
-        CurrentParticle currentParticle = Instantiate(particlePrefab, ballParent.transform)
-            .GetComponent<CurrentParticle>();
+        CurrentParticle currentParticle = Instantiate(particlePrefab, ballParent.transform).GetComponent<CurrentParticle>();
 
-        currentParticle.Create(realCurrent, targetPosition, currentDirection);
+        currentParticle.Create(realCurrent, targetPosition);
     }
 
     private void KillExistingParticles()
@@ -106,6 +110,7 @@ public class CurrentVisualisation : MonoBehaviour
         if (ballParent != null)
         {
             Destroy(ballParent);
+            ballParent = Instantiate(originalParent, transform);
         }
     }
 

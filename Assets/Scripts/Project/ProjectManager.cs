@@ -1,10 +1,8 @@
-using MathNet.Numerics.RootFinding;
 using SFB;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Forms;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -80,7 +78,6 @@ public class ProjectManager : MonoBehaviour
     IEnumerator InitializeAllConnections()
     {
         yield return new WaitForNextFrameUnit();
-        //yield return new WaitForFixedUpdate();
         foreach (ElectricComponent component in componentList.Keys)
         {
             component.InitConnections();
@@ -110,13 +107,13 @@ public class ProjectManager : MonoBehaviour
             SaveProjectAs();
         } else
         {
-            print("Saving project...");
             SerializeComponents();
             string data = JsonUtility.ToJson(project, true);
             FileUtility.WriteString(project.savePath, data);
 
             OnSaveProject();
             MainMenuButtons.AddRecentProject(project.savePath);
+            print($"<color=#00FF00>Project saved...</color>");
         }
     }
 
@@ -133,9 +130,12 @@ public class ProjectManager : MonoBehaviour
     public void SaveProjectAs()
     {
         print("Opening file option window...");
-        string path = StandaloneFileBrowser.SaveFilePanel("Sauvegarder le projet", "", nameText.text, "amp");
-        project.savePath = path;
-        SaveProject();
+        StandaloneFileBrowser.SaveFilePanelAsync("Sauvegarder le projet", Application.dataPath, nameText.text, "amp", delegate (string path)
+        {
+            project.savePath = path;
+            SaveProject();
+            print($"<color=#00FF00>Project saved...</color>");
+        });
     }
 
     public void ReturnToMenu(bool bypassSaveProtection = false)
@@ -167,8 +167,12 @@ public class ProjectManager : MonoBehaviour
         m_Instance.savedIndicator.SetActive(false);
         m_Instance.isNotSavedIndicator.SetActive(true);
 
-        if(type == ProjectModificationType.CircuitModification || type == ProjectModificationType.CircuitDataModification)
+        if (type == ProjectModificationType.CircuitModification || type == ProjectModificationType.CircuitDataModification)
+        {
+
             SimulationManager.ProjectModificationCallback(); // TODO appeler dans un fonction moin appelé
+            CurrentVisualisationManager.ResetParticleEmissions();
+        }
     }
 
     public static bool IsSelectionEmpty()
@@ -318,6 +322,7 @@ public class ProjectManager : MonoBehaviour
 
     public void ConnectComponents(ElectricComponent first, ElectricComponent second)
     {
+        //print("CONNECTING " + first + " AND " + second);
         if(first.connectionManager.CanAddConnections() && second.connectionManager.CanAddConnections())
         {
             if (ComponentsPointToEachOther(first, second))

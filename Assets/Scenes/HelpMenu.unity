@@ -300,7 +300,8 @@ MonoBehaviour:
     \xE0 gauche de l\u2019\xE9cran lorsqu\u2019il est s\xE9lectionn\xE9\r\nIl est
     possible de modifier le courant, la r\xE9sistance ou la diff\xE9rence de potentiel
     de certains composants dans la boite en bas \xE0 gauche de l\u2019\xE9cran lorsqu\u2019il
-    est s\xE9lectionn\xE9\r\n"
+    est s\xE9lectionn\xE9\r\nAfin de visualiser le courant appuyer sur d\xE9marer
+    en haut \xE0 droite\n \n"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}

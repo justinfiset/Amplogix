@@ -9,7 +9,6 @@ public class CurrentParticle : MonoBehaviour
     private Vector2 targetPosition;
     public Color negativeColor;
     public Color positiveColor;
-    private Connection.Position direction;
     private float targetDistance;
 
     public float targetSpeed = 1;
@@ -18,7 +17,7 @@ public class CurrentParticle : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     /*
@@ -50,13 +49,12 @@ public class CurrentParticle : MonoBehaviour
         }
     }
 
-    public void Create(bool realCurrent, Vector2 targetPosition, Connection.Position direction)
+    public void Create(bool realCurrent, Vector2 targetPosition)
     {
-        this.direction = direction;
         this.targetPosition = targetPosition;
         targetDistance = CalculateExpectedDistance();
 
-        WaitToSetColor(realCurrent);
+        StartSetColorCoroutine(realCurrent);
         StartMovement();
     }
 
@@ -72,6 +70,13 @@ public class CurrentParticle : MonoBehaviour
 
     private float CalculateExpectedDistance()
     {
+        double diffX = Math.Abs(targetPosition.x - transform.position.x);
+        double diffY = Math.Abs(targetPosition.y - transform.position.y);
+        return (float) Math.Sqrt(Math.Pow(diffX, 2d) + Math.Pow(diffY, 2d));
+    }
+
+
+        /*
         if (direction == Connection.Position.Left || direction == Connection.Position.Right)
         {
             return Math.Abs(targetPosition.x - transform.position.x);
@@ -80,25 +85,16 @@ public class CurrentParticle : MonoBehaviour
         {
             return Mathf.Abs(targetPosition.y - transform.position.y);
         }
+        */
 
-        throw new Exception("Direction of particle needs to be set");
-    }
+
 
     public float GetExpectedTravelTime()
     {
-        if (direction == Connection.Position.Left || direction == Connection.Position.Right)
-        {
-            return Math.Abs(targetDistance / targetSpeed);
-        }
-        if (direction == Connection.Position.Top || direction == Connection.Position.Bottom)
-        {
-            return Mathf.Abs(targetDistance / targetSpeed);
-        }
-
-        throw new Exception("Direction of particle needs to be set");
+        return Mathf.Abs(targetDistance / targetSpeed);
     }
 
-    private IEnumerator WaitToSetColor(bool realCurrent)
+    private IEnumerator StartSetColorCoroutine(bool realCurrent)
     {
         yield return new WaitForEndOfFrame();
 

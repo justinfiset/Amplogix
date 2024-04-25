@@ -11,7 +11,6 @@ public class ScreenshotManager : MonoBehaviour
     private Camera cam;
 
     public Camera mainCam;
-    
 
     private void Start()
     {
@@ -22,11 +21,6 @@ public class ScreenshotManager : MonoBehaviour
     private void Update()
     {
         cam.orthographicSize = mainCam.orthographicSize;
-    }
-
-    public string SelectDirectory()
-    {
-        return StandaloneFileBrowser.SaveFilePanel("Enregistrer le schéma", "", "Circuit", "png");
     }
 
     public void SaveCurrentView(string path)
@@ -52,10 +46,6 @@ public class ScreenshotManager : MonoBehaviour
         RenderTexture.active = null;
         return renderedTexture;
     }
-
-   
-
-   
 
     public static void SavecamView(Camera cam, string path)
     {
