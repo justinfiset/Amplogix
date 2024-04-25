@@ -299,9 +299,9 @@ public class CurrentVisualisationManager : MonoBehaviour
                 //if it contains both the current component and the previous (common branch)
                  if (meshList[i].Contains(component) && meshList[i].Contains(meshList[thisMeshIndex][componentIndex - 1])) 
                  {
-                     print("component found in common");
-                    print("in this mesh i = " + meshCurrents[thisMeshIndex]);
-                    print("in other mesh i = " + meshCurrents[i]);
+                     //print("component found in common");
+                     //print("in this mesh i = " + meshCurrents[thisMeshIndex]);
+                     //print("in other mesh i = " + meshCurrents[i]);
                      if (Math.Abs(meshCurrents[thisMeshIndex]) > Math.Abs(meshCurrents[i]))
                      {
                          return 1;
@@ -323,7 +323,7 @@ public class CurrentVisualisationManager : MonoBehaviour
 
     private static void StartEmission(ElectricComponent source, ElectricComponent target)
     {
-        print("starting emission from " + source + " to " + target);
+        //print("starting emission from " + source + " to " + target);
 
         CurrentVisualisation emitter = source.GetComponent<CurrentVisualisation>();
 

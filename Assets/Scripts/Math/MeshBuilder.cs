@@ -211,29 +211,9 @@ public class MeshBuilder : MonoBehaviour
             Matrix<float> resistanceMatrix = GetResistanceMatrix(meshList);
             MatrixEquationSystem system = new MatrixEquationSystem(resistanceMatrix, voltageMatrix);
 
-            //////////////////////////////////////
-            List<ElectricComponent> prefered = null;
-            foreach (List<ElectricComponent> list in meshList.Values)
-            {
-                if (prefered == null || list.Count < prefered.Count)
-                {
-                    prefered = list;
-                }
-            }
-            foreach (ElectricComponent component in prefered)
-            {
-                //component._SetColor(Color.blue);
-                if(component.type == ElectricComponentType.PowerSource)
-                {
-
-                }
-            }
-            //////////////////////////////////////
-            /*
             print(system.resistanceMatrix.ToString());
             print(system.meshVoltage.ToString());
             print(system.meshCurrent.ToString());
-            */
 
             SetAllComponentCurrent(system, meshList);
             ExecuteAllVoltmeters();
@@ -242,7 +222,7 @@ public class MeshBuilder : MonoBehaviour
             return system;
         } catch (IncorrectCircuitException e)
         {
-            print(e.Message);
+            //print(e.Message);
         }
 
         return null;
@@ -325,14 +305,49 @@ public class MeshBuilder : MonoBehaviour
 
         unsafeMeshList = RemoveDuplicatedMeshes(unsafeMeshList);
         unsafeMeshList = RemoveIncorrectMeshes(unsafeMeshList);
+        unsafeMeshList = RemoveParentMeshes(unsafeMeshList);
         DetectShortCircuit(unsafeMeshList);
         PopulateMeshMap(unsafeMeshList, meshList);
         return meshList;
     }
 
+    public static List<List<ElectricComponent>> RemoveParentMeshes(List<List<ElectricComponent>> toCorrect)
+    {
+        toCorrect.Sort((a, b) => a.Count - b.Count); // On vient trier par ordre croissant
+        List<List<ElectricComponent>> childMeshes = new List<List<ElectricComponent>>();
+
+        foreach (List<ElectricComponent> parent in toCorrect)
+        {
+            int foundCount = 0;
+            foreach(ElectricComponent comp in parent)
+            {
+                bool wasFound = false;
+                foreach(List<ElectricComponent> child in childMeshes)
+                {
+                    foreach(ElectricComponent temp in child)
+                    {
+                        if(comp.GetHashCode() == temp.GetHashCode())
+                        {
+                            wasFound = true;
+                            break;
+                        }
+                    }
+                }
+                if (wasFound) foundCount++;
+            }
+
+            if(foundCount != parent.Count)
+            {
+                childMeshes.Add(parent);
+            }
+            //print("Found : " + foundCount + " And needed : " + parent.Count);
+        }
+        return childMeshes;
+    }
+
     public static List<List<ElectricComponent>> RemoveIncorrectMeshes(List<List<ElectricComponent>> toCorrect)
     {
-        List<List<ElectricComponent>> correctMeshes = new List<List<ElectricComponent>>();
+        List<List<ElectricComponent>> validMeshes = new List<List<ElectricComponent>>();
         foreach(List<ElectricComponent> mesh in toCorrect)
         {
             if(mesh.Count >= 4) // Doit avoir plus de 4 composants
@@ -349,11 +364,11 @@ public class MeshBuilder : MonoBehaviour
 
                 if(isValid)
                 {
-                    correctMeshes.Add(mesh);
+                    validMeshes.Add(mesh);
                 }
             }
         }
-        return correctMeshes;
+        return validMeshes;
     }
 
     public static void PopulateMeshMap(List<List<ElectricComponent>> setList, ElectricMeshList meshList)
@@ -493,8 +508,6 @@ public class MeshBuilder : MonoBehaviour
         return multiplier;
     }
 
-    // TODO tester
-    // TODO prendre en compte les condensateurs et / ou bobines
     // On analyse les sources en sens horaire selon les lois de kirchoff
     public static float GetMeshVoltage(List<ElectricComponent> mesh)
     {
@@ -551,19 +564,21 @@ public class MeshBuilder : MonoBehaviour
 
     public static float AnalyseMeshVoltage(ElectricComponent root, ElectricComponent previous, ElectricComponent current, List<ElectricComponent> mesh)
     {
-        if (root == null) root = current; // Si on vient de lancer le tout
         // Sinon on continue : 
         float voltage = 0;
 
         // On trouve le voltage et le sens
-        float prevAngle = (previous == null) ? 0 : previous.transform.localEulerAngles.z % 360;
+        float prevAngle = previous.transform.localEulerAngles.z % 360;
         float angle = current.transform.localEulerAngles.z % 360; // permet d'avoir des valeurs parmit 0, 90, 180, 270 ,360, 
+
+        print("Mesh: " + mesh.Count + " Comp: " + current.type);
 
         if (current.type == ElectricComponentType.PowerSource)
         {
-            PowerSource powerSource = (PowerSource) current;
+            PowerSource source = (PowerSource) current;
 
             int multiplier = 1;
+
             if (previous != null && previous.type == ElectricComponentType.Wire)
             {
                 multiplier = GetPowerSourceMultiplier(previous.connectionManager, current);
@@ -583,14 +598,14 @@ public class MeshBuilder : MonoBehaviour
             /////////////////////
             if (multiplier == 1)
             {
-                powerSource.SetColor(Color.green); // TODO REMOVE (FOR DEBUG)
+                source.SetColor(Color.green); // TODO REMOVE (FOR DEBUG)
             }
             else
             {
-                powerSource.SetColor(Color.red); // TODO REMOVE (FOR DEBUG)
+                source.SetColor(Color.red); // TODO REMOVE (FOR DEBUG)
             }
             ////////////////////
-            voltage = powerSource.voltage * multiplier;
+            voltage = source.voltage * multiplier;
         }
 
         // Gestion de la récursivité
@@ -598,13 +613,13 @@ public class MeshBuilder : MonoBehaviour
         ElectricComponent next = null;
         foreach(ElectricComponent connection in connections)
         {
-            if(connection != null && connection !=  previous)
+            if(connection != null && connection != previous && mesh.Contains(connection))
             {
                 next = connection;
                 break;
             }
         }
-        if(next != null && current != root && mesh.Contains(next))
+        if(next != null && current != root)
         {
             voltage += AnalyseMeshVoltage(root, current, next, mesh);
         }
@@ -615,35 +630,8 @@ public class MeshBuilder : MonoBehaviour
     public static Vector<float> GetVoltageMatrix(ElectricMeshList meshList)
     {
         Vector<float> voltageMatrix = Vector<float>.Build.Dense(meshList.Count);
-
-        /*
-        ////////////////////// DEBUG CODE
-        ProjectManager.ChangeAllComponentsColor(Color.black);
-        List<Color> colors = new List<Color> { Color.red, Color.blue, Color.cyan, Color.yellow };
-        int index = 0;
         foreach (KeyValuePair<int, List<ElectricComponent>> mesh in meshList)
-        {
-            string value = "Composants: ";
-            foreach (ElectricComponent comp in mesh.Value)
-            {
-                if (comp.type != ElectricComponentType.PowerSource)
-                {
-                    value += comp.name + ", ";
-                    comp._SetColor(colors[index]);
-                }
-            }
-            print(value);
-            index++;
-        }
-        //////////////////////////////////////////////////
-        */
-
-        foreach (KeyValuePair<int, List<ElectricComponent>> mesh in meshList)
-        {
-            float result = GetMeshVoltage(mesh.Value);
-            voltageMatrix[mesh.Key] = result;
-        }
-
+            voltageMatrix[mesh.Key] = GetMeshVoltage(mesh.Value);
         return voltageMatrix;
     }
 
