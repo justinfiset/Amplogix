@@ -58,7 +58,9 @@ public class MatrixEquationSystem
             {
                 Matrix<float> temp = Matrix<float>.Build.DenseOfMatrix(resistanceMatrix);
                 temp.SetColumn(col, meshVoltage);
-                result[col] = (temp.Determinant() / det);
+                float current = (temp.Determinant() / det);
+                current = current * Mathf.Sign(meshVoltage[col]); // On vient donner le signe positif ou négatif au courrant
+                result[col] = current;
             }
         } else
         {

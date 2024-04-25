@@ -9,20 +9,23 @@ public class CameraDrag : MonoBehaviour
 
     public KeyCode dragButton = KeyCode.Mouse1;
 
+    private Camera cam;
+
     void Start()
     {
-        resetPos = Camera.main.transform.position;
+        cam = GetComponent<Camera>();
+        resetPos = cam.transform.position;
     }
 
     void LateUpdate()
     {
         if (Input.GetKey(dragButton))
         {
-            diffPos = (Camera.main.ScreenToWorldPoint(Input.mousePosition)) - Camera.main.transform.position;
+            diffPos = (cam.ScreenToWorldPoint(Input.mousePosition)) - cam.transform.position;
             if (isDragging == false)
             {
                 isDragging = true;
-                originPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                originPos = cam.ScreenToWorldPoint(Input.mousePosition);
             }
         }
         else
@@ -31,7 +34,7 @@ public class CameraDrag : MonoBehaviour
         }
         if (isDragging == true)
         {
-            Camera.main.transform.position = originPos - diffPos;
+            cam.transform.position = originPos - diffPos;
         }
         
         if (Input.GetKeyDown(KeyCode.Space))
@@ -42,6 +45,6 @@ public class CameraDrag : MonoBehaviour
 
     public void ResetCamPos()
     {
-        Camera.main.transform.position = resetPos;
+        cam.transform.position = resetPos;
     }
 }
