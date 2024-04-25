@@ -211,9 +211,9 @@ public class MeshBuilder : MonoBehaviour
             Matrix<float> resistanceMatrix = GetResistanceMatrix(meshList);
             MatrixEquationSystem system = new MatrixEquationSystem(meshList, resistanceMatrix, voltageMatrix);
 
-            print(system.resistanceMatrix.ToString());
-            print(system.meshVoltage.ToString());
-            print(system.meshCurrent.ToString());
+            //print(system.resistanceMatrix.ToString());
+            //print(system.meshVoltage.ToString());
+            //print(system.meshCurrent.ToString());
 
             SetAllComponentCurrent(system, meshList);
             ExecuteAllVoltmeters();
@@ -485,7 +485,7 @@ public class MeshBuilder : MonoBehaviour
             if (previous.connections.connections[i] == component)
             {
                 float expectedAngle = 0f;
-                float angle = component.transform.localEulerAngles.z % 360; // permet d'avoir des valeurs parmit 0, 90, 180, 
+                float angle = component.transform.localEulerAngles.z; // permet d'avoir des valeurs parmit 0, 90, 180, 
 
                 Connection.Position orientation = (Connection.Position)i;
                 switch (orientation)
@@ -557,19 +557,17 @@ public class MeshBuilder : MonoBehaviour
             }
         }
 
-        float meshVoltage = AnalyseMeshVoltage(first, first, next, mesh);
+        float meshVoltage = AnalyseMeshVoltage(first, first, next, mesh, 0);
         return meshVoltage;
     }
 
-    public static float AnalyseMeshVoltage(ElectricComponent root, ElectricComponent previous, ElectricComponent current, List<ElectricComponent> mesh)
+    public static float AnalyseMeshVoltage(ElectricComponent root, ElectricComponent previous, ElectricComponent current, List<ElectricComponent> mesh, int callstackCount)
     {
-        // Sinon on continue : 
+        if (callstackCount > mesh.Count) return 0f;
         float voltage = 0;
 
         // On trouve le voltage et le sens
-        float prevAngle = previous.transform.localEulerAngles.z % 360;
-        float angle = current.transform.localEulerAngles.z % 360; // permet d'avoir des valeurs parmit 0, 90, 180, 270 ,360, 
-
+        float angle = current.transform.localEulerAngles.z; // permet d'avoir des valeurs parmit 0, 90, 180, 270 ,360, 
         //print("Mesh: " + mesh.Count + " Comp: " + current.type);
 
         if (current.type == ElectricComponentType.PowerSource)
@@ -585,7 +583,7 @@ public class MeshBuilder : MonoBehaviour
             else // si on a pas un fil avant
             {
                 if(angle == 0f && previous.transform.localPosition.x < current.transform.localPosition.x)
-                        multiplier = -1;
+                    multiplier = -1;
                 else if (angle == 270f && previous.transform.localPosition.y > current.transform.localPosition.y)
                     multiplier = -1;
                 else if (angle == 180f && previous.transform.localPosition.x > current.transform.localPosition.x)
@@ -620,7 +618,8 @@ public class MeshBuilder : MonoBehaviour
         }
         if(next != null && current != root)
         {
-            voltage += AnalyseMeshVoltage(root, current, next, mesh);
+            callstackCount++;
+            voltage += AnalyseMeshVoltage(root, current, next, mesh, callstackCount);
         }
 
         return voltage;
