@@ -43,6 +43,7 @@ public class SaveScreenShotPopup : MonoBehaviour
         {
             if(Path.IsPathRooted(path))
             {
+                this.path = path;
                 fileName.text = Path.GetFileNameWithoutExtension(path);
                 cheminement.text = path;
                 saveButton.interactable = true;
@@ -53,7 +54,7 @@ public class SaveScreenShotPopup : MonoBehaviour
     public void Save()
     {
         ProjectManager.UnselectComponent();
-        manager.SaveCurrentView(path);        
+        manager.SaveCurrentView(path);
         Hide();
         ProjectManager.canInteract = true;
     }

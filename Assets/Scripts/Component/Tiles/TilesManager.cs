@@ -24,12 +24,6 @@ public class TilesManager : MonoBehaviour
         currentComponent = GetComponent<ElectricComponent>();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     public void ShowTiles(ElectricComponent source)
     {
         parent = new GameObject("Tiles");

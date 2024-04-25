@@ -254,7 +254,6 @@ public class ElectricComponent : MonoBehaviour
 
     public virtual void OnCurrentChange(float newCurrent)
     {
-
         if (showsCurrent)
         {
             CurrentVisualisation currentVisualisation = GetComponent<CurrentVisualisation>();

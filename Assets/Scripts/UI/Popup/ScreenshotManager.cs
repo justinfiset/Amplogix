@@ -15,10 +15,9 @@ public class ScreenshotManager : MonoBehaviour
     private void Start()
     {
         cam = GetComponent<Camera>();
-        
     }
 
-    private void Update()
+    private void CopyMainCamSize(Camera cam)
     {
         cam.orthographicSize = mainCam.orthographicSize;
     }
@@ -28,14 +27,13 @@ public class ScreenshotManager : MonoBehaviour
         SavecamView(cam, path);
     }
 
-    public Texture2D GetCurrentViewTexture()
+    private Texture2D GetCurrentViewTexture()
     {
         return GetCurrentViewTexture(cam);
     }
 
-    public static Texture2D GetCurrentViewTexture(Camera cam)
+    private static Texture2D GetCurrentViewTexture(Camera cam)
     {
-
         RenderTexture screenTexture = new RenderTexture(Screen.width, Screen.height, 16);
         cam.targetTexture = screenTexture;
         RenderTexture.active = screenTexture;
@@ -47,8 +45,9 @@ public class ScreenshotManager : MonoBehaviour
         return renderedTexture;
     }
 
-    public static void SavecamView(Camera cam, string path)
+    public void SavecamView(Camera cam, string path)
     {
+        CopyMainCamSize(cam);
         Texture2D renderedTexture = GetCurrentViewTexture(cam);
         byte[] byteArray = renderedTexture.EncodeToPNG();
         File.WriteAllBytes(path, byteArray);

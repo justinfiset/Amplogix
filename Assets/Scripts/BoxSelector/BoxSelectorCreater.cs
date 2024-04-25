@@ -56,9 +56,6 @@ public class BoxSelectorCreater : MonoBehaviour
             rectangle.sizeDelta = new Vector2(Math.Abs(witdh), Math.Abs(height));
         }
 
-
-
-
         if (Input.GetMouseButtonUp(0)) 
         {
             firstTime = true;
