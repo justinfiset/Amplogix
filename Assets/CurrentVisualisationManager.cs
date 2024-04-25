@@ -230,7 +230,7 @@ public class CurrentVisualisationManager : MonoBehaviour
             IterateAndStartEmitting(GetNextComponent(clockwise, componentIndex), component, ++componentIndex, 
                 meshCurrents, meshList, meshIndex, handledComponents, clockwise);
             return; // si on est un coin et qu'il n'y a pas de coin precedant, on itere en se settant comme lastCorner
-            // même chose si on est déjà handled
+            // mï¿½me chose si on est dï¿½jï¿½ handled
         }
 
         if (GetSignInMesh(component, meshList, componentIndex, meshIndex, meshCurrents) == 1)
@@ -275,11 +275,36 @@ public class CurrentVisualisationManager : MonoBehaviour
 
     private static void CornerBasedEmission(ElectricMeshList meshList, Vector<float> meshCurrents)
     {
-        List<ElectricComponent> cornerList = new();
-
         Dictionary<int, (List<ElectricComponent>, BranchStorage)> meshCornerLists = BuildMeshCorners(meshList);
 
+        BranchStorage handledBranches = new();
 
+        for (int i = 0; i < meshCornerLists.Count; i++) // pour chaque mesh dans le systeme
+        {
+            foreach ((ElectricComponent, ElectricComponent) branch in meshCornerLists[i].Item2.branches) // pour chaque branche du mesh
+            {
+                if (handledBranches.Contains(branch))
+                {
+                    continue;
+                }
+
+                int sign = GetBranchSignInMesh(branch, i, meshCornerLists, meshCurrents); // sign du petit i de la branche
+                int meshSign = Math.Sign(meshCurrents[i]); // sign du grand I dans le mesh
+
+                if (sign == 0) // aucun courant dans la branche (possible?)
+                {
+                    continue;
+                }
+
+                if (sign == meshSign) // on emet du bon cote
+                {
+                    StartEmission(branch.Item1, branch.Item2);
+                } else
+                {
+                    StartEmission(branch.Item2, branch.Item1);
+                }
+            }
+        }
     }
 
     private static Dictionary<int, (List<ElectricComponent>, BranchStorage)> BuildMeshCorners(ElectricMeshList meshList)
@@ -311,10 +336,31 @@ public class CurrentVisualisationManager : MonoBehaviour
         return meshCornerLists;
     }
 
-    private static int GetBranchSignInMesh((ElectricComponent, ElectricComponent) branch, 
+    private static int GetBranchSignInMesh((ElectricComponent, ElectricComponent) branch, int meshIndex,
         Dictionary<int, (List<ElectricComponent>, BranchStorage)> meshCornerLists, Vector<float> meshCurrents)
     {
-        return 0;
+        float thisMeshCurrent = meshCurrents[meshIndex];
+        int otherMeshIndex = -1;
+        bool otherMeshFound = false;
+
+        for (int i = 0; i < meshCornerLists.Count; i++) // trouver l'autre maille avec la branch
+        {
+            if (i != meshIndex && meshCornerLists[i].Item2.Contains(branch))
+            {
+                otherMeshIndex = i;
+                otherMeshFound = true;
+                break;
+            }
+        }
+
+        if (!otherMeshFound)
+        {
+            return Math.Sign(meshCurrents[meshIndex]);
+        }
+
+        float currentInBranch = thisMeshCurrent - meshCurrents[otherMeshIndex];
+
+        return Math.Sign(currentInBranch);
     }
 
     private static int GetSignInMesh(ElectricComponent component, ElectricMeshList meshList, int componentIndex, int thisMeshIndex, Vector<float> meshCurrents)
@@ -393,7 +439,7 @@ public class CurrentVisualisationManager : MonoBehaviour
 
     private class BranchStorage
     {
-        readonly public HashSet<(ElectricComponent, ElectricComponent)> branches;
+        public readonly HashSet<(ElectricComponent, ElectricComponent)> branches;
 
         public BranchStorage()
         {
@@ -419,7 +465,24 @@ public class CurrentVisualisationManager : MonoBehaviour
             return true;
         }
 
-        public bool AreBranchesEqual((ElectricComponent, ElectricComponent) branch1, (ElectricComponent, ElectricComponent) branch2)
+        public bool Contains((ElectricComponent, ElectricComponent) branch)
+        {
+            foreach ((ElectricComponent, ElectricComponent) componentPair in branches)
+            {
+                if (AreBranchesEqual(componentPair, branch))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public int Count()
+        {
+            return branches.Count;
+        }
+
+        public static bool AreBranchesEqual((ElectricComponent, ElectricComponent) branch1, (ElectricComponent, ElectricComponent) branch2)
         {
             List<ElectricComponent> branch1Items = new List<ElectricComponent>(2)
             {

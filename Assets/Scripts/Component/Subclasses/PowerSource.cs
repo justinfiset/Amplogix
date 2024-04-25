@@ -41,7 +41,15 @@ public class PowerSource : ElectricComponent
 
     public ElectricComponent GetPositiveSideConnection()
     {
-        return null; //TODO
+        Connection connectionComponent = GetComponent<Connection>();
+        float rotation = transform.rotation.z;
+
+        if (rotation % 1 != 0)
+        {
+            print("ROTATION DE LA SOURCE N'EST PAS Z?RO");
+        }
+
+        return connectionComponent.connections.connections[Connection.GetMultiplierFromConnection((int)rotation)];
     }
 
     public override void UnpackCustomComponentData(string customDataString)

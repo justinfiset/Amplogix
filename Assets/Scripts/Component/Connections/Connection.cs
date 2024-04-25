@@ -19,11 +19,22 @@ public class Connection : MonoBehaviour
 
     public bool CanAddConnections()
     {
-        // Un fil n'a pas de limite de connection (pas de limite fixe / limité par les cases autours)
+        // Un fil n'a pas de limite de connection (pas de limite fixe / limitï¿½ par les cases autours)
         if (GetComponent<ElectricComponent>().type == ElectricComponentType.Wire)
             return true;
         else
             return ConnectionCount() < maxConnectionCount;
+    }
+    public int WhereIsConnected(ElectricComponent component)
+    {
+        for (int i = 0; i < connections.connections.Length; i++)
+        {
+            if (connections.connections[i] == component)
+            {
+                return i;
+            }
+        }
+        throw new Exception("not connected to " + component);
     }
 
     public void CreateInitialConnections(ConnectionValueData data)
@@ -244,13 +255,13 @@ public class Connection : MonoBehaviour
         {
             for (int i = 0; i < 4; i++)
             {
-                if (connections.IsConnected(i)) // si connecté et pas de connection vis.
+                if (connections.IsConnected(i)) // si connectï¿½ et pas de connection vis.
                 {
                     if (visualConnections[i] == null)
                     {
                         CreateVisualConnection(i);
                     }
-                } else if (visualConnections[i] != null) // si déco. et il y a co. vis.
+                } else if (visualConnections[i] != null) // si dï¿½co. et il y a co. vis.
                 {
                     Destroy(visualConnections[i].gameObject);
                 }
@@ -403,15 +414,15 @@ public class Connection : MonoBehaviour
             UpdateVisualConnections();
             ProjectManager.OnModifyProject(ProjectModificationType.CircuitModification);
         }
-        //else throw new Exception("On Excede le maximum de connection il y a un cas non géré. : " + ConnectionCount());
+        //else throw new Exception("On Excede le maximum de connection il y a un cas non gï¿½rï¿½. : " + ConnectionCount());
     }
     #endregion
 
     #region Connection getters
     /*
      * Retourne un array de toutes les connection (Gauche, Droite, Haut, Bas)
-     * Sauf celle reçue en argument
-     * Null si il n'y a pas de connection à cet endroit
+     * Sauf celle reï¿½ue en argument
+     * Null si il n'y a pas de connection ï¿½ cet endroit
      */
     public List<ElectricComponent> GetConnectedToExcept(ElectricComponent entryPoint)
     {
@@ -419,7 +430,7 @@ public class Connection : MonoBehaviour
     }
     /*
      * Retourne un array de toutes les connection(Gauche, Droite, Haut, Bas)
-     * Null si il n'y a pas de connection à cet endroit
+     * Null si il n'y a pas de connection ï¿½ cet endroit
      */
     public List<ElectricComponent> GetAllConnectedTo()
     {
