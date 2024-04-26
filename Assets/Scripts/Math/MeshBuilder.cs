@@ -219,7 +219,7 @@ public class MeshBuilder : MonoBehaviour
             } catch (Exception e) { print("erreur de matrice " + e.Message); }
 
             SetAllComponentCurrent(system, meshList);
-            ExecuteAllVoltmeters();
+            //ExecuteAllVoltmeters();
             //HandleVisualCurrent(meshList, system.meshCurrent);
 
             return system;
@@ -361,11 +361,11 @@ public class MeshBuilder : MonoBehaviour
                 bool isValid = true;
                 foreach(ElectricComponent component in mesh)
                 {
-                    // On Invalide les mailles qui contiennent des voltm�tres
-                    if(component.type == ElectricComponentType.Voltmeter)
-                    {
-                        isValid = false;
-                    }
+                    //// On Invalide les mailles qui contiennent des voltm�tres
+                    //if(component.type == ElectricComponentType.Voltmeter)
+                    //{
+                    //    isValid = false;
+                    //}
                 }
 
                 if(isValid)

@@ -9,12 +9,15 @@ public class Voltmetre : ElectricComponent
     public override void Setup()
     {
         GUIHeightDivider = 2.5f;
+
+        SetBaseResistance(1_000_000f); // 1 million de ohms
+
         potentialText = componentPotential.ToString();
     }
 
     public override float CalculatePotential(float current)
     {
-        return current * 10; // POURQUOI????!!!
+        return current * resistance; 
     }
 
     public override void RenderGUI()
