@@ -25,10 +25,15 @@ public class ProjectManager : MonoBehaviour
     public GameObject isNotSavedIndicator;
 
     public Dictionary<ElectricComponent, Vector2> componentList { get; private set; }
-    public static int selectionCount = 0;
+    public int selectionCount = 0;
     public HashSet<ElectricComponent> componentSelection { get; private set; }
     public static bool canInteract = true;
     
+    public static int GetSelectionCount()
+    {
+        return m_Instance.selectionCount;
+    }
+
     void Start()
     {
         if(m_Instance == null) m_Instance = this;
@@ -178,14 +183,14 @@ public class ProjectManager : MonoBehaviour
 
     public static bool IsSelectionEmpty()
     {
-        return selectionCount == 0;
+        return m_Instance.selectionCount == 0;
     }
 
     public static void AddComponentToSelection(ElectricComponent component)
     {
         if(m_Instance.componentSelection.Add(component))
         {
-           selectionCount++;
+            m_Instance.selectionCount++;
         }
     }
 
@@ -193,7 +198,7 @@ public class ProjectManager : MonoBehaviour
     {
         if(m_Instance.componentSelection.Remove(component))
         {
-            selectionCount--;
+            m_Instance.selectionCount--;
         }
     }
 

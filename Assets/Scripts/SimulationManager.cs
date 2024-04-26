@@ -4,10 +4,13 @@ using System.Collections.Generic;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class SimulationManager : MonoBehaviour
 {
     public static SimulationManager Instance { get; private set; }
+
+    public int orientationModifier = 1; // Par défaut, on est dans le sens conventionel (horaire)
 
     public GameObject playButton;
     public GameObject pauseButton;
@@ -24,11 +27,48 @@ public class SimulationManager : MonoBehaviour
     public bool isPaused = false;
     public bool calculAreLaunched = false;
 
+    // ORIENTATION
+    [SerializeField] private Toggle conventionalOrientationIndicator;
+    [SerializeField] private Toggle electronOrientationIndicator;
+
+    public void UpdateOrientationUI()
+    {
+        if (orientationModifier == 1)
+        { // Sens conventionel
+            conventionalOrientationIndicator.interactable = false;
+            electronOrientationIndicator.interactable = true;
+        }
+        else
+        { // Sens des éléctrons
+            conventionalOrientationIndicator.interactable = true;
+            electronOrientationIndicator.interactable = false;
+        }
+    }
+
+    public void SetCurrentOrientation(int newOrientation)
+    {
+        orientationModifier = newOrientation;
+        ProjectManager.OnModifyProject(ProjectModificationType.CircuitDataModification);
+        UpdateOrientationUI();
+    }
+
+    public void OnClickConventionalOrientation()
+    {
+        SetCurrentOrientation(1);
+    }
+
+    public void OnClickElectronOrientation()
+    {
+        SetCurrentOrientation(-1);
+    }
+
     private void Start()
     {
         if (Instance == null)
             Instance = this;
         else Destroy(this);
+
+        UpdateOrientationUI();
     }
 
     public static void ProjectModificationCallback()
@@ -55,7 +95,7 @@ public class SimulationManager : MonoBehaviour
 
     public void HandleCircuit()
     {
-        circuitData = MeshBuilder.CreateAndCalculateMeshes();
+        circuitData = MeshBuilder.CreateAndCalculateMeshes(orientationModifier);
         calculAreLaunched = false;
     }
 

@@ -31,7 +31,7 @@ public class MatrixEquationSystem
     */
 
 
-    public MatrixEquationSystem(Dictionary<int, List<ElectricComponent>> meshList, Matrix<float> resistanceMatrix, Vector<float> meshVoltage)
+    public MatrixEquationSystem(Dictionary<int, List<ElectricComponent>> meshList, Matrix<float> resistanceMatrix, Vector<float> meshVoltage, int currentModifier)
     {
         this.meshList = meshList;
         this.resistanceMatrix = resistanceMatrix;
@@ -44,10 +44,10 @@ public class MatrixEquationSystem
             throw new IncorrectCircuitException("Matrices de tailles incompatibles fournisent"); 
         }
 
-        this.meshCurrent = GetCalculatedCurrents();
+        this.meshCurrent = GetCalculatedCurrents(currentModifier);
     }
 
-    public Vector<float> GetCalculatedCurrents()
+    public Vector<float> GetCalculatedCurrents(int modifier)
     {
         Vector<float> result = Vector<float>.Build.Dense(meshCount);
 
@@ -59,7 +59,8 @@ public class MatrixEquationSystem
                 Matrix<float> temp = Matrix<float>.Build.DenseOfMatrix(resistanceMatrix);
                 temp.SetColumn(col, meshVoltage);
                 float current = (temp.Determinant() / det);
-                current = current * Mathf.Sign(meshVoltage[col]); // On vient donner le signe positif ou négatif au courrant
+                current *= modifier;
+                //current = current * Mathf.Sign(meshVoltage[col]); // On vient donner le signe positif ou négatif au courrant
                 result[col] = current;
             }
         } else

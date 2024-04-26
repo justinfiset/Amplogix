@@ -100,7 +100,7 @@ public class ElectricComponent : MonoBehaviour
         {
             if (isSelected && hasReleasedSinceSelection && !isMouseOverGUI)
             {
-                if (Input.GetKey(KeyCode.LeftControl) && ProjectManager.selectionCount > 1)
+                if (Input.GetKey(KeyCode.LeftControl) && ProjectManager.GetSelectionCount() > 1)
                 {
                     tilesManager.HideTiles();
                 }
@@ -331,22 +331,14 @@ public class ElectricComponent : MonoBehaviour
         isSelected = true;
         if (executeInheritedCode)
         {
-            if (Input.GetKey(KeyCode.LeftControl) && ProjectManager.selectionCount >= 0)
-            {
-                Select();
-            }
+            // TODO CLEAN UP
+            if (Input.GetKey(KeyCode.LeftControl) && ProjectManager.GetSelectionCount() >= 0)
+            { }
             else
             {
-                Select();
                 tilesManager.HideTiles();
             }
-            if (!Input.GetKey(KeyCode.LeftControl))
-            {
-                Select();
-
-            }
-
-
+            Select();
         }
         outline.color = Color.white;
         _SetColor(color * new Color(1f, 1f, 1f, 0.5f), true);
@@ -481,7 +473,7 @@ public class ElectricComponent : MonoBehaviour
     {
         if (isSelected)
         {
-            bool isUnique = ProjectManager.selectionCount < 2;
+            bool isUnique = ProjectManager.GetSelectionCount() < 2;
             string headerName = isUnique ? ElectricComponentTypeMethods.GetName(type) : "Sélection Multiple...";
 
             ComponentGUI.InitGUI(isUnique ? GUIHeightDivider : DefaltGUIDivider);

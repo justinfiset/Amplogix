@@ -199,7 +199,7 @@ public class MeshBuilder : MonoBehaviour
     }
 
     #region Mesh Creation
-    public static MatrixEquationSystem CreateAndCalculateMeshes()
+    public static MatrixEquationSystem CreateAndCalculateMeshes(int currentModifier)
     {
         // Preps avant les calculs
         ProjectManager.ResetCurrentIntensity();
@@ -209,11 +209,14 @@ public class MeshBuilder : MonoBehaviour
             ElectricMeshList meshList = CreateMeshes();
             Vector<float> voltageMatrix = GetVoltageMatrix(meshList);
             Matrix<float> resistanceMatrix = GetResistanceMatrix(meshList);
-            MatrixEquationSystem system = new MatrixEquationSystem(meshList, resistanceMatrix, voltageMatrix);
+            MatrixEquationSystem system = new MatrixEquationSystem(meshList, resistanceMatrix, voltageMatrix, currentModifier);
 
-            //print(system.resistanceMatrix.ToString());
-            //print(system.meshVoltage.ToString());
-            //print(system.meshCurrent.ToString());
+            try
+            {
+                //print(system.resistanceMatrix.ToString());
+                //print(system.meshVoltage.ToString());
+                print(system.meshCurrent.ToString());
+            } catch (Exception e) { }
 
             SetAllComponentCurrent(system, meshList);
             ExecuteAllVoltmeters();
@@ -222,6 +225,7 @@ public class MeshBuilder : MonoBehaviour
             return system;
         } catch (IncorrectCircuitException e)
         {
+            string mes = e.Message;
             //print(e.Message);
         }
 
