@@ -38,7 +38,7 @@ public class MatrixEquationSystem
         this.meshVoltage = meshVoltage;
         meshCount = resistanceMatrix.RowCount;
 
-        // Si on a pas une matrice carré ou que la matrice des voltages n'est pas de meme longueur
+        // Si on a pas une matrice carrï¿½ ou que la matrice des voltages n'est pas de meme longueur
         if(meshCount != resistanceMatrix.ColumnCount && meshCount != meshVoltage.Count)
         {
             throw new IncorrectCircuitException("Matrices de tailles incompatibles fournisent"); 
@@ -60,7 +60,7 @@ public class MatrixEquationSystem
                 temp.SetColumn(col, meshVoltage);
                 float current = (temp.Determinant() / det);
                 current *= modifier;
-                //current = current * Mathf.Sign(meshVoltage[col]); // On vient donner le signe positif ou négatif au courrant
+                //current = current * Mathf.Sign(meshVoltage[col]); // On vient donner le signe positif ou nï¿½gatif au courrant
                 result[col] = current;
             }
         } else

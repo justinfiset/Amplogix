@@ -17,8 +17,10 @@ public class CurrentVisualisationManager : MonoBehaviour
 
     public static void StartEmission(MatrixEquationSystem circuitData)
     {
-        if (circuitData == null) print("circuit data is null");
-        StartParticleEmissions(circuitData.meshList, circuitData.meshCurrent);
+        if (circuitData != null)
+        {
+            StartParticleEmissions(circuitData.meshList, circuitData.meshCurrent);
+        }
     }
 
     public static void ResumeEmission()
@@ -306,21 +308,24 @@ public class CurrentVisualisationManager : MonoBehaviour
                 int sign = GetBranchSignInMesh(branch, i, meshCornerLists, meshCurrents); // sign du petit i de la branche
                 int meshSign = Math.Sign(meshCurrents[i]); // sign du grand I dans le mesh
 
+                print("i sign = " +  sign);
+                print("I sign = " + meshSign);
+
                 if (sign == 0) // aucun courant dans la branche (possible?)
                 {
                     continue;
                 }
 
 
-                if (sign == meshSign) // on emet du bon cote
+                if (sign == 1)
                 {
                     emittingBranches.Add(branch);
-                    //StartEmission(branch.Item1, branch.Item2);
                 } else
                 {
                     emittingBranches.Add((branch.Item2, branch.Item1));
-                    //StartEmission(branch.Item2, branch.Item1);
                 }
+                    //StartEmission(branch.Item1, branch.Item2);
+
                 handledBranches.AddBranch(branch);
             }
         }
