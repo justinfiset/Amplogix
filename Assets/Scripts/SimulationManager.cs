@@ -50,6 +50,8 @@ public class SimulationManager : MonoBehaviour
         orientationModifier = newOrientation;
         ProjectManager.OnModifyProject(ProjectModificationType.CircuitDataModification);
         UpdateOrientationUI();
+        CurrentVisualisationManager.UpdateOrientation(newOrientation);
+        Play();
     }
 
     public void OnClickConventionalOrientation()

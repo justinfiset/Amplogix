@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class CurrentParticle : MonoBehaviour
@@ -103,7 +104,7 @@ public class CurrentParticle : MonoBehaviour
 
     private IEnumerator StartSetColorCoroutine(bool realCurrent)
     {
-        yield return new WaitForEndOfFrame();
+        yield return new WaitForNextFrameUnit();
 
         SetDirectionColor(realCurrent);
     }

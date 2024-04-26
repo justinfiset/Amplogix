@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using JetBrains.Annotations;
 using MathNet.Numerics.LinearAlgebra;
 using Unity.VisualScripting.Antlr3.Runtime.Collections;
 using UnityEngine;
@@ -20,6 +21,15 @@ public class CurrentVisualisationManager : MonoBehaviour
         if (circuitData != null)
         {
             StartParticleEmissions(circuitData.meshList, circuitData.meshCurrent);
+        }
+    }
+
+    public static void UpdateOrientation(int newOrientation)
+    {
+        bool isReal = newOrientation == 1;
+        foreach (ElectricComponent component in emittingComponents)
+        {
+            component.GetComponent<CurrentVisualisation>().SetIsRealCurrent(isReal);
         }
     }
 
