@@ -476,7 +476,9 @@ public class ElectricComponent : MonoBehaviour
             bool isUnique = ProjectManager.GetSelectionCount() < 2;
             string headerName = isUnique ? ElectricComponentTypeMethods.GetName(type) : "Sélection Multiple...";
 
-            ComponentGUI.InitGUI(isUnique ? GUIHeightDivider : DefaltGUIDivider);
+            ComponentGUI.InitLayout(isUnique ? GUIHeightDivider : DefaltGUIDivider);
+            ComponentGUI.InitGUI();
+
             ComponentGUI.CreateBackground(this, headerName); // Creation de la fenetre en bas � droite
 
             if (isUnique) RenderGUI(); // Creation du UI custom
@@ -484,7 +486,7 @@ public class ElectricComponent : MonoBehaviour
             ComponentGUI.CreateColorPalette();
             ComponentGUI.CreateDeleteButton();
 
-            if (GUI.changed) // Si on a modifié quelque chose, on relance les calculs
+            if(GUI.changed) // Si on a modifié quelque chose, on relance les calculs
             {
                 ProjectManager.OnModifyProject(ProjectModificationType.CircuitDataModification);
             }

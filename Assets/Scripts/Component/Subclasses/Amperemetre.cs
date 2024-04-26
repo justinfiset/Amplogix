@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -19,7 +20,7 @@ public class Amperemetre : ElectricComponent
         GUIStyle labelStyle = ComponentGUI.labelStyle;
 
         Rect inputRect = ComponentGUI.CreateRect(0, 1, 1, 4);
-        currentText = currentIntensity.ToString(); // mettre ailleur pour optimiser
+        currentText = Math.Round(currentIntensity, 2).ToString(); // mettre ailleur pour optimiser
         GUI.TextField(inputRect, currentText, 15, inputStyle);
 
         Rect labelRect = ComponentGUI.CreateRect(4, 1, 5, 4);
