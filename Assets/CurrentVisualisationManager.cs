@@ -308,9 +308,6 @@ public class CurrentVisualisationManager : MonoBehaviour
                 int sign = GetBranchSignInMesh(branch, i, meshCornerLists, meshCurrents); // sign du petit i de la branche
                 int meshSign = Math.Sign(meshCurrents[i]); // sign du grand I dans le mesh
 
-                print("i sign = " +  sign);
-                print("I sign = " + meshSign);
-
                 if (sign == 0) // aucun courant dans la branche (possible?)
                 {
                     continue;
