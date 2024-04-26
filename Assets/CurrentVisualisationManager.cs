@@ -16,11 +16,11 @@ public class CurrentVisualisationManager : MonoBehaviour
     public static bool isSetup { get; private set; } = false;
     public static bool doVisualCurrent = true;
 
-    public static void StartEmission(MatrixEquationSystem circuitData)
+    public static void StartEmission(MatrixEquationSystem circuitData, int orientation)
     {
         if (circuitData != null)
         {
-            StartParticleEmissions(circuitData.meshList, circuitData.meshCurrent);
+            StartParticleEmissions(circuitData.meshList, circuitData.meshCurrent, orientation);
         }
     }
 
@@ -33,13 +33,13 @@ public class CurrentVisualisationManager : MonoBehaviour
         }
     }
 
-    public static void ResumeEmission()
+    public static void ResumeEmission(int orientation)
     {
         foreach(ElectricComponent component in emittingComponents)
         {
             component.GetComponent<CurrentVisualisation>().ResumeParticleMovements();
         }
-        MakeBranchesEmit(emittingBranches);
+        MakeBranchesEmit(emittingBranches, orientation);
     }
 
     public static void PauseEmission()
@@ -55,7 +55,7 @@ public class CurrentVisualisationManager : MonoBehaviour
         ResetParticleEmissions();
     }
 
-    public static void StartParticleEmissions(ElectricMeshList meshList, Vector<float> meshCurrents)
+    public static void StartParticleEmissions(ElectricMeshList meshList, Vector<float> meshCurrents, int orientation)
     {
         /*
         HashSet<ElectricComponent> handledCorners = new();
@@ -106,7 +106,7 @@ public class CurrentVisualisationManager : MonoBehaviour
             
         }
         */
-        CornerBasedEmission(meshList, meshCurrents);
+        CornerBasedEmission(meshList, meshCurrents, orientation);
     }
 
     private static List<ElectricComponent> GetClockWiseOrder(List<ElectricComponent> originalList)
@@ -200,7 +200,7 @@ public class CurrentVisualisationManager : MonoBehaviour
 
     [Obsolete("Method is obsolete, call CornerBasedEmission instead")]
     private static void IterateAndStartEmitting(ElectricComponent component, ElectricComponent lastCorner, int componentIndex, Vector<float> meshCurrents, 
-        ElectricMeshList meshList, int meshIndex, HashSet<ElectricComponent> handledComponents, List<ElectricComponent> clockwise)
+        ElectricMeshList meshList, int meshIndex, HashSet<ElectricComponent> handledComponents, List<ElectricComponent> clockwise, int orientation)
     {
         //print("componentIndex = " + componentIndex);
 
@@ -208,7 +208,7 @@ public class CurrentVisualisationManager : MonoBehaviour
         {
             //print("back at first component");
             handledComponents.Add(component);
-            StartEmission(lastCorner, component);
+            StartEmission(lastCorner, component, orientation);
             return; // si on retombe sur le premier component on sort
         }
 
@@ -222,7 +222,7 @@ public class CurrentVisualisationManager : MonoBehaviour
 
             handledComponents.Add(component);
             IterateAndStartEmitting(GetNextComponent(clockwise, 0), null, ++componentIndex, meshCurrents, 
-                meshList, meshIndex, handledComponents, clockwise);
+                meshList, meshIndex, handledComponents, clockwise, orientation);
             return;
         }
         if (connection.IsFlatConnection())
@@ -231,7 +231,7 @@ public class CurrentVisualisationManager : MonoBehaviour
             //print(component);
             handledComponents.Add(component);
             IterateAndStartEmitting(GetNextComponent(clockwise, componentIndex), lastCorner, ++componentIndex, 
-                meshCurrents, meshList, meshIndex, handledComponents, clockwise);
+                meshCurrents, meshList, meshIndex, handledComponents, clockwise, orientation);
             return; // si on est pas encore tombe sur un coin
         } 
 
@@ -241,7 +241,7 @@ public class CurrentVisualisationManager : MonoBehaviour
             {
                 //print("detected first corner");
                 //print(component);
-                StartEmission(clockwise[0], component);
+                StartEmission(clockwise[0], component, orientation);
             } else if (handledComponents.Contains(component))
             {
                 //print("detected handled component");
@@ -249,21 +249,21 @@ public class CurrentVisualisationManager : MonoBehaviour
             }
             handledComponents.Add(component);
             IterateAndStartEmitting(GetNextComponent(clockwise, componentIndex), component, ++componentIndex, 
-                meshCurrents, meshList, meshIndex, handledComponents, clockwise);
+                meshCurrents, meshList, meshIndex, handledComponents, clockwise, orientation);
             return; // si on est un coin et qu'il n'y a pas de coin precedant, on itere en se settant comme lastCorner
             // m�me chose si on est d�j� handled
         }
 
         if (GetSignInMesh(component, meshList, componentIndex, meshIndex, meshCurrents) == 1)
         {
-            StartEmission(lastCorner, component); // si on a le meme signe que le courant on emet les particules depuis le dernier coin (horaire)
+            StartEmission(lastCorner, component, orientation); // si on a le meme signe que le courant on emet les particules depuis le dernier coin (horaire)
         } else
         {
-            StartEmission(component, lastCorner); // sinon, on emet jusqu'au dernier coin (antihoraire) (si c'est zero on pleure)
+            StartEmission(component, lastCorner, orientation); // sinon, on emet jusqu'au dernier coin (antihoraire) (si c'est zero on pleure)
         }
         // on itere en se settant comme lastCorner
         IterateAndStartEmitting(GetNextComponent(clockwise, componentIndex), component, ++componentIndex, 
-            meshCurrents, meshList, meshIndex, handledComponents, clockwise);
+            meshCurrents, meshList, meshIndex, handledComponents, clockwise, orientation);
     }
 
     [Obsolete("Method is obsolete, call CornerBasedEmission instead")]
@@ -295,7 +295,7 @@ public class CurrentVisualisationManager : MonoBehaviour
 
     }
 
-    private static void CornerBasedEmission(ElectricMeshList meshList, Vector<float> meshCurrents)
+    private static void CornerBasedEmission(ElectricMeshList meshList, Vector<float> meshCurrents, int orientation)
     {
         print("starting cornerbasedemissions");
 
@@ -336,7 +336,7 @@ public class CurrentVisualisationManager : MonoBehaviour
                 handledBranches.AddBranch(branch);
             }
         }
-        MakeBranchesEmit(emittingBranches);
+        MakeBranchesEmit(emittingBranches, orientation);
     }
 
     private static bool IsBranchInClockWiseDirection((ElectricComponent, ElectricComponent) branch, List<ElectricComponent> orderedComponents)
@@ -452,15 +452,22 @@ public class CurrentVisualisationManager : MonoBehaviour
         return 1;
     }
 
-    private static void MakeBranchesEmit(HashSet<(ElectricComponent, ElectricComponent)> emittingBranches)
+    private static void MakeBranchesEmit(HashSet<(ElectricComponent, ElectricComponent)> emittingBranches, int orientation)
     {
+        bool isReal = orientation == 1;
         foreach ((ElectricComponent,ElectricComponent) branch in emittingBranches)
         {
-            StartEmission(branch.Item1, branch.Item2);
+            StartEmission(branch.Item1, branch.Item2, isReal);
         }
     }
 
-    private static void StartEmission(ElectricComponent source, ElectricComponent target)
+    private static void StartEmission(ElectricComponent source, ElectricComponent target, int orientation)
+    {
+        bool isReal = orientation == 1;
+        StartEmission(source, target, isReal);
+    }
+
+    private static void StartEmission(ElectricComponent source, ElectricComponent target, bool isReal)
     {
         print("starting emission from " + source + " to " + target);
 
@@ -470,6 +477,7 @@ public class CurrentVisualisationManager : MonoBehaviour
         builtVector.x = target.transform.position.x;
         builtVector.y = target.transform.position.y;
 
+        emitter.SetIsRealCurrent(isReal);
         emitter.StartParticleEmission(builtVector);
 
         handledComponents.Add(source);

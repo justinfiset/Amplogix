@@ -185,7 +185,6 @@ MonoBehaviour:
   respectOrientation: 0
   canGenerateMeshes: 1
   isMouseOverGUI: 0
-  isMove: 0
   initialComponentData: 
   initialConnectionData: 
   connectionManager: {fileID: 0}
@@ -223,7 +222,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1017275c93913d6459e11c0b45d72bc3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  particlePrefab: {fileID: 4462108619749537757, guid: 5350ceb032553a443aa2aad7e5304ebf, type: 3}
+  realCurentparticlePrefab: {fileID: 4462108619749537757, guid: 67bb92cbfe620e649b39e0e03e471b67, type: 3}
+  electronCurrentParticlePrefab: {fileID: 4462108619749537757, guid: 5350ceb032553a443aa2aad7e5304ebf, type: 3}
 --- !u!1001 &1411770068393735217
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -238,6 +238,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1624132070148405415, guid: b5baa3d1b1169d148b97771d5d633605, type: 3}
       propertyPath: m_Color.a
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1624132070148405415, guid: b5baa3d1b1169d148b97771d5d633605, type: 3}
+      propertyPath: m_Color.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1624132070148405415, guid: b5baa3d1b1169d148b97771d5d633605, type: 3}
+      propertyPath: m_Color.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1624132070148405415, guid: b5baa3d1b1169d148b97771d5d633605, type: 3}
+      propertyPath: m_Color.r
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3678502852632036175, guid: b5baa3d1b1169d148b97771d5d633605, type: 3}

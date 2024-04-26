@@ -145,9 +145,6 @@ MonoBehaviour:
   sprite: {fileID: 0}
   isLightSource: 0
   showsCurrent: 1
-  hypotheticalIntensity: 0
-  hypotheticalCurrentSign: 0
-  hypotheticalVoltage: 0
   closedSprite: {fileID: -1757465333, guid: c6b6966af1811ea4bbd2fbab940b39d5, type: 3}
   openSprite: {fileID: -79407870, guid: c6b6966af1811ea4bbd2fbab940b39d5, type: 3}
   isOpen: 1
@@ -210,7 +207,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1017275c93913d6459e11c0b45d72bc3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  particlePrefab: {fileID: 4462108619749537757, guid: 5350ceb032553a443aa2aad7e5304ebf, type: 3}
+  realCurentparticlePrefab: {fileID: 4462108619749537757, guid: 67bb92cbfe620e649b39e0e03e471b67, type: 3}
+  electronCurrentParticlePrefab: {fileID: 4462108619749537757, guid: 5350ceb032553a443aa2aad7e5304ebf, type: 3}
 --- !u!1001 &3126676511196591769
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -222,6 +220,22 @@ PrefabInstance:
     - target: {fileID: 475578015003214662, guid: b5baa3d1b1169d148b97771d5d633605, type: 3}
       propertyPath: m_Name
       value: Component Outline
+      objectReference: {fileID: 0}
+    - target: {fileID: 1624132070148405415, guid: b5baa3d1b1169d148b97771d5d633605, type: 3}
+      propertyPath: m_Color.a
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1624132070148405415, guid: b5baa3d1b1169d148b97771d5d633605, type: 3}
+      propertyPath: m_Color.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1624132070148405415, guid: b5baa3d1b1169d148b97771d5d633605, type: 3}
+      propertyPath: m_Color.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1624132070148405415, guid: b5baa3d1b1169d148b97771d5d633605, type: 3}
+      propertyPath: m_Color.r
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3678502852632036175, guid: b5baa3d1b1169d148b97771d5d633605, type: 3}
       propertyPath: m_RootOrder

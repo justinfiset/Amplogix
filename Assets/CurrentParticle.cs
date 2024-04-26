@@ -8,8 +8,6 @@ public class CurrentParticle : MonoBehaviour
 {
 
     private Vector2 targetPosition;
-    public Color negativeColor;
-    public Color positiveColor;
     private float targetDistance;
     private int tweenID;
 
@@ -38,25 +36,11 @@ public class CurrentParticle : MonoBehaviour
     }
     */
 
-    private void SetDirectionColor(bool realCurrent)
-    {
-        SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
-
-        if (realCurrent)
-        {
-            spriteRenderer.color = negativeColor;
-        } else
-        {
-            spriteRenderer.color = positiveColor;
-        }
-    }
-
-    public void Create(bool realCurrent, Vector2 targetPosition)
+    public void Create(Vector2 targetPosition)
     {
         this.targetPosition = targetPosition;
         targetDistance = CalculateExpectedDistance();
 
-        StartSetColorCoroutine(realCurrent);
         StartMovement();
     }
 
@@ -100,12 +84,5 @@ public class CurrentParticle : MonoBehaviour
     public float GetExpectedTravelTime()
     {
         return Mathf.Abs(targetDistance / targetSpeed);
-    }
-
-    private IEnumerator StartSetColorCoroutine(bool realCurrent)
-    {
-        yield return new WaitForNextFrameUnit();
-
-        SetDirectionColor(realCurrent);
     }
 }

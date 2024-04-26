@@ -216,7 +216,7 @@ public class MeshBuilder : MonoBehaviour
                 //print(system.resistanceMatrix.ToString());
                 //print(system.meshVoltage.ToString());
                 print(system.meshCurrent.ToString());
-            } catch (Exception e) { }
+            } catch (Exception e) { print("erreur de matrice " + e.Message); }
 
             SetAllComponentCurrent(system, meshList);
             ExecuteAllVoltmeters();
@@ -277,13 +277,15 @@ public class MeshBuilder : MonoBehaviour
         }
     }
 
-    private static void HandleVisualCurrent(ElectricMeshList meshList, Vector<float> meshCurrent)
+    /*
+    private static void HandleVisualCurrent(ElectricMeshList meshList, Vector<float> meshCurrent, int orientation)
     {
         if (!CurrentVisualisationManager.isSetup && CurrentVisualisationManager.doVisualCurrent)
         {
-            CurrentVisualisationManager.StartParticleEmissions(meshList, meshCurrent);
+            CurrentVisualisationManager.StartParticleEmissions(meshList, meshCurrent, orientation);
         }
     }
+    */
 
     public static ElectricMeshList CreateMeshes()
     {

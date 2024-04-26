@@ -8,11 +8,12 @@ using static UnityEngine.ParticleSystem;
 public class CurrentVisualisation : MonoBehaviour
 {
     private bool isEmitting = false;
-    private bool realCurrent = false;
+    private bool realCurrent = true;
     private GameObject originalParent;
     private GameObject ballParent;
 
-    public GameObject particlePrefab;
+    public GameObject realCurentparticlePrefab;
+    public GameObject electronCurrentParticlePrefab;
 
     private void Start()
     {
@@ -20,7 +21,6 @@ public class CurrentVisualisation : MonoBehaviour
 
         
         ballParent = Instantiate(originalParent, transform);
-
     }
 
     public void UpdateCurrent(float current)
@@ -100,9 +100,10 @@ public class CurrentVisualisation : MonoBehaviour
 
     private void ShootBall(Vector2 targetPosition)
     {
-        CurrentParticle currentParticle = Instantiate(particlePrefab, ballParent.transform).GetComponent<CurrentParticle>();
+        GameObject prefab = realCurrent ? realCurentparticlePrefab : electronCurrentParticlePrefab;
+        CurrentParticle currentParticle = Instantiate(prefab, ballParent.transform).GetComponent<CurrentParticle>();
 
-        currentParticle.Create(realCurrent, targetPosition);
+        currentParticle.Create(targetPosition);
     }
 
     private void KillExistingParticles()

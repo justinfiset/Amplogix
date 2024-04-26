@@ -50,7 +50,6 @@ public class SimulationManager : MonoBehaviour
         orientationModifier = newOrientation;
         ProjectManager.OnModifyProject(ProjectModificationType.CircuitDataModification);
         UpdateOrientationUI();
-        CurrentVisualisationManager.UpdateOrientation(newOrientation);
         Play();
     }
 
@@ -155,10 +154,8 @@ public class SimulationManager : MonoBehaviour
             startTime = Time.time;
             HandleCircuit();
             // CODE :
-            CurrentVisualisationManager.StartEmission(circuitData);
-        }
-
-        
+            CurrentVisualisationManager.StartEmission(circuitData, orientationModifier);
+        }    
 
         UpdateButtons();
     }
@@ -166,7 +163,7 @@ public class SimulationManager : MonoBehaviour
     public void Resume()
     {
         // CODE :
-        CurrentVisualisationManager.ResumeEmission();
+        CurrentVisualisationManager.ResumeEmission(orientationModifier);
     }
 
     public void Pause()
