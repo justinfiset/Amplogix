@@ -384,16 +384,16 @@ public class MeshBuilder : MonoBehaviour
             if(mesh.Count >= 4) // Doit avoir plus de 4 composants
             {
                 bool isValid = true;
-                //foreach(ElectricComponent component in mesh)
-                //{
-                //    // On Invalide les mailles qui contiennent des voltm�tres
-                //    if(component.type == ElectricComponentType.Voltmeter)
-                //    {
-                //        isValid = false;
-                //    }
-                //}
+                foreach (ElectricComponent component in mesh)
+                {
+                    // On Invalide les mailles qui contiennent des voltm�tres
+                    if (component.type == ElectricComponentType.Voltmeter)
+                    {
+                        isValid = false;
+                    }
+                }
 
-                if(isValid)
+                if (isValid)
                 {
                     validMeshes.Add(mesh);
                 }
