@@ -134,18 +134,17 @@ public class MeshBuilder : MonoBehaviour
                             }
                         }
 
-                        float maxPotential = 0f;
-                        float minPotential = float.PositiveInfinity;
+                        float totalPotential = 0f;
                         if (connectedComponents.Count == 2)
                         {
                             foreach (ElectricComponent link in bestMesh)
                             {
                                 float potential = Math.Abs(link.GetComponentPotential());
+                                if (link.type == ElectricComponentType.PowerSource) potential = potential * -1;
                                 print(link.name + " : " + potential);
-                                if (potential > maxPotential) maxPotential = potential;
-                                if (potential < minPotential) minPotential = potential;
+                                totalPotential += potential;
                             }
-                            component.SetCalculatedPotential(maxPotential - minPotential);
+                            component.SetCalculatedPotential(Math.Abs(totalPotential));
                             break; // On passe au prochain voltmètre
                         }
                     }
