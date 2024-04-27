@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,12 +10,10 @@ public class Voltmetre : ElectricComponent
     public override void Setup()
     {
         GUIHeightDivider = 2.5f;
-        SetBaseResistance(1_000_000);
-        potentialText = componentPotential.ToString();
-    }
 
-    public override void OnCurrentChange(float newCurrent)
-    {
+        SetBaseResistance(1_000_000f); // 1 million de ohms
+
+        potentialText = componentPotential.ToString();
     }
 
     public override void RenderGUI()
