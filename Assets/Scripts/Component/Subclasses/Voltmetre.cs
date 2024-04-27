@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,12 +10,12 @@ public class Voltmetre : ElectricComponent
     public override void Setup()
     {
         GUIHeightDivider = 2.5f;
+        SetBaseResistance(1_000_000);
         potentialText = componentPotential.ToString();
     }
 
-    public override float CalculatePotential(float current)
+    public override void OnCurrentChange(float newCurrent)
     {
-        return current * 10; // POURQUOI????!!!
     }
 
     public override void RenderGUI()
@@ -24,7 +25,7 @@ public class Voltmetre : ElectricComponent
 
         Rect inputRect = ComponentGUI.CreateRect(0, 1, 1, 4);
 
-        potentialText = componentPotential.ToString();
+        potentialText = Math.Round(componentPotential, 2).ToString(); // mettre ailleur pour optimiser
         potentialText = GUI.TextField(inputRect, potentialText, 15, inputStyle);
 
         Rect labelRect = ComponentGUI.CreateRect(4, 1, 5, 4);

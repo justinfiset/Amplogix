@@ -247,9 +247,17 @@ public class ElectricComponent : MonoBehaviour
         if (calculatedIntensity != currentIntensity)
         {
             currentIntensity = (calculatedIntensity); //TODO: REMETTRE LE MATH.ABS()
-            SetCalculatedPotential(CalculatePotential(currentIntensity));
+            if(type != ElectricComponentType.Voltmeter)
+            {
+                SetCalculatedPotential(CalculatePotential(currentIntensity));
+            }
             OnCurrentChange(currentIntensity);
         }
+    }
+
+    public virtual float GetComponentPotential()
+    {
+        return currentIntensity * resistance;
     }
 
     public virtual void OnCurrentChange(float newCurrent)

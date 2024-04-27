@@ -52,6 +52,16 @@ public class PowerSource : ElectricComponent
         return connectionComponent.connections.connections[Connection.GetMultiplierFromConnection((int)rotation)];
     }
 
+    public override float CalculatePotential(float current)
+    {
+        return voltage;
+    }
+
+    public override float GetComponentPotential()
+    {
+        return voltage;
+    }
+
     public override void UnpackCustomComponentData(string customDataString)
     {
         PowerSourceData data = UnserializeCustomComponentData<PowerSourceData>(customDataString);

@@ -58,13 +58,13 @@ public class MeshBuilder : MonoBehaviour
     }
     */
 
-    public static void ExecuteAllVoltmeters()
+    public static void ExecuteAllVoltmeters(ElectricMeshList meshList)
     {
-        foreach(ElectricComponent component in ProjectManager.m_Instance.componentList.Keys.ToList())
+        foreach (ElectricComponent component in ProjectManager.m_Instance.componentList.Keys.ToList())
         {
-            if(component.type == ElectricComponentType.Voltmeter)
+
+            if (component.type == ElectricComponentType.Voltmeter)
             {
-                float potential = 0f;
                 List<ElectricComponent> connectedComponents = new List<ElectricComponent>(); // Les deux composants qu'on mesure
                 ElectricComponent[] connections = component.connectionManager.connections.connections; // Tous les composants auquel le voltm�tre est connect�
                 for (int i = 0; i < connections.Length; i++)
@@ -72,12 +72,13 @@ public class MeshBuilder : MonoBehaviour
                     if (connections[i] != null)
                     {
                         ElectricComponent revelant = FindNextRevelantComponent(connections[i], component);
-                        if(revelant != null) connectedComponents.Add(revelant);
+                        if (revelant != null) connectedComponents.Add(revelant);
                     }
                 }
 
-                if(connectedComponents.Count == 2)
+                if (connectedComponents.Count == 2)
                 {
+
                     // On va chercher les mailles qui passent d'un revelant et qui reviennent
                     List<List<ElectricComponent>> allMeshList = new();
                     AnalyseConnections(connectedComponents[0], null, connectedComponents[1], new HashSet<ElectricComponent>(), allMeshList);
@@ -90,14 +91,14 @@ public class MeshBuilder : MonoBehaviour
                         bool isValid = true;
                         foreach (ElectricComponent revelant in connectedComponents)
                         {
-                            if(!mesh.Contains(revelant))
+                            if (!mesh.Contains(revelant))
                             {
                                 isValid = false;
                                 break;
                             }
                         }
 
-                        if(isValid) unsafeMeshList.Add(mesh);
+                        if (isValid) unsafeMeshList.Add(mesh);
                     }
 
                     // On enleve toutes les mailles en double
@@ -106,7 +107,7 @@ public class MeshBuilder : MonoBehaviour
                     // Si on possède au moin une maille qui comprend les deux composants
                     if (unsafeMeshList.Count > 0)
                     {
-                        //On va chercher la maille qui 
+                        //On va chercher la maille qui a la plus petite résistance ou la plus petite longueur;
                         List<ElectricComponent> bestMesh = null;
                         float bestMeshResistance = 0f;
                         foreach (List<ElectricComponent> list in unsafeMeshList)
@@ -133,35 +134,58 @@ public class MeshBuilder : MonoBehaviour
                             }
                         }
 
-                        float current = -1f;
-                        foreach(ElectricComponent link in bestMesh)
+                        float maxPotential = 0f;
+                        float minPotential = float.PositiveInfinity;
+                        if (connectedComponents.Count == 2)
                         {
-                            if(current == -1f)
+                            foreach (ElectricComponent link in bestMesh)
                             {
-                                current = link.currentIntensity;
+                                float potential = Math.Abs(link.GetComponentPotential());
+                                print(link.name + " : " + potential);
+                                if (potential > maxPotential) maxPotential = potential;
+                                if (potential < minPotential) minPotential = potential;
                             }
-                            else
-                            {
-                                if(current != link.currentIntensity)
-                                {
-                                    current = 0f;
-                                    print("plusieurs courant entre les deux bornes du voltmètre.");
-                                    break;
-                                }
-                            }
+                            component.SetCalculatedPotential(maxPotential - minPotential);
+                            break; // On passe au prochain voltmètre
                         }
-                        potential = current * bestMeshResistance;
-                        /*
-                                            int count = 0;
-                                if (count == 0) potential += revelant.componentPotential;
-                                else potential -= revelant.componentPotential;
-                        */
                     }
                 }
-
-                component.SetCalculatedPotential(potential);
             }
         }
+        //foreach(List<ElectricComponent> mesh in meshList.Values)
+        //{
+        //    foreach(ElectricComponent component in mesh)
+        //    {
+        //        if(component.type == ElectricComponentType.Voltmeter)
+        //        {
+        //            List<ElectricComponent> connectedComponents = new List<ElectricComponent>(); // Les deux composants qu'on mesure
+        //            ElectricComponent[] connections = component.connectionManager.connections.connections; // Tous les composants auquel le voltm�tre est connect�
+        //            for (int i = 0; i < connections.Length; i++)
+        //            {
+        //                if (connections[i] != null)
+        //                {
+        //                    ElectricComponent revelant = FindNextRevelantComponent(connections[i], component);
+        //                    if (revelant != null) connectedComponents.Add(revelant);
+        //                }
+        //            }
+
+        //            float maxPotential = 0f;
+        //            float minPotential = float.PositiveInfinity;
+        //            if(connectedComponents.Count == 2)
+        //            {
+        //                foreach(ElectricComponent link in mesh)
+        //                {
+        //                    float potential = Math.Abs(link.resistance * link.currentIntensity);
+        //                    if (potential > maxPotential) maxPotential = potential;
+        //                    if (potential < minPotential) minPotential = potential;
+        //                }
+        //                component.SetCalculatedPotential(maxPotential - minPotential);
+        //                break; // On passe au prochain voltmètre
+        //            }
+        //        }
+        //    }
+        //}
+        
     }
 
     public static float GetMeshResistance(List<ElectricComponent> list)
@@ -219,7 +243,7 @@ public class MeshBuilder : MonoBehaviour
             } catch (Exception e) { print("erreur de matrice " + e.Message); }
 
             SetAllComponentCurrent(system, meshList);
-            ExecuteAllVoltmeters();
+            ExecuteAllVoltmeters(meshList);
             //HandleVisualCurrent(meshList, system.meshCurrent);
 
             return system;
@@ -287,7 +311,7 @@ public class MeshBuilder : MonoBehaviour
     }
     */
 
-    public static ElectricMeshList CreateMeshes()
+        public static ElectricMeshList CreateMeshes()
     {
         ElectricMeshList meshList = new ElectricMeshList();
 
@@ -354,19 +378,20 @@ public class MeshBuilder : MonoBehaviour
     public static List<List<ElectricComponent>> RemoveIncorrectMeshes(List<List<ElectricComponent>> toCorrect)
     {
         List<List<ElectricComponent>> validMeshes = new List<List<ElectricComponent>>();
+
         foreach(List<ElectricComponent> mesh in toCorrect)
         {
             if(mesh.Count >= 4) // Doit avoir plus de 4 composants
             {
                 bool isValid = true;
-                foreach(ElectricComponent component in mesh)
-                {
-                    // On Invalide les mailles qui contiennent des voltm�tres
-                    if(component.type == ElectricComponentType.Voltmeter)
-                    {
-                        isValid = false;
-                    }
-                }
+                //foreach(ElectricComponent component in mesh)
+                //{
+                //    // On Invalide les mailles qui contiennent des voltm�tres
+                //    if(component.type == ElectricComponentType.Voltmeter)
+                //    {
+                //        isValid = false;
+                //    }
+                //}
 
                 if(isValid)
                 {
