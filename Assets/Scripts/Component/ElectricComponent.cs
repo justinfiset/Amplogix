@@ -479,13 +479,12 @@ public class ElectricComponent : MonoBehaviour
 
     private void OnGUI()
     {
-        if (isSelected)
+        if (ProjectManager.m_Instance.isGUIinit && isSelected)
         {
             bool isUnique = ProjectManager.GetSelectionCount() < 2;
             string headerName = isUnique ? ElectricComponentTypeMethods.GetName(type) : "Sélection Multiple...";
 
             ComponentGUI.InitLayout(isUnique ? GUIHeightDivider : DefaltGUIDivider);
-            ComponentGUI.InitGUI();
 
             ComponentGUI.CreateBackground(this, headerName); // Creation de la fenetre en bas � droite
 

@@ -5,8 +5,6 @@ using UnityEngine;
 
 public class ComponentGUI
 {
-    private static bool isInitiated = false;
-
     public static Color[] colorList = null;
     public static GUIStyle[] colorStyle = null;
     public static int colorRowCount = 2;
@@ -19,16 +17,14 @@ public class ComponentGUI
     public static GUIStyle inputStyle = null;
     public static ComponentGUILayout currentLayout;
 
-    public static GUIStyle InitGUI()
+    public static float padding = 20f;
+
+    public static bool InitGUI()
     {
-        if (!isInitiated)
-        {
-            int fontSize = 32;
-            GUI.skin.box.fontSize = fontSize;
-            GUI.skin.button.fontSize = fontSize;
-            return InitStyles();
-        }
-        else return currentStyle;
+        int fontSize = 32;
+        GUI.skin.box.fontSize = fontSize;
+        GUI.skin.button.fontSize = fontSize;
+        return InitStyles();
     }
 
     public static ComponentGUILayout InitLayout(float heightDivider = 3f)
@@ -40,17 +36,17 @@ public class ComponentGUI
         return currentLayout;
     }
 
-    public static GUIStyle InitStyles()
+    public static bool InitStyles()
     {
-        if(currentStyle == null)
-        {
+        //if(currentStyle == null)
+        //{
             currentStyle = new GUIStyle(GUI.skin.box);
             currentStyle.normal.background = MakeTex(2, 2, Color.white);
             currentStyle.normal.textColor = Color.black;
-        }
+        //}
 
-        if(buttonStyle == null)
-        {
+        //if(buttonStyle == null)
+        //{
             buttonStyle = new GUIStyle(GUI.skin.box);
             buttonStyle.alignment = TextAnchor.MiddleCenter;
             buttonStyle.normal.background = MakeTex(2, 2, new Color32(49, 106, 189, 255));
@@ -59,10 +55,10 @@ public class ComponentGUI
             buttonStyle.hover.textColor = Color.white;
             buttonStyle.active.background = MakeTex(2, 2, new Color32(19, 34, 56, 255));
             buttonStyle.active.textColor = Color.white;
-        }
+        //}
 
-        if(deleteStyle == null)
-        {
+        //if(deleteStyle == null)
+        //{
             deleteStyle = new GUIStyle(GUI.skin.box);
             deleteStyle.alignment = TextAnchor.MiddleCenter;
             deleteStyle.normal.background = MakeTex(2, 2, new Color32(191, 54, 54, 255));
@@ -71,23 +67,24 @@ public class ComponentGUI
             deleteStyle.hover.textColor = Color.white;
             deleteStyle.active.background = MakeTex(2, 2, new Color32(59, 12, 9, 255));
             deleteStyle.active.textColor = Color.white;
-        }
+        //}
 
-        if (labelStyle == null)
-        {
+        //if (labelStyle == null)
+        //{
             labelStyle = new GUIStyle(currentStyle);
             labelStyle.alignment = TextAnchor.MiddleCenter;
-        }
+        //}
 
-        if (inputStyle == null)
-        {
+        //if (inputStyle == null)
+        //{
             inputStyle = new GUIStyle(buttonStyle);
             inputStyle.alignment = TextAnchor.MiddleLeft;
-            inputStyle.padding.left = (int)currentLayout.padding;
+            inputStyle.padding.left = (int)padding;
             inputStyle.normal.background = MakeTex(2, 2, new Color32(52, 104, 179, 255));
-        }
+        //}
 
-        return currentStyle;
+        GenerateColorList();
+        return true;
     }
 
     public static Texture2D MakeTex(int width, int height, Color col)
@@ -105,6 +102,7 @@ public class ComponentGUI
 
     public static Rect CreateBackground(ElectricComponent component, string headerName)
     {
+        if (currentStyle == null) return new Rect(0,0,0,0);
         Rect rect = new Rect(currentLayout.x, currentLayout.y, currentLayout.width, currentLayout.height);
         GUI.Box(rect, headerName, currentStyle);
         component.isMouseOverGUI = rect.Contains(Event.current.mousePosition);
@@ -133,41 +131,30 @@ public class ComponentGUI
 
     private static void GenerateColorList()
     {
-        if (colorList == null)
-        {
-            List<Color> list = new List<Color>();
-            list.Add(new Color32(255, 105, 97, 255)); // rouge 
-            list.Add(new Color32(255, 180, 128, 255)); // oragne 
-            list.Add(new Color32(248, 243, 141, 255)); // jaune
-            list.Add(new Color32(66, 214, 164, 255)); // vert
-            list.Add(new Color32(8, 202, 209, 255)); // turquoise
-            list.Add(new Color32(89, 173, 246, 255)); // bleu
-            list.Add(new Color32(157, 148, 255, 255)); // mauve
-            list.Add(new Color32(199, 128, 232, 255)); // rose
-            list.Add(new Color32(255, 255, 255, 255)); // blanc
-            list.Add(new Color32(0, 0, 0, 255)); // noir
-            colorList = list.ToArray();
-        }
+        List<Color> list = new List<Color>();
+        list.Add(new Color32(255, 105, 97, 255)); // rouge 
+        list.Add(new Color32(255, 180, 128, 255)); // oragne 
+        list.Add(new Color32(248, 243, 141, 255)); // jaune
+        list.Add(new Color32(66, 214, 164, 255)); // vert
+        list.Add(new Color32(8, 202, 209, 255)); // turquoise
+        list.Add(new Color32(89, 173, 246, 255)); // bleu
+        list.Add(new Color32(157, 148, 255, 255)); // mauve
+        list.Add(new Color32(199, 128, 232, 255)); // rose
+        list.Add(new Color32(255, 255, 255, 255)); // blanc
+        list.Add(new Color32(0, 0, 0, 255)); // noir
+        colorList = list.ToArray();
 
-        if(colorStyle == null)
+        colorStyle = new GUIStyle[10];
+        for (int i = 0; i < colorList.Length; i++)
         {
-            colorStyle = new GUIStyle[10];
-            for(int i = 0; i < colorList.Length; i++)
-            {
-                GUIStyle style = new GUIStyle(GUI.skin.box);
-                style.normal.background = MakeTex(2, 2, colorList[i]);
-                colorStyle[i] = style;
-            }
+            GUIStyle style = new GUIStyle(GUI.skin.box);
+            style.normal.background = MakeTex(2, 2, colorList[i]);
+            colorStyle[i] = style;
         }
     }
 
     public static void CreateColorPalette()
     {
-        if(colorList == null)
-        {
-            GenerateColorList();
-        }
-
         float size = (currentLayout.width - 2 * currentLayout.padding) / colorColCount;
 
         // 2 row of 5 cokumns

@@ -28,7 +28,9 @@ public class ProjectManager : MonoBehaviour
     public int selectionCount = 0;
     public HashSet<ElectricComponent> componentSelection { get; private set; }
     public static bool canInteract = true;
-    
+
+    public bool isGUIinit = false;
+
     public static int GetSelectionCount()
     {
         return m_Instance.selectionCount;
@@ -41,6 +43,18 @@ public class ProjectManager : MonoBehaviour
 
         componentList = new Dictionary<ElectricComponent, Vector2>();
         componentSelection = new HashSet<ElectricComponent>();
+    }
+
+    public void OnGUI()
+    {
+        if(!isGUIinit)
+        {
+            if(ComponentGUI.InitGUI())
+            {
+                print($"<color=#00FFFF>GUI initialised !</color>");
+                isGUIinit = true;
+            }
+        }
     }
 
     public void Init()
