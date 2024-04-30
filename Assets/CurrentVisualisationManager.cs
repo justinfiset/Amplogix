@@ -341,6 +341,24 @@ public class CurrentVisualisationManager : MonoBehaviour
 
     private static bool IsBranchInClockWiseDirection((ElectricComponent, ElectricComponent) branch, List<ElectricComponent> orderedComponents)
     {
+        if (orderedComponents[0] == branch.Item2)
+        {
+        
+            if (orderedComponents[^1] == branch.Item1)
+            {
+                return true;
+            }
+        }
+
+        if (orderedComponents[0] == branch.Item1)
+        {
+
+            if (orderedComponents[^1] == branch.Item2)
+            {
+                return false;
+            }
+        }
+
         foreach (ElectricComponent component in orderedComponents)
         {
             if (branch.Item1 == component)

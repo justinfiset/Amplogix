@@ -191,7 +191,7 @@ public class ElectricComponent : MonoBehaviour
                 {
                     if (Input.GetKey(KeyCode.LeftControl) && Input.GetKey(KeyCode.Mouse0))
                     {     
-                         Vector3 mousePos = new Vector3(0,0,0);       à
+                         Vector3 mousePos = new Vector3(0,0,0);
                                     
                             if (snapToGrid)
                            {
