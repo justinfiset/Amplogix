@@ -38,7 +38,10 @@ public class ElectricComponent : MonoBehaviour
     protected bool isBeingMoved = false;
     protected Vector3 lastClickMousePos;
     protected Vector3 lastClickPos;
+    
+     protected Vector3 oldMousePos;
 
+     protected bool origineMousePosIsSet = false;
 
     [Header("UI")]
     [SerializeField] protected SpriteRenderer outline;
@@ -149,6 +152,10 @@ public class ElectricComponent : MonoBehaviour
 
         if (isSelected)
         {
+            if(!origineMousePosIsSet){
+            oldMousePos = GridSettings.GetCurrentSnapedPosition(); // pour le mouvement multie sélection
+                origineMousePosIsSet = true;
+            }
             if (listenToInputs)
             {
                 if (canBeRotated && Input.GetKeyDown(rotateKey))
@@ -173,7 +180,7 @@ public class ElectricComponent : MonoBehaviour
                 _DestroyComponent();
             }
 
-            if (!hasReleasedSinceSelection)// || Input.GetKey(KeyCode.LeftControl) && Input.GetKey(KeyCode.Mouse0))
+            if (!hasReleasedSinceSelection || Input.GetKey(KeyCode.LeftControl) && Input.GetKey(KeyCode.Mouse0))
             {
                 if (!isBeingMoved)
                 {
@@ -182,45 +189,43 @@ public class ElectricComponent : MonoBehaviour
 
                 if (isBeingMoved && canBeMoved)
                 {
-                    //if (Input.GetKey(KeyCode.LeftControl) && Input.GetKey(KeyCode.Mouse0))
-                    //{
-                    //    foreach (ElectricComponent electricComponent in ProjectManager.m_Instance.componentSelection)
-                    //    {
-                    //        Vector3 newPos;
-                    //        if (snapToGrid)
-                    //        {
-                    //            print("in snap");
-                    //            newPos = GridSettings.GetCurrentSnapedPosition();
-
-
-                    //        }
-                    //        else
-                    //        {
-                    //            Vector3 diffPos = lastClickMousePos - GridSettings.MouseInputToWorldPoint();
-                    //            newPos = lastClickPos - diffPos;
-                    //        }
-                    //        electricComponent.MoveComponentForMany(newPos, electricComponent);
-
-                    //    }
-                    //}
-                    //else
-                    //{
+                    if (Input.GetKey(KeyCode.LeftControl) && Input.GetKey(KeyCode.Mouse0))
+                    {     
+                         Vector3 mousePos = new Vector3(0,0,0);       à
+                                    
+                            if (snapToGrid)
+                           {
+                                mousePos = GridSettings.GetCurrentSnapedPosition();
+                            }
+                          else
+                           {
+                                Vector3 diffPos = lastClickMousePos - GridSettings.MouseInputToWorldPoint();
+                               mousePos = lastClickPos - diffPos;
+                          }
+                             MoveComponentForMany(mousePos, this, oldMousePos);
+                             oldMousePos = mousePos;
+                    }
+                    else
+                    {
                         Vector3 newPos;
                         if (snapToGrid)
                         {
+                  
                             newPos = GridSettings.GetCurrentSnapedPosition();
                         }
                         else
                         {
+                      
                             Vector3 diffPos = lastClickMousePos - GridSettings.MouseInputToWorldPoint();
                             newPos = lastClickPos - diffPos;
                         }
                         MoveComponent(newPos);
-                    //}
+                    }
                 }
             }
             else // Si on relache le boutton
             {
+                origineMousePosIsSet = false;
                 if (!canStack && isBeingMoved)
                 {
                     if (ProjectManager.m_Instance.GetComponentCount(transform.position) > 1)
@@ -232,6 +237,7 @@ public class ElectricComponent : MonoBehaviour
         }
 
         OnUpdate(); // pour les sous composants
+       
     }
 
 
@@ -295,13 +301,21 @@ public class ElectricComponent : MonoBehaviour
         }
     }
 
-    private void MoveComponentForMany(Vector3 newPos, ElectricComponent electricComponent)
-    {
-        if (newPos != electricComponent.transform.position)
+    private void MoveComponentForMany(Vector3 mousePos, ElectricComponent electricComponent, Vector3 oldMousePos)
+    {   
+        Vector3 newPos = new Vector3(0,0,0);
+        if (mousePos != oldMousePos && oldMousePos != new Vector3(0,0,0)) 
         {
-            print("in move");
+            float diffPosMouseX = mousePos.x - oldMousePos.x;
+            float diffPosMouseY = mousePos.y - oldMousePos.y;
+
+            newPos.x = electricComponent.transform.position.x + diffPosMouseX;
+            newPos.y = electricComponent.transform.position.y + diffPosMouseY;
+            
             electricComponent._Unselect();
+
             electricComponent.transform.position = newPos;
+            
             ProjectManager.m_Instance.ChangeComponentPos(electricComponent, newPos);
             ProjectManager.OnModifyProject(ProjectModificationType.CircuitModification);
             electricComponent._Select();
