@@ -43,6 +43,8 @@ public class ElectricComponent : MonoBehaviour
 
      protected bool origineMousePosIsSet = false;
 
+   
+
     [Header("UI")]
     [SerializeField] protected SpriteRenderer outline;
     private ResizeWinglets resizeWinglets;
@@ -96,7 +98,8 @@ public class ElectricComponent : MonoBehaviour
     }
 
     void Update()
-    {
+    {   
+        
         if (!ProjectManager.canInteract) return;
 
         if (Input.GetMouseButtonDown(0))
@@ -144,6 +147,7 @@ public class ElectricComponent : MonoBehaviour
 
         if (isHover)
         {
+            
             if (Input.GetKeyDown(interactKey))
             {
                 Interact();
@@ -155,6 +159,7 @@ public class ElectricComponent : MonoBehaviour
             if(!origineMousePosIsSet){
             oldMousePos = GridSettings.GetCurrentSnapedPosition(); // pour le mouvement multie sélection
                 origineMousePosIsSet = true;
+
             }
             if (listenToInputs)
             {
@@ -235,9 +240,7 @@ public class ElectricComponent : MonoBehaviour
                 }
             }
         }
-
         OnUpdate(); // pour les sous composants
-       
     }
 
 
@@ -303,8 +306,9 @@ public class ElectricComponent : MonoBehaviour
 
     private void MoveComponentForMany(Vector3 mousePos, ElectricComponent electricComponent, Vector3 oldMousePos)
     {   
+      
         Vector3 newPos = new Vector3(0,0,0);
-        if (mousePos != oldMousePos && oldMousePos != new Vector3(0,0,0)) 
+        if (mousePos != oldMousePos && electricComponent.transform.position != mousePos)
         {
             float diffPosMouseX = mousePos.x - oldMousePos.x;
             float diffPosMouseY = mousePos.y - oldMousePos.y;
