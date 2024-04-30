@@ -297,7 +297,7 @@ public class CurrentVisualisationManager : MonoBehaviour
 
     private static void CornerBasedEmission(ElectricMeshList meshList, Vector<float> meshCurrents, int orientation)
     {
-        print("starting cornerbasedemissions");
+        //print("starting cornerbasedemissions");
 
         Dictionary<int, (List<ElectricComponent>, BranchStorage)> meshCornerLists = BuildMeshCorners(meshList);
 
@@ -308,7 +308,7 @@ public class CurrentVisualisationManager : MonoBehaviour
             print("mesh current = " + meshCurrents[i]);
             foreach ((ElectricComponent, ElectricComponent) branch in meshCornerLists[i].Item2.branches) // pour chaque branche du mesh
             {
-                print("handling branch : " + branch);
+                //print("handling branch : " + branch);
 
                 if (handledBranches.Contains(branch))
                 {
@@ -487,7 +487,7 @@ public class CurrentVisualisationManager : MonoBehaviour
 
     private static void StartEmission(ElectricComponent source, ElectricComponent target, bool isReal, bool isResume)
     {
-        print("starting emission from " + source + " to " + target);
+        //print("starting emission from " + source + " to " + target);
 
         CurrentVisualisation emitter = source.GetComponent<CurrentVisualisation>();
 
