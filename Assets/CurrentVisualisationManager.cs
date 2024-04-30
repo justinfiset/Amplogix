@@ -39,7 +39,7 @@ public class CurrentVisualisationManager : MonoBehaviour
         {
             component.GetComponent<CurrentVisualisation>().ResumeParticleMovements();
         }
-        MakeBranchesEmit(emittingBranches, orientation);
+        MakeBranchesEmit(emittingBranches, orientation, true);
     }
 
     public static void PauseEmission()
@@ -336,7 +336,7 @@ public class CurrentVisualisationManager : MonoBehaviour
                 handledBranches.AddBranch(branch);
             }
         }
-        MakeBranchesEmit(emittingBranches, orientation);
+        MakeBranchesEmit(emittingBranches, orientation, false);
     }
 
     private static bool IsBranchInClockWiseDirection((ElectricComponent, ElectricComponent) branch, List<ElectricComponent> orderedComponents)
@@ -470,22 +470,22 @@ public class CurrentVisualisationManager : MonoBehaviour
         return 1;
     }
 
-    private static void MakeBranchesEmit(HashSet<(ElectricComponent, ElectricComponent)> emittingBranches, int orientation)
+    private static void MakeBranchesEmit(HashSet<(ElectricComponent, ElectricComponent)> emittingBranches, int orientation, bool isResume)
     {
         bool isReal = orientation == 1;
         foreach ((ElectricComponent,ElectricComponent) branch in emittingBranches)
         {
-            StartEmission(branch.Item1, branch.Item2, isReal);
+            StartEmission(branch.Item1, branch.Item2, isReal, isResume);
         }
     }
 
     private static void StartEmission(ElectricComponent source, ElectricComponent target, int orientation)
     {
         bool isReal = orientation == 1;
-        StartEmission(source, target, isReal);
+        StartEmission(source, target, isReal, false);
     }
 
-    private static void StartEmission(ElectricComponent source, ElectricComponent target, bool isReal)
+    private static void StartEmission(ElectricComponent source, ElectricComponent target, bool isReal, bool isResume)
     {
         print("starting emission from " + source + " to " + target);
 
@@ -495,7 +495,11 @@ public class CurrentVisualisationManager : MonoBehaviour
         builtVector.x = target.transform.position.x;
         builtVector.y = target.transform.position.y;
 
-        emitter.SetIsRealCurrent(isReal);
+        if (!isResume)
+        {
+            emitter.SetIsRealCurrent(isReal);
+        }
+        
         emitter.StartParticleEmission(builtVector);
 
         handledComponents.Add(source);
