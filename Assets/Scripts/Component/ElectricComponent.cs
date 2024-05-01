@@ -130,7 +130,7 @@ public class ElectricComponent : MonoBehaviour
                 }
 
                 if (!isSelected)
-                {
+                {      
                     _Select();
                     hasReleasedSinceSelection = false;
                 }
@@ -315,15 +315,17 @@ public class ElectricComponent : MonoBehaviour
 
             newPos.x = electricComponent.transform.position.x + diffPosMouseX;
             newPos.y = electricComponent.transform.position.y + diffPosMouseY;
-            
+     
             electricComponent._Unselect();
 
             electricComponent.transform.position = newPos;
             
             ProjectManager.m_Instance.ChangeComponentPos(electricComponent, newPos);
             ProjectManager.OnModifyProject(ProjectModificationType.CircuitModification);
-            electricComponent._Select();
 
+            connectionManager.UpdateConnection();
+            electricComponent._Select();
+           
         }
     }
 
@@ -520,7 +522,11 @@ public class ElectricComponent : MonoBehaviour
 
     public void UnselectAfterEndOfFrame()
     {
-        StartCoroutine(IUnselectAfterEndOfFrame());
+        if (!Input.GetKey(KeyCode.LeftControl))
+        {
+            StartCoroutine(IUnselectAfterEndOfFrame());
+        }
+        
     }
 
     private IEnumerator IUnselectAfterEndOfFrame()
