@@ -26,7 +26,7 @@ public class ElectricComponent : MonoBehaviour
     [Header("State")]
     protected bool isHover = false;
     protected bool isSelected = false;
-    protected bool listenToInputs = true;
+    public bool listenToInputs = true;
     public bool isMouseOverGUI = false;
     [HideInInspector] public string initialComponentData = "";
     [HideInInspector] public string initialConnectionData = "";
@@ -362,7 +362,8 @@ public class ElectricComponent : MonoBehaviour
             { }
             else
             {
-                tilesManager.HideTiles();
+                if(tilesManager != null)
+                    tilesManager.HideTiles();
             }
             Select();
         }

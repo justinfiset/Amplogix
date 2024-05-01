@@ -220,6 +220,7 @@ MonoBehaviour:
   snapToGrid: 0
   respectOrientation: 0
   canGenerateMeshes: 0
+  listenToInputs: 0
   isMouseOverGUI: 0
   initialComponentData: 
   initialConnectionData: 
@@ -228,6 +229,7 @@ MonoBehaviour:
   outline: {fileID: 1047390179120490554}
   sprite: {fileID: 0}
   isLightSource: 0
+  showsCurrent: 1
   text: {fileID: 0}
   rect: {fileID: 0}
   col: {fileID: 0}
