@@ -1,0 +1,18 @@
+{
+    "name": "Nouveau Projet",
+    "componentDataList": [
+        {
+            "type": 99,
+            "x": -2.533721923828125,
+            "y": 0.7803497314453125,
+            "rot": 0.0,
+            "scaleX": 1.0,
+            "scaleY": 1.0,
+            "customComponentData": "{\"text\":\"Labbb\",\"fontSize\":6.0}",
+            "r": 1.0,
+            "g": 0.4117647111415863,
+            "b": 0.3803921639919281,
+            "connectionData": ""
+        }
+    ]
+}

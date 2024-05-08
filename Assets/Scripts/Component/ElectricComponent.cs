@@ -298,7 +298,8 @@ public class ElectricComponent : MonoBehaviour
             ProjectManager.m_Instance.ChangeComponentPos(this, transform.position);
             ProjectManager.OnModifyProject(ProjectModificationType.CircuitModification);
 
-            connectionManager.UpdateConnection();
+            if(connectionManager != null)
+                connectionManager.UpdateConnection();
 
             _Select();
         }
@@ -464,6 +465,7 @@ public class ElectricComponent : MonoBehaviour
     #region Data / Serialization / Unpack
     public string GetConnectionsnData()
     {
+        if (connectionManager == null) return "";
         Connection.ConnectionValueData data = connectionManager.GetData();
         return SerializeCustomComponentData(data);
     }
@@ -500,7 +502,7 @@ public class ElectricComponent : MonoBehaviour
 
     private void OnGUI()
     {
-        if (ProjectManager.m_Instance.isGUIinit && isSelected)
+        if (ProjectManager.m_Instance != null && ProjectManager.m_Instance.isGUIinit && isSelected)
         {
             bool isUnique = ProjectManager.GetSelectionCount() < 2;
             string headerName = isUnique ? ElectricComponentTypeMethods.GetName(type) : "Sélection Multiple...";

@@ -71,7 +71,8 @@ public class TextLabel : ElectricComponent
 
     public void UpdateText(string newText)
     {
-        text.text = newText;
+        if (text != null)
+            text.text = newText;
         UpdateSize();
     }
 
@@ -101,6 +102,12 @@ public class TextLabel : ElectricComponent
     public override void UnpackCustomComponentData(string customDataString)
     {
         TextLabelData customData = UnserializeCustomComponentData<TextLabelData>(customDataString);
+        StartCoroutine(WaitForDataUnpack(customData));
+    }
+
+    IEnumerator WaitForDataUnpack(TextLabelData customData)
+    {
+        yield return new WaitForFrames(2);
         UpdateText(customData.text);
         text.fontSize = customData.fontSize;
     }
