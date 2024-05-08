@@ -625,9 +625,19 @@ public class ElectricComponentData
         scaleY = component.transform.localScale.y;
         customComponentData = component.GetCustomComponentData();
         // Color
-        r = component.sprite.color.r;
-        g = component.sprite.color.g;
-        b = component.sprite.color.b;
+        if(component.type != ElectricComponentType.TextLabel)
+        {
+            r = component.sprite.color.r;
+            g = component.sprite.color.g;
+            b = component.sprite.color.b;
+        } else
+        {
+            TextLabel label = (TextLabel)component;
+            r = label.text.color.r;
+            g = label.text.color.g;
+            b = label.text.color.b;
+        }
+        
         // Connections
         connectionData = component.GetConnectionsnData();
     }
