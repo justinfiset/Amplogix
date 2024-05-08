@@ -2,17 +2,60 @@
     "name": "Nouveau Projet",
     "componentDataList": [
         {
-            "type": 99,
-            "x": -2.533721923828125,
-            "y": 0.7803497314453125,
+            "type": 1,
+            "resistance": 1.0,
+            "x": -5.0,
+            "y": 1.0,
             "rot": 0.0,
             "scaleX": 1.0,
             "scaleY": 1.0,
-            "customComponentData": "{\"text\":\"Labbb\",\"fontSize\":6.0}",
-            "r": 1.0,
-            "g": 0.4117647111415863,
-            "b": 0.3803921639919281,
-            "connectionData": ""
+            "customComponentData": "",
+            "r": 0.0,
+            "g": 0.0,
+            "b": 0.0,
+            "connectionData": "{\"connections\":[false,false,false,false]}"
+        },
+        {
+            "type": 4,
+            "resistance": 2.0,
+            "x": -4.0,
+            "y": 1.0,
+            "rot": 0.0,
+            "scaleX": 1.0,
+            "scaleY": 1.0,
+            "customComponentData": "",
+            "r": 0.0,
+            "g": 0.0,
+            "b": 0.0,
+            "connectionData": "{\"connections\":[false,false,false,false]}"
+        },
+        {
+            "type": 5,
+            "resistance": 3.0,
+            "x": -3.0,
+            "y": 1.0,
+            "rot": 0.0,
+            "scaleX": 1.0,
+            "scaleY": 1.0,
+            "customComponentData": "",
+            "r": 0.0,
+            "g": 0.0,
+            "b": 0.0,
+            "connectionData": "{\"connections\":[false,false,false,false]}"
+        },
+        {
+            "type": 5,
+            "resistance": 5.0,
+            "x": -9.0,
+            "y": 5.0,
+            "rot": 0.0,
+            "scaleX": 1.0,
+            "scaleY": 1.0,
+            "customComponentData": "",
+            "r": 0.0,
+            "g": 0.0,
+            "b": 0.0,
+            "connectionData": "{\"connections\":[false,false,false,false]}"
         }
     ]
 }

@@ -606,6 +606,7 @@ public static class ElectricComponentTypeMethods
 public class ElectricComponentData
 {
     public int type;
+    public float resistance;
     public float x = 0f;
     public float y = 0f;
     public float rot = 0f;
@@ -622,6 +623,7 @@ public class ElectricComponentData
         type = (int)component.type;
         x = component.transform.position.x;
         y = component.transform.position.y;
+        resistance = component.resistance;
         rot = component.transform.localEulerAngles.z;
         scaleX = component.transform.localScale.x;
         scaleY = component.transform.localScale.y;

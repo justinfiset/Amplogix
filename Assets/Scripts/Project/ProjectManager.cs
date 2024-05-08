@@ -86,6 +86,7 @@ public class ProjectManager : MonoBehaviour
             if(data != null)
             {
                 ElectricComponent component = ComponentSpawner.CreateComponent(data);
+                component.SetBaseResistance(data.resistance);
                 component.initialConnectionData = data.connectionData;
                 component.initialComponentData = data.customComponentData;
             }

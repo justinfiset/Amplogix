@@ -17,17 +17,6 @@ public class Resistor : ElectricComponent
         resistanceText = resistance.ToString();
     }
 
-    public override void UnpackCustomComponentData(string customDataString)
-    {
-        ResistorData data = UnserializeCustomComponentData<ResistorData>(customDataString);
-        this.resistance = data.resistance;
-    }
-
-    public override string GetCustomComponentData()
-    {
-        return SerializeCustomComponentData(new ResistorData(resistance));
-    }
-
     public override void RenderGUI()
     {
         GUIStyle inputStyle = isInputWrong ? ComponentGUI.deleteStyle : ComponentGUI.inputStyle;
@@ -50,17 +39,6 @@ public class Resistor : ElectricComponent
             {
                 isInputWrong = true;
             }
-        }
-    }
-
-    [Serializable]
-    public class ResistorData
-    {
-        public float resistance = 25f;
-
-        public ResistorData(float resistance)
-        {
-            this.resistance = resistance;
         }
     }
 }
